@@ -7,6 +7,11 @@ const contactStatusSchema = z.object({
   status: z.enum(["new", "in_review", "resolved"]),
 });
 
+// Required for static export - returns empty array since we don't pre-render any contact submission IDs
+export function generateStaticParams() {
+  return [];
+}
+
 export async function PATCH(
   request: Request,
   context: { params: Promise<{ id: string }> },
