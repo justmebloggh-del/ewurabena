@@ -32,6 +32,25 @@ export async function getPublicContent(): Promise<PublicContent> {
       supabase.from("social_links").select("*").eq("is_published", true).order("created_at", { ascending: false }),
     ]);
 
+    // Check if any response has an error (e.g., table doesn't exist)
+    const hasError = [
+      profileRes.error,
+      albumsRes.error,
+      tracksRes.error,
+      playlistsRes.error,
+      mediaRes.error,
+      awardsRes.error,
+      announcementsRes.error,
+      donationRes.error,
+      socialRes.error,
+    ].some(Boolean);
+
+    // Fall back to sample data if there's any error (e.g., tables don't exist)
+    if (hasError) {
+      console.warn("Supabase database not ready, falling back to sample data");
+      return samplePublicContent;
+    }
+
     const profile = profileRes.data ?? samplePublicContent.profile;
 
     return {

@@ -101,7 +101,7 @@ const mediaItems: MediaItem[] = [
     id: "media-2",
     title: "All is Well",
     kind: "video",
-    url: "https://youtu.be/-3pYM4IbUhg?si=Y2MIZeD8BuuN1Zg2",
+    url: "https://www.youtube.com/embed/-3pYM4IbUhg",
     thumbnail_url: null,
     caption: "It is a declaration of the truth and our truth, that the God who delights in the prosperity of his children is our God and surely he will prosper everything that concerns me",
     is_published: true,
