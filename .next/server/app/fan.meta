@@ -1,0 +1,17 @@
+{
+  "status": 307,
+  "headers": {
+    "location": "/auth/sign-in",
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/fan/layout,_N_T_/fan/page,_N_T_/fan"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/fan/__PAGE__",
+    "/fan",
+    "/_index",
+    "/_head"
+  ]
+}

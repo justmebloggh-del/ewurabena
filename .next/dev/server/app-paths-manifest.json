@@ -1,0 +1,7 @@
+{
+  "/albums/page": "app/albums/page.js",
+  "/api/public/content/route": "app/api/public/content/route.js",
+  "/page": "app/page.js",
+  "/playlists/page": "app/playlists/page.js",
+  "/portfolio/page": "app/portfolio/page.js"
+}

@@ -1,0 +1,223 @@
+{
+  "version": 3,
+  "pages404": true,
+  "appType": "app",
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/api/admin/contact-submissions/[id]",
+      "regex": "^/api/admin/contact\\-submissions/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/admin/contact\\-submissions/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/fan/playlists/[playlistId]/tracks",
+      "regex": "^/api/fan/playlists/([^/]+?)/tracks(?:/)?$",
+      "routeKeys": {
+        "nxtPplaylistId": "nxtPplaylistId"
+      },
+      "namedRegex": "^/api/fan/playlists/(?<nxtPplaylistId>[^/]+?)/tracks(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_global-error",
+      "regex": "^/_global\\-error(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_global\\-error(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/about",
+      "regex": "^/about(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/about(?:/)?$"
+    },
+    {
+      "page": "/admin",
+      "regex": "^/admin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin(?:/)?$"
+    },
+    {
+      "page": "/albums",
+      "regex": "^/albums(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/albums(?:/)?$"
+    },
+    {
+      "page": "/api/admin/albums",
+      "regex": "^/api/admin/albums(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/albums(?:/)?$"
+    },
+    {
+      "page": "/api/admin/announcements",
+      "regex": "^/api/admin/announcements(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/announcements(?:/)?$"
+    },
+    {
+      "page": "/api/admin/awards",
+      "regex": "^/api/admin/awards(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/awards(?:/)?$"
+    },
+    {
+      "page": "/api/admin/donation-links",
+      "regex": "^/api/admin/donation\\-links(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/donation\\-links(?:/)?$"
+    },
+    {
+      "page": "/api/admin/media-items",
+      "regex": "^/api/admin/media\\-items(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/media\\-items(?:/)?$"
+    },
+    {
+      "page": "/api/admin/official-playlists",
+      "regex": "^/api/admin/official\\-playlists(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/official\\-playlists(?:/)?$"
+    },
+    {
+      "page": "/api/admin/profile",
+      "regex": "^/api/admin/profile(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/profile(?:/)?$"
+    },
+    {
+      "page": "/api/admin/social-links",
+      "regex": "^/api/admin/social\\-links(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/social\\-links(?:/)?$"
+    },
+    {
+      "page": "/api/admin/tracks",
+      "regex": "^/api/admin/tracks(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/tracks(?:/)?$"
+    },
+    {
+      "page": "/api/contact",
+      "regex": "^/api/contact(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/contact(?:/)?$"
+    },
+    {
+      "page": "/api/fan/favorites",
+      "regex": "^/api/fan/favorites(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/fan/favorites(?:/)?$"
+    },
+    {
+      "page": "/api/fan/notifications",
+      "regex": "^/api/fan/notifications(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/fan/notifications(?:/)?$"
+    },
+    {
+      "page": "/api/fan/playlists",
+      "regex": "^/api/fan/playlists(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/fan/playlists(?:/)?$"
+    },
+    {
+      "page": "/api/public/content",
+      "regex": "^/api/public/content(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/public/content(?:/)?$"
+    },
+    {
+      "page": "/auth/sign-in",
+      "regex": "^/auth/sign\\-in(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/auth/sign\\-in(?:/)?$"
+    },
+    {
+      "page": "/auth/sign-up",
+      "regex": "^/auth/sign\\-up(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/auth/sign\\-up(?:/)?$"
+    },
+    {
+      "page": "/contact",
+      "regex": "^/contact(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/contact(?:/)?$"
+    },
+    {
+      "page": "/fan",
+      "regex": "^/fan(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/fan(?:/)?$"
+    },
+    {
+      "page": "/favicon.ico",
+      "regex": "^/favicon\\.ico(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/favicon\\.ico(?:/)?$"
+    },
+    {
+      "page": "/playlists",
+      "regex": "^/playlists(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/playlists(?:/)?$"
+    },
+    {
+      "page": "/portfolio",
+      "regex": "^/portfolio(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/portfolio(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments",
+    "clientParamParsing": false,
+    "dynamicRSCPrerender": false
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}

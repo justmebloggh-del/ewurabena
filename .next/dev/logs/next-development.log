@@ -1,0 +1,23 @@
+[00:00:00.886] Server  LOG     ✓ Ready in 669ms
+[00:00:12.827] Server  WARN    Supabase database not ready, falling back to sample data
+[00:00:24.880] Server  WARN    Supabase database not ready, falling back to sample data
+[00:00:31.538] Server  WARN    Supabase database not ready, falling back to sample data
+[00:00:37.737] Server  WARN    Supabase database not ready, falling back to sample data
+[00:00:44.310] Server  WARN    Supabase database not ready, falling back to sample data
+[00:00:50.598] Server  WARN    Supabase database not ready, falling back to sample data
+[00:00:50.603] Server  WARN    Supabase database not ready, falling back to sample data
+[00:00:58.558] Server  WARN    Supabase database not ready, falling back to sample data
+[00:00:58.583] Server  WARN    Supabase database not ready, falling back to sample data
+[00:00:58.854] Server  WARN    Supabase database not ready, falling back to sample data
+[00:00:58.856] Server  WARN    Supabase database not ready, falling back to sample data
+[00:10:05.470] Server  WARN    Supabase database not ready, falling back to sample data
+[00:10:13.461] Server  WARN    Supabase database not ready, falling back to sample data
+[00:10:13.466] Server  WARN    Supabase database not ready, falling back to sample data
+[00:10:30.124] Server  WARN    Supabase database not ready, falling back to sample data
+[00:10:30.272] Server  WARN    Supabase database not ready, falling back to sample data
+[00:10:43.354] Server  WARN    Supabase database not ready, falling back to sample data
+[00:10:43.358] Server  WARN    Supabase database not ready, falling back to sample data
+[00:10:59.245] Server  WARN    Supabase database not ready, falling back to sample data
+[00:10:59.249] Server  WARN    Supabase database not ready, falling back to sample data
+[00:20:28.897] Server  LOG     ✓ Compiled in 47ms
+[00:21:01.728] Server  LOG     ✓ Compiled in 21ms
