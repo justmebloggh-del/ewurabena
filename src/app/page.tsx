@@ -63,7 +63,7 @@ export default async function HomePage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="section-title">Latest Announcements</h2>
+        <h2 className="section-title">THEY THAT WORSHIP GOD MUST WORSHIP HIM IN SPIRIT AND IN TRUTH</h2>
         <div className="grid gap-3 md:grid-cols-2">
           {content.announcements.slice(0, 2).map((announcement) => (
             <article key={announcement.id} className="card">
@@ -75,10 +75,10 @@ export default async function HomePage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="section-title">Todos</h2>
+        <h2 className="section-title">Upcoming Events</h2>
         <ul className="card list-disc space-y-1 pl-6 text-sm text-[color:var(--text-muted)]">
           {todos.length === 0 ? (
-            <li>No todos found.</li>
+            <li>Loading......</li>
           ) : (
             todos.map((todo, index) => (
               <li key={`todo-${index}`}>
@@ -91,8 +91,8 @@ export default async function HomePage() {
 
       <section className="space-y-4">
         <div>
-          <h2 className="section-title">Featured Music</h2>
-          <p className="section-subtitle">Hybrid streaming with embeds and direct playback support.</p>
+          <h2 className="section-title">Ewura Abena Music</h2>
+          <p className="section-subtitle">Hybrid Streaming with Direct Playbacks</p>
         </div>
         <div className="grid gap-4 lg:grid-cols-2">
           {content.tracks.slice(0, 4).map((track) => (
