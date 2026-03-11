@@ -34,7 +34,11 @@ export default async function FanPage() {
 
       <FanPlaylistManager
         playlists={fanData.playlists.map((playlist) => ({ id: playlist.id, title: playlist.title }))}
-        tracks={publicContent.tracks.map((track) => ({ id: track.id, title: track.title }))}
+        tracks={publicContent.tracks.map((track) => ({ 
+          id: track.id, 
+          title: track.title,
+          audiomack_url: track.audiomack_url 
+        }))}
       />
 
       <section className="card space-y-3">

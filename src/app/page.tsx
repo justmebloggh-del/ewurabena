@@ -78,7 +78,7 @@ export default async function HomePage() {
         <h2 className="section-title">Upcoming Events</h2>
         <ul className="card list-disc space-y-1 pl-6 text-sm text-[color:var(--text-muted)]">
           {todos.length === 0 ? (
-            <li>No todos found.</li>
+            <li>No todos found</li>
           ) : (
             todos.map((todo, index) => (
               <li key={`todo-${index}`}>

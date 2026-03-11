@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type TrackOption = {
   id: string;
   title: string;
+  audiomack_url?: string | null;
 };
 
 type PlaylistOption = {
@@ -21,9 +22,42 @@ export function FanPlaylistManager({ playlists: initialPlaylists, tracks }: FanP
   const [playlists, setPlaylists] = useState<PlaylistOption[]>(initialPlaylists);
   const [selectedPlaylist, setSelectedPlaylist] = useState<string>(initialPlaylists[0]?.id || "");
   const [selectedTrack, setSelectedTrack] = useState<string>(tracks[0]?.id || "");
+  const [playlistTracks, setPlaylistTracks] = useState<TrackOption[]>([]);
+  const [playingTrack, setPlayingTrack] = useState<TrackOption | null>(null);
   const [message, setMessage] = useState("");
 
   const sortedTracks = useMemo(() => [...tracks].sort((a, b) => a.title.localeCompare(b.title)), [tracks]);
+
+  // Fetch playlist tracks when playlist changes
+  useEffect(() => {
+    async function fetchPlaylistTracks() {
+      if (!selectedPlaylist) {
+        setPlaylistTracks([]);
+        return;
+      }
+
+      const response = await fetch(`/api/fan/playlists/${selectedPlaylist}/tracks`);
+      if (!response.ok) {
+        setPlaylistTracks([]);
+        return;
+      }
+
+      const data = await response.json().catch(() => null);
+      if (!data?.trackIds) {
+        setPlaylistTracks([]);
+        return;
+      }
+
+      // Match track IDs with available tracks to get full track data
+      const matchedTracks = data.trackIds
+        .map((pt: { track_id: string }) => tracks.find((t) => t.id === pt.track_id))
+        .filter(Boolean) as TrackOption[];
+      
+      setPlaylistTracks(matchedTracks);
+    }
+
+    fetchPlaylistTracks();
+  }, [selectedPlaylist, tracks]);
 
   async function createPlaylist(formData: FormData) {
     setMessage("");
@@ -62,10 +96,27 @@ export function FanPlaylistManager({ playlists: initialPlaylists, tracks }: FanP
     const response = await fetch(`/api/fan/playlists/${selectedPlaylist}/tracks`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ track_id: selectedTrack, position: 1 }),
+      body: JSON.stringify({ track_id: selectedTrack, position: playlistTracks.length + 1 }),
     });
 
-    setMessage(response.ok ? "Track added to playlist." : "Could not add track.");
+    if (response.ok) {
+      // Refresh playlist tracks
+      const trackToAdd = tracks.find((t) => t.id === selectedTrack);
+      if (trackToAdd) {
+        setPlaylistTracks([...playlistTracks, trackToAdd]);
+      }
+      setMessage("Track added to playlist.");
+    } else {
+      setMessage("Could not add track.");
+    }
+  }
+
+  function handlePlay(track: TrackOption) {
+    if (playingTrack?.id === track.id) {
+      setPlayingTrack(null);
+    } else {
+      setPlayingTrack(track);
+    }
   }
 
   return (
@@ -102,6 +153,73 @@ export function FanPlaylistManager({ playlists: initialPlaylists, tracks }: FanP
           Add Track
         </button>
       </div>
+
+      {/* Playlist Tracks with Play Buttons */}
+      {playlistTracks.length > 0 && (
+        <div className="space-y-3">
+          <h4 className="font-medium text-[color:var(--text-main)]">Playlist Tracks</h4>
+          <ul className="space-y-2">
+            {playlistTracks.map((track) => (
+              <li
+                key={track.id}
+                className="flex items-center justify-between rounded-lg border border-[color:var(--border-soft)] bg-[color:var(--bg-soft)] p-3"
+              >
+                <span className="text-sm font-medium text-[color:var(--text-main)]">{track.title}</span>
+                {track.audiomack_url ? (
+                  <button
+                    type="button"
+                    onClick={() => handlePlay(track)}
+                    className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
+                      playingTrack?.id === track.id
+                        ? "bg-[color:var(--gold)] text-black"
+                        : "bg-[color:var(--gold)]/20 text-[color:var:bg-[color:var(--gold)] hover(--gold)]/30"
+                    }`}
+                  >
+                    {playingTrack?.id === track.id ? "Pause" : "Play"}
+                  </button>
+                ) : (
+                  <span className="text-xs text-[color:var(--text-muted)]">No link</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Audio Player / Audiomack Embed */}
+      {playingTrack && playingTrack.audiomack_url && (
+        <div className="mt-4 rounded-xl border border-[color:var(--border-soft)] bg-[color:var(--bg-soft)] p-4">
+          <div className="mb-2 flex items-center justify-between">
+            <span className="font-medium text-[color:var(--text-main)]">Now Playing: {playingTrack.title}</span>
+            <button
+              type="button"
+              onClick={() => setPlayingTrack(null)}
+              className="text-sm text-[color:var(--text-muted)] hover:text-[color:var(--text-main)]"
+            >
+              Close
+            </button>
+          </div>
+          <iframe
+            src={`https://audiomack.com/embedsong/${playingTrack.audiomack_url.replace('https://audiomack.com/', '')}?color=%23ffb400&background=%23222222&footer=no&sm=0`}
+            width="100%"
+            height="150"
+            allow="autoplay"
+            className="rounded-lg"
+            title={`Play ${playingTrack.title} on Audiomack`}
+          />
+          <p className="mt-2 text-xs text-[color:var(--text-muted)]">
+            Powered by{' '}
+            <a
+              href={playingTrack.audiomack_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[color:var(--gold)] hover:underline"
+            >
+              Audiomack
+            </a>
+          </p>
+        </div>
+      )}
 
       {message ? <p className="text-sm text-[color:var(--text-muted)]">{message}</p> : null}
     </section>
