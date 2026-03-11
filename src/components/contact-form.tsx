@@ -68,13 +68,13 @@ export function ContactForm() {
       </div>
       <div>
         <label htmlFor="organization" className="label">
-          Organization (Optional)
+          Organization
         </label>
         <input id="organization" name="organization" className="input" />
       </div>
       <div>
         <label htmlFor="event_date" className="label">
-          Event Date (Optional)
+          Event Date 
         </label>
         <input id="event_date" name="event_date" type="date" className="input" />
       </div>
