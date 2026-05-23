@@ -79,10 +79,10 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="mx-auto max-w-md space-y-4">
+    <div style={{ maxWidth: "420px", margin: "0 auto", padding: "3rem 1rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
       <section className="card space-y-4">
-        <h1 className="section-title">Create Fan Account</h1>
-        <p className="text-sm text-[color:var(--text-muted)]">
+        <h1 className="section-title-dark">Create Fan Account</h1>
+        <p style={{ fontSize: "0.9rem", color: "var(--text-dark-body)" }}>
           Save favorites, build playlists, and receive ministry notifications.
         </p>
 
@@ -125,15 +125,15 @@ export default function SignUpPage() {
         </form>
 
         {notice ? (
-          <p className={notice.kind === "success" ? "text-sm text-emerald-300" : "text-sm text-rose-300"}>
+          <p style={{ fontSize: "0.875rem", color: notice.kind === "success" ? "var(--kente-green)" : "#dc2626" }}>
             {notice.text}
           </p>
         ) : null}
       </section>
 
-      <p className="text-sm text-[color:var(--text-muted)]">
+      <p style={{ fontSize: "0.9rem", color: "var(--text-dark-body)" }}>
         Already registered?{" "}
-        <Link href="/auth/sign-in" className="text-[color:var(--gold)] hover:underline">
+        <Link href="/auth/sign-in" style={{ color: "var(--royal-gold)", fontWeight: 600 }}>
           Sign in
         </Link>
       </p>

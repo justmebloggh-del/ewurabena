@@ -1,163 +1,1071 @@
+import Image from "next/image";
 import Link from "next/link";
-import { cookies } from "next/headers";
 
 import { FavoriteButton } from "@/components/favorite-button";
+import { PlatformEmbedPlayer } from "@/components/platform-embed-player";
 import { getPublicContent } from "@/lib/data/public";
-import { createClient } from "@/utils/supabase/server";
 
+/* ── Streaming platforms opened in-app ── */
 const IN_APP_PLATFORMS = new Set(["spotify", "boomplay", "apple music", "audiomac", "audiomack"]);
+
+const PLATFORM_ICONS: Record<string, string> = {
+  spotify: "♫",
+  "apple music": "♪",
+  boomplay: "▶",
+  audiomack: "◈",
+  facebook: "f",
+  instagram: "◉",
+  tiktok: "♪",
+  youtube: "▷",
+};
+
+const TESTIMONIALS = [
+  {
+    quote: "Her voice carries such anointing. Every time she ministers, the atmosphere shifts and people are healed and set free.",
+    author: "Apostle K. Mensah",
+    location: "Ghana",
+    stars: 5,
+  },
+  {
+    quote: "Ewura Abena's worship is not performance — it is a genuine encounter with God. The Warrior Queen truly carries the fire.",
+    author: "Pastor M. Osei",
+    location: "United Kingdom",
+    stars: 5,
+  },
+  {
+    quote: "When she sang 'This Far,' I wept. The Holy Spirit moved so powerfully. This woman's songs carry real healing.",
+    author: "Minister A. Johnson",
+    location: "United States",
+    stars: 5,
+  },
+];
+
+const MINISTRY_PILLARS = [
+  {
+    icon: "🎵",
+    title: "Soul Gospel Music",
+    desc: "Original compositions that hit the soul from the first note — crafted to ignite faith, worship, and transformation.",
+  },
+  {
+    icon: "🌍",
+    title: "Global Ministry",
+    desc: "Ministering across continents, carrying the gospel message of healing, hope, and restoration to every nation.",
+  },
+  {
+    icon: "⚔️",
+    title: "Warrior Queen",
+    desc: "A bold, grace-filled anointing that breaks chains, restores hope, and draws hearts back to God's presence.",
+  },
+  {
+    icon: "🕊️",
+    title: "DOVVSU Ambassador",
+    desc: "Using music and ministry as a platform to advocate for dignity, safety, and restoration for the vulnerable.",
+  },
+];
+
+const FACTS = [
+  { number: "2+", label: "Albums" },
+  { number: "5+", label: "Awards" },
+  { number: "15+", label: "Nations" },
+  { number: "∞", label: "Lives Touched" },
+];
 
 export default async function HomePage() {
   const content = await getPublicContent();
-  const cookieStore = await cookies();
-  let todos: unknown[] = [];
 
-  try {
-    const supabase = createClient(cookieStore);
-    const { data } = await supabase.from("todos").select();
-    todos = data ?? [];
-  } catch {
-    todos = [];
-  }
+  const tickerItems = [
+    "Global Gospel Minister",
+    "Soul Gospel Singer",
+    "Composer & Songwriter",
+    "Worship Leader",
+    "DOVVSU Ambassador",
+    "Warrior Queen",
+    "Voice of Healing",
+    "Voice of Light",
+  ];
+
+  const featuredTrack = content.tracks?.[0];
+  const heroBio = content.profile.bio?.slice(0, 220) + "…" || "A vessel of God's glory — ministering healing, worship, and grace to the nations.";
 
   return (
-    <div className="space-y-10">
-      <section className="grid gap-6 rounded-3xl border border-[color:var(--border-soft)] bg-[color:var(--bg-card)] p-6 md:grid-cols-[1.2fr_0.8fr] md:p-8 animate-fade-in">
-        <div className="space-y-4">
-          <p className="text-sm uppercase tracking-[0.24em] text-[color:var(--gold)]">Global Gospel Minister</p>
-          <h1 className="text-4xl leading-tight sm:text-5xl">{content.profile.stage_name}</h1>
-          <p className="max-w-xl text-base text-[color:var(--text-muted)]">{content.profile.subtitle}</p>
-          <p className="max-w-xl text-sm text-[color:var(--gold)]">
-            Booking/Info: +447921 459335 || +233540993540
-          </p>
-          <p className="max-w-xl text-sm text-[color:var(--text-muted)]">Email: nustylerecordz@gmail.com</p>
-          <p className="max-w-xl text-[color:var(--text-muted)]">
-            Ewura Abena is a Global Gospel Minister whose soulful voice carries both power and healing. As a singer,
-            composer, and songwriter, she creates music that inspires faith, restores hope, and connects hearts to God.
-          
-            <p>Beyond the stage, Ewura Abena serves as a DOVVSU Ambassador, using her influence to advocate for justice
-            and protection for the vulnerable.</p>
-            <p>Her passion for worship is matched by her commitment to purpose. Bold in
-            spirit and graceful in strength, she is known as the Warrior Queen - a voice of light, love, and
-            unwavering faith.</p>
-          </p>
-          <div className="flex flex-wrap gap-3 pt-2">
-            <Link href="/albums" className="btn-primary">
-              Explore Albums
+    <>
+      {/* ══════════════════════════════════════════════════════
+          HERO — Cinematic Fullscreen, White & Gold
+          ══════════════════════════════════════════════════════ */}
+      <section className="hero" aria-label="Ewura Abena Hero">
+
+        {/* Fullscreen background image */}
+        <div className="hero-portrait-bg" aria-hidden="true">
+          <Image
+            src={content.profile.hero_image_url || "/ea3.jpg"}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            quality={85}
+            className="hero-portrait-bg-img"
+            unoptimized={Boolean(content.profile.hero_image_url && !content.profile.hero_image_url.startsWith("/"))}
+          />
+          <div className="hero-portrait-overlay" />
+        </div>
+
+        {/* Atmospheric effects */}
+        <div className="hero-light-rays" aria-hidden="true" />
+        <div className="hero-particles" aria-hidden="true" />
+
+        {/* Content grid */}
+        <div className="hero-inner">
+
+          {/* ── Left: Copy ── */}
+          <div>
+            <span className="hero-eyebrow">Voice of Healing · Warrior Queen · Global Ministry</span>
+
+            <h1 className="hero-name text-hero-shimmer">
+              {content.profile.stage_name || "Ewura Abena"}
+            </h1>
+
+            <p className="hero-role">
+              Global Gospel Minister&nbsp;·&nbsp;Worship Leader&nbsp;·&nbsp;DOVVSU Ambassador
+            </p>
+
+            <blockquote className="hero-verse">
+              &ldquo;Worship that heals — royal, graceful, and faithful.
+              The nations are my pulpit, and every song a prayer.&rdquo;
+            </blockquote>
+
+            {/* CTAs */}
+            <div className="hero-ctas">
+              <Link href="/albums" className="btn-primary btn-hero">
+                ▶&nbsp; Listen Now
+              </Link>
+              <Link href="/gallery" className="btn-ghost btn-hero">
+                ◈&nbsp; Watch Ministry
+              </Link>
+              <Link href="/contact" className="btn-hero btn-hero-solid">
+                ✦&nbsp; Book Ministry
+              </Link>
+            </div>
+
+            {/* Latest release preview */}
+            {featuredTrack && (
+              <div className="hero-streaming">
+                <div className="hero-streaming-card">
+                  <div className="hero-release">
+                    <Image
+                      src={(featuredTrack as { artwork_url?: string }).artwork_url || "/ea.jpg"}
+                      alt={`${featuredTrack.title} artwork`}
+                      width={72}
+                      height={72}
+                      className="hero-release-art"
+                      quality={80}
+                      unoptimized={Boolean((featuredTrack as { artwork_url?: string }).artwork_url)}
+                    />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <span className="hero-release-label">Latest Release</span>
+                      <span className="hero-release-title">{featuredTrack.title}</span>
+                      <div className="hero-release-actions">
+                        <Link href="/albums" className="btn-primary btn-stream-play">
+                          ▶ Play
+                        </Link>
+                        <div className="hero-platform-row">
+                          {["Spotify", "Apple Music", "Boomplay"].map((p) => (
+                            <span key={p} className="hero-platform-pill">{p}</span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* ── Right: Portrait ── */}
+          <div className="hero-portrait-figure">
+            <Image
+              src={content.profile.hero_image_url || "/ea3.jpg"}
+              alt="Ewura Abena"
+              width={600}
+              height={680}
+              priority
+              sizes="(max-width: 900px) 100vw, 50vw"
+              quality={90}
+              className="hero-portrait-img"
+              unoptimized={Boolean(content.profile.hero_image_url && !content.profile.hero_image_url.startsWith("/"))}
+            />
+            <div className="hero-portrait-glow" aria-hidden="true" />
+            <div className="hero-portrait-badge" aria-hidden="true">
+              <span className="hero-badge-number">15+</span>
+              <span className="hero-badge-label">Nations Reached</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div className="hero-scroll" aria-hidden="true">
+          <div className="scroll-line" />
+          <span>Scroll</span>
+        </div>
+      </section>
+
+
+      {/* ══════════════════════════════════════════════════════
+          TICKER — Ministry identity strip
+          ══════════════════════════════════════════════════════ */}
+      <div className="ticker-strip" aria-hidden="true">
+        <div className="ticker-inner">
+          {[...tickerItems, ...tickerItems].map((item, i) => (
+            <span key={i} className="ticker-item">
+              {item}
+              <span className="ticker-dot" />
+            </span>
+          ))}
+        </div>
+      </div>
+
+
+      {/* ══════════════════════════════════════════════════════
+          MINISTRY PILLARS
+          ══════════════════════════════════════════════════════ */}
+      <section className="section-cream" aria-label="Ministry pillars">
+        <div className="container">
+          <div style={{ textAlign: "center", marginBottom: "3.5rem" }} className="reveal">
+            <p className="gold-label" style={{ marginBottom: "0.75rem" }}>The Calling</p>
+            <h2 className="section-title-dark" style={{ fontSize: "clamp(2rem,4vw,2.8rem)" }}>
+              Ministry &amp; Purpose
+            </h2>
+            <p className="section-subtitle-dark" style={{ margin: "0.9rem auto 0", textAlign: "center" }}>
+              Touching nations through worship, healing, and the power of the gospel.
+            </p>
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+              gap: "1.5rem",
+            }}
+          >
+            {MINISTRY_PILLARS.map((pillar, i) => (
+              <div
+                key={pillar.title}
+                className={`ministry-card reveal reveal-delay-${i + 1}`}
+              >
+                <span className="ministry-icon">{pillar.icon}</span>
+                <h3
+                  style={{
+                    fontFamily: "var(--font-heading), serif",
+                    fontSize: "1.45rem",
+                    fontWeight: 400,
+                    color: "var(--text-dark)",
+                    marginBottom: "0.85rem",
+                  }}
+                >
+                  {pillar.title}
+                </h3>
+                <p style={{ fontSize: "0.92rem", color: "#5E5048", lineHeight: 1.75 }}>
+                  {pillar.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* ══════════════════════════════════════════════════════
+          ABOUT / STORY SPLIT
+          ══════════════════════════════════════════════════════ */}
+      <section className="section-light" aria-label="About Ewura Abena">
+        <div className="container">
+          <div className="about-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "5rem", alignItems: "center" }}>
+
+            {/* Portrait */}
+            <div className="reveal-left" style={{ position: "relative" }}>
+              <Image
+                src={content.profile.hero_image_url || "/ea.jpg"}
+                alt="Ewura Abena portrait"
+                width={600}
+                height={540}
+                sizes="(max-width: 900px) 100vw, 50vw"
+                quality={85}
+                style={{
+                  width: "100%",
+                  height: "540px",
+                  objectFit: "cover",
+                  objectPosition: "center top",
+                  borderRadius: "2rem",
+                  boxShadow: "0 40px 100px rgba(0,0,0,0.14)",
+                  border: "1px solid rgba(212,175,55,0.22)",
+                  display: "block",
+                }}
+                unoptimized={Boolean(content.profile.hero_image_url && !content.profile.hero_image_url.startsWith("/"))}
+              />
+              {/* Gold border accent */}
+              <div
+                aria-hidden="true"
+                style={{
+                  position: "absolute",
+                  top: "1.5rem",
+                  left: "-1.5rem",
+                  right: "1.5rem",
+                  bottom: "-1.5rem",
+                  borderRadius: "2.25rem",
+                  border: "1px solid rgba(212,175,55,0.28)",
+                  zIndex: -1,
+                  pointerEvents: "none",
+                }}
+              />
+            </div>
+
+            {/* Copy */}
+            <div className="reveal-right">
+              <p className="gold-label" style={{ marginBottom: "0.75rem" }}>The Story</p>
+              <h2 className="section-title-dark" style={{ fontSize: "clamp(2rem,4vw,2.8rem)", marginBottom: "1.5rem" }}>
+                The Warrior Queen
+              </h2>
+              <p style={{ fontSize: "1rem", color: "#5E5048", lineHeight: 1.85, marginBottom: "2.5rem" }}>
+                {content.profile.bio || heroBio}
+              </p>
+
+              {/* Stat bar */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(4, 1fr)",
+                  gap: "0",
+                  background: "linear-gradient(160deg, var(--kente-green) 0%, var(--kente-deep) 100%)",
+                  borderRadius: "1.25rem",
+                  overflow: "hidden",
+                  marginBottom: "2.5rem",
+                  border: "1px solid rgba(212,175,55,0.28)",
+                  boxShadow: "0 12px 40px rgba(212,175,55,0.14)",
+                }}
+              >
+                {FACTS.map((fact, i) => (
+                  <div
+                    key={fact.label}
+                    style={{
+                      textAlign: "center",
+                      padding: "1.5rem 0.75rem",
+                      borderRight: i < FACTS.length - 1 ? "1px solid rgba(212,175,55,0.14)" : "none",
+                    }}
+                  >
+                    <span className="stat-number">{fact.number}</span>
+                    <span className="stat-label">{fact.label}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+                <Link href="/about" className="btn-gold">
+                  Read Her Story
+                </Link>
+                <Link href="/contact" className="btn-primary">
+                  Book Ministry
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <style>{`
+          @media (max-width: 900px) {
+            .about-grid { grid-template-columns: 1fr !important; gap: 3rem !important; }
+          }
+        `}</style>
+      </section>
+
+
+      {/* ══════════════════════════════════════════════════════
+          SCRIPTURE / QUOTE GOLD STRIP
+          ══════════════════════════════════════════════════════ */}
+      <section
+        style={{
+          background: "linear-gradient(135deg, var(--kente-deep) 0%, var(--kente-green) 40%, var(--kente-deep) 100%)",
+          padding: "5rem 0",
+          position: "relative",
+          overflow: "hidden",
+          borderTop: "1px solid rgba(212,175,55,0.22)",
+          borderBottom: "1px solid rgba(212,175,55,0.22)",
+        }}
+        aria-label="Scripture"
+      >
+        {/* Gold glow orbs */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            top: "-40%",
+            left: "25%",
+            width: "600px",
+            height: "600px",
+            background: "radial-gradient(circle, rgba(212,175,55,0.30) 0%, rgba(230,199,123,0.12) 50%, transparent 70%)",
+            filter: "blur(60px)",
+            animation: "orb-drift 12s ease-in-out infinite",
+            pointerEvents: "none",
+          }}
+        />
+        <div className="container" style={{ textAlign: "center", position: "relative", zIndex: 1 }}>
+          <div className="reveal">
+            <p className="gold-label" style={{ marginBottom: "1.75rem", color: "var(--champagne-gold)" }}>
+              Word of Faith
+            </p>
+            <blockquote
+              style={{
+                fontFamily: "var(--font-heading), serif",
+                fontSize: "clamp(1.45rem, 3.5vw, 2.3rem)",
+                fontWeight: 300,
+                fontStyle: "italic",
+                color: "var(--ivory)",
+                maxWidth: "800px",
+                margin: "0 auto 1.75rem",
+                lineHeight: 1.55,
+                letterSpacing: "0.01em",
+              }}
+            >
+              &ldquo;My spirit is willing. My mind is receptive.
+              My heart is prepared. God is in my story.
+              His glory will be seen.&rdquo;
+            </blockquote>
+            <p
+              style={{
+                fontFamily: "var(--font-body), sans-serif",
+                fontSize: "0.72rem",
+                letterSpacing: "0.28em",
+                textTransform: "uppercase",
+                color: "var(--royal-gold)",
+                fontWeight: 700,
+              }}
+            >
+              — {content.profile.stage_name || "Ewura Abena"}
+            </p>
+          </div>
+        </div>
+      </section>
+
+
+      {/* ══════════════════════════════════════════════════════
+          FEATURED MUSIC
+          ══════════════════════════════════════════════════════ */}
+      <section className="section-pearl" aria-label="Featured music">
+        <div className="container">
+          <div style={{ marginBottom: "3.5rem" }} className="reveal">
+            <p className="gold-label" style={{ marginBottom: "0.75rem" }}>Discography</p>
+            <h2 className="section-title-dark" style={{ fontSize: "clamp(2rem,4vw,2.8rem)" }}>
+              Featured Music
+            </h2>
+            <p className="section-subtitle-dark">
+              Soul gospel crafted to ignite faith — available on all major platforms.
+            </p>
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gap: "1.5rem",
+              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            }}
+          >
+            {content.tracks.slice(0, 4).map((track, idx) => (
+              <article
+                key={track.id}
+                className={`track-card reveal reveal-delay-${Math.min(idx + 1, 4)}`}
+              >
+                {/* Track header */}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "1rem",
+                    marginBottom: "1.25rem",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "56px",
+                      height: "56px",
+                      borderRadius: "12px",
+                      background: "linear-gradient(135deg, var(--royal-gold), var(--deep-gold))",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                      fontSize: "1.4rem",
+                      boxShadow: "0 8px 24px rgba(212,175,55,0.30)",
+                    }}
+                  >
+                    🎵
+                  </div>
+                  <div>
+                    <span
+                      style={{
+                        fontFamily: "var(--font-body), sans-serif",
+                        fontSize: "0.62rem",
+                        letterSpacing: "0.28em",
+                        textTransform: "uppercase",
+                        color: "var(--royal-gold)",
+                        fontWeight: 700,
+                        display: "block",
+                        marginBottom: "0.3rem",
+                      }}
+                    >
+                      Track {track.track_number || idx + 1}
+                    </span>
+                    <h3
+                      style={{
+                        fontFamily: "var(--font-heading), serif",
+                        fontSize: "1.35rem",
+                        fontWeight: 400,
+                        color: "var(--text-dark)",
+                        margin: 0,
+                        lineHeight: 1.25,
+                      }}
+                    >
+                      {track.title}
+                    </h3>
+                  </div>
+                </div>
+
+                {/* Embedded player */}
+                {track.embed_url ? (
+                  <iframe
+                    src={track.embed_url}
+                    style={{
+                      width: "100%",
+                      height: "9rem",
+                      borderRadius: "0.85rem",
+                      border: "1px solid rgba(212,175,55,0.22)",
+                      marginBottom: "1rem",
+                      display: "block",
+                    }}
+                    title={`${track.title} player`}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                ) : track.audio_url ? (
+                  <audio
+                    controls
+                    src={track.audio_url}
+                    style={{
+                      width: "100%",
+                      marginBottom: "1rem",
+                      accentColor: "var(--royal-gold)",
+                    }}
+                  />
+                ) : null}
+
+                {/* Platform links */}
+                <div style={{ marginBottom: "1rem" }}>
+                  <PlatformEmbedPlayer
+                    trackTitle={track.title}
+                    youtube_url={track.youtube_url}
+                    youtube_embed_url={track.embed_url}
+                    spotify_url={track.spotify_url}
+                    apple_music_url={track.apple_music_url}
+                    audiomack_url={track.audiomack_url}
+                  />
+                </div>
+
+                <FavoriteButton trackId={track.id} />
+              </article>
+            ))}
+          </div>
+
+          <div style={{ textAlign: "center", marginTop: "3.5rem" }} className="reveal">
+            <Link href="/albums" className="btn-primary" style={{ marginRight: "1rem" }}>
+              Full Discography
             </Link>
-            <Link href="/auth/sign-up" className="btn-secondary">
-              Join Fan Hub
-            </Link>
-            <Link href="/contact" className="btn-secondary">
-              Book Ministry Session
+            <Link href="/playlists" className="btn-gold">
+              Official Playlists
             </Link>
           </div>
         </div>
-        <div className="overflow-hidden rounded-2xl border border-[color:var(--border-soft)]">
-          <img
-            src={content.profile.hero_image_url || "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1200&q=80"}
-            alt="Ewura Abena ministry portrait"
-            className="h-full min-h-56 w-full object-cover"
-          />
-        </div>
       </section>
 
-      <section className="space-y-3">
-        <h2 className="section-title"></h2>
-        <div className="grid gap-3 md:grid-cols-2">
-          {content.announcements.slice(0, 2).map((announcement) => (
-            <article key={announcement.id} className="card">
-              <h3 className="text-xl">{announcement.title}</h3>
-              <p className="mt-2 text-sm text-[color:var(--text-muted)]">{announcement.body}</p>
-            </article>
-          ))}
-        </div>
-      </section>
 
-      <section className="space-y-3">
-        <h2 className="section-title">Upcoming Events</h2>
-        <ul className="card list-disc space-y-1 pl-6 text-sm text-[color:var(--text-muted)]">
-          {todos.length === 0 ? (
-            <li>No todos found</li>
-          ) : (
-            todos.map((todo, index) => (
-              <li key={`todo-${index}`}>
-                {typeof todo === "string" ? todo : JSON.stringify(todo)}
-              </li>
-            ))
-          )}
-        </ul>
-      </section>
+      {/* ══════════════════════════════════════════════════════
+          VIDEO / LIVE MINISTRY
+          ══════════════════════════════════════════════════════ */}
+      {content.mediaItems.length > 0 && (
+        <section className="section-cream" aria-label="Videos and live ministry">
+          <div className="container">
+            <div style={{ marginBottom: "3.5rem" }} className="reveal">
+              <p className="gold-label" style={{ marginBottom: "0.75rem" }}>Visual Ministry</p>
+              <h2 className="section-title-dark" style={{ fontSize: "clamp(2rem,4vw,2.8rem)" }}>
+                Live Ministrations &amp; Videos
+              </h2>
+              <p className="section-subtitle-dark">
+                Watch Ewura Abena carry God&apos;s presence across nations.
+              </p>
+            </div>
 
-      <section className="space-y-4">
-        <div>
-          <h2 className="section-title">Featured Music</h2>
-          <p className="section-subtitle">Hybrid streaming with embeds and direct playback support.</p>
-        </div>
-        <div className="grid gap-4 lg:grid-cols-2">
-          {content.tracks.slice(0, 4).map((track) => (
-            <article key={track.id} className="card space-y-3">
-              <h3 className="text-xl">{track.title}</h3>
-              <div className="flex flex-wrap gap-2 text-xs text-[color:var(--text-muted)]">
-                {track.youtube_url ? (
-                  <a href={track.youtube_url} target="_blank" rel="noreferrer" className="btn-secondary">
-                    YouTube
-                  </a>
-                ) : null}
-                {track.spotify_url ? (
-                  <a href={track.spotify_url} className="btn-secondary">
-                    Spotify
-                  </a>
-                ) : null}
-                {track.apple_music_url ? (
-                  <a href={track.apple_music_url} className="btn-secondary">
-                    Apple Music
-                  </a>
-                ) : null}
-                {track.audiomack_url ? (
-                  <a href={track.audiomack_url} className="btn-secondary">
-                    Audiomack
-                  </a>
-                ) : null}
-              </div>
-              {track.embed_url ? (
-                <iframe
-                  src={track.embed_url}
-                  className="h-44 w-full rounded-xl border border-[color:var(--border-soft)]"
-                  title={`${track.title} embedded player`}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              ) : null}
-              {track.audio_url ? <audio controls src={track.audio_url} className="w-full" /> : null}
-              <FavoriteButton trackId={track.id} />
-            </article>
-          ))}
-        </div>
-      </section>
+            <div
+              style={{
+                display: "grid",
+                gap: "1.5rem",
+                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+              }}
+            >
+              {content.mediaItems.slice(0, 3).map((item, idx) => (
+                <article
+                  key={item.id}
+                  className={`video-card reveal reveal-delay-${Math.min(idx + 1, 3)}`}
+                >
+                  {item.kind === "video" && item.url ? (
+                    <iframe
+                      src={item.url}
+                      style={{ width: "100%", aspectRatio: "16/9", border: "none", display: "block" }}
+                      title={item.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  ) : item.thumbnail_url ? (
+                    <img
+                      src={item.thumbnail_url}
+                      alt={item.title}
+                      style={{ width: "100%", aspectRatio: "16/9", objectFit: "cover" }}
+                    />
+                  ) : null}
 
-      <section className="grid gap-6 rounded-3xl border border-[color:var(--border-soft)] bg-[color:var(--bg-card)] p-6 md:grid-cols-[1fr_auto] md:items-center md:p-8">
-        <div>
-          <h2 className="section-title">Official Links</h2>
-          <p className="section-subtitle">Spotify, Boomplay, Apple Music, Audiomack, Facebook, Instagram, and TikTok.</p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {content.socialLinks.map((link) => {
-            const openInApp = IN_APP_PLATFORMS.has(link.platform.trim().toLowerCase());
-            return (
-              <a
-                key={link.id}
-                href={link.url}
-                target={openInApp ? undefined : "_blank"}
-                rel={openInApp ? undefined : "noreferrer"}
-                className="btn-secondary"
+                  <div style={{ padding: "1.5rem" }}>
+                    <h3
+                      style={{
+                        fontFamily: "var(--font-heading), serif",
+                        fontSize: "1.3rem",
+                        fontWeight: 400,
+                        color: "var(--text-dark)",
+                        margin: "0 0 0.5rem",
+                      }}
+                    >
+                      {item.title}
+                    </h3>
+                    {item.caption && (
+                      <p
+                        style={{
+                          fontSize: "0.88rem",
+                          color: "#6B5240",
+                          lineHeight: 1.7,
+                          margin: 0,
+                        }}
+                      >
+                        {item.caption}
+                      </p>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <div style={{ textAlign: "center", marginTop: "3rem" }} className="reveal">
+              <Link href="/gallery" className="btn-gold">View All Media</Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+
+      {/* ══════════════════════════════════════════════════════
+          TESTIMONIALS
+          ══════════════════════════════════════════════════════ */}
+      <section
+        style={{
+          background: "var(--ivory)",
+          padding: "6rem 0",
+          position: "relative",
+          overflow: "hidden",
+        }}
+        aria-label="Testimonials"
+      >
+        {/* Subtle gold background glow */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "radial-gradient(ellipse at 50% 50%, rgba(212,175,55,0.10) 0%, transparent 65%)",
+            pointerEvents: "none",
+          }}
+        />
+        <div className="container" style={{ position: "relative", zIndex: 1 }}>
+          <div style={{ textAlign: "center", marginBottom: "3.5rem" }} className="reveal">
+            <p className="gold-label" style={{ marginBottom: "0.75rem" }}>Testimonies</p>
+            <h2 className="section-title-dark" style={{ fontSize: "clamp(2rem,4vw,2.8rem)" }}>
+              Lives Transformed
+            </h2>
+            <p className="section-subtitle-dark" style={{ margin: "0.9rem auto 0", textAlign: "center" }}>
+              Real encounters with God through her music and ministry.
+            </p>
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(290px, 1fr))",
+              gap: "1.5rem",
+            }}
+          >
+            {TESTIMONIALS.map((t, i) => (
+              <div
+                key={t.author}
+                className={`testimonial-card reveal reveal-delay-${i + 1}`}
               >
-                {link.platform}
-              </a>
-            );
-          })}
+                {/* Stars */}
+                <div style={{ marginBottom: "1rem", display: "flex", gap: "3px" }}>
+                  {Array.from({ length: t.stars }).map((_, si) => (
+                    <span key={si} style={{ color: "var(--royal-gold)", fontSize: "0.9rem" }}>★</span>
+                  ))}
+                </div>
+                {/* Quote mark */}
+                <p
+                  style={{
+                    fontFamily: "var(--font-heading), serif",
+                    fontSize: "3rem",
+                    color: "var(--royal-gold)",
+                    lineHeight: 0.8,
+                    marginBottom: "1.1rem",
+                    opacity: 0.7,
+                  }}
+                >
+                  &ldquo;
+                </p>
+                <p className="testimonial-quote">{t.quote}</p>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
+                  <div
+                    style={{
+                      width: "32px",
+                      height: "1px",
+                      background: "var(--royal-gold)",
+                      opacity: 0.5,
+                    }}
+                  />
+                  <div>
+                    <p className="testimonial-author">{t.author}</p>
+                    <p
+                      style={{
+                        fontFamily: "var(--font-body), sans-serif",
+                        fontSize: "0.7rem",
+                        color: "#A89480",
+                        marginTop: "0.15rem",
+                        letterSpacing: "0.08em",
+                      }}
+                    >
+                      {t.location}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
-    </div>
+
+
+      {/* ══════════════════════════════════════════════════════
+          AWARDS — Deep dark cinematic section
+          ══════════════════════════════════════════════════════ */}
+      {content.awards.length > 0 && (
+        <section className="section-deep" aria-label="Awards and recognition">
+          <div className="container">
+            <div style={{ textAlign: "center", marginBottom: "3.5rem" }} className="reveal">
+              <p className="gold-label" style={{ marginBottom: "0.75rem", color: "var(--champagne-gold)" }}>
+                Recognition
+              </p>
+              <h2 className="section-title" style={{ fontSize: "clamp(2rem,4vw,2.8rem)" }}>
+                Awards &amp; Nominations
+              </h2>
+              <p className="section-subtitle" style={{ margin: "0.9rem auto 0", textAlign: "center" }}>
+                Excellence recognized across nations.
+              </p>
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gap: "1.25rem",
+                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+              }}
+            >
+              {content.awards.map((award, i) => (
+                <div
+                  key={award.id}
+                  className={`card-dark reveal reveal-delay-${Math.min(i + 1, 4)}`}
+                  style={{ borderLeft: "3px solid var(--royal-gold)", paddingLeft: "1.75rem" }}
+                >
+                  <h3
+                    style={{
+                      fontFamily: "var(--font-heading), serif",
+                      fontSize: "1.35rem",
+                      fontWeight: 400,
+                      color: "var(--champagne-gold)",
+                      margin: "0 0 0.75rem",
+                    }}
+                  >
+                    {award.title}
+                  </h3>
+                  <p style={{ fontSize: "0.9rem", color: "rgba(255,253,248,0.62)", lineHeight: 1.72, margin: 0 }}>
+                    {award.description}
+                  </p>
+                  {award.awarded_on && (
+                    <p
+                      style={{
+                        fontFamily: "var(--font-body), sans-serif",
+                        fontSize: "0.68rem",
+                        letterSpacing: "0.22em",
+                        textTransform: "uppercase",
+                        color: "var(--deep-gold)",
+                        marginTop: "0.85rem",
+                      }}
+                    >
+                      {new Date(award.awarded_on).getFullYear()}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+
+      {/* ══════════════════════════════════════════════════════
+          STREAMING & SOCIAL PLATFORMS
+          ══════════════════════════════════════════════════════ */}
+      <section
+        style={{
+          background: "linear-gradient(160deg, var(--ivory-warm) 0%, var(--warm-beige) 100%)",
+          padding: "6rem 0",
+          borderTop: "1px solid rgba(212,175,55,0.18)",
+          borderBottom: "1px solid rgba(212,175,55,0.18)",
+        }}
+        aria-label="Streaming and social platforms"
+      >
+        <div className="container">
+          <div style={{ textAlign: "center", marginBottom: "3rem" }} className="reveal">
+            <p className="gold-label" style={{ marginBottom: "0.75rem" }}>Stream Everywhere</p>
+            <h2 className="section-title-dark" style={{ fontSize: "clamp(2rem,4vw,2.8rem)" }}>
+              Find Ewura Abena
+            </h2>
+            <p className="section-subtitle-dark" style={{ margin: "0.9rem auto 0", textAlign: "center" }}>
+              Listen on your favourite platform or follow for updates.
+            </p>
+          </div>
+
+          <div
+            className="reveal"
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "0.85rem",
+              justifyContent: "center",
+              marginBottom: "1.5rem",
+            }}
+          >
+            {content.socialLinks.map((link) => {
+              const openInApp = IN_APP_PLATFORMS.has(link.platform.trim().toLowerCase());
+              const icon = PLATFORM_ICONS[link.platform.trim().toLowerCase()];
+              return (
+                <a
+                  key={link.id}
+                  href={link.url}
+                  target={openInApp ? undefined : "_blank"}
+                  rel={openInApp ? undefined : "noreferrer"}
+                  className="platform-badge"
+                >
+                  {icon && <span style={{ fontSize: "1rem" }}>{icon}</span>}
+                  {link.platform}
+                </a>
+              );
+            })}
+          </div>
+
+          {/* Donation Links */}
+          {content.donationLinks.filter((d) => d.is_published).length > 0 && (
+            <div style={{ textAlign: "center", marginTop: "4rem" }} className="reveal">
+              <hr className="gold-divider" style={{ marginBottom: "2.5rem" }} />
+              <p className="gold-label" style={{ marginBottom: "1rem" }}>Partner with the Ministry</p>
+              <p
+                style={{
+                  color: "#6B5240",
+                  fontSize: "0.97rem",
+                  maxWidth: "500px",
+                  margin: "0 auto 1.75rem",
+                  lineHeight: 1.75,
+                }}
+              >
+                Support the spread of the gospel through giving.
+                Every seed sown carries eternal value.
+              </p>
+              <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
+                {content.donationLinks
+                  .filter((d) => d.is_published)
+                  .map((donation) => (
+                    <a
+                      key={donation.id}
+                      href={donation.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="btn-primary"
+                    >
+                      ♡&nbsp; {donation.label}
+                    </a>
+                  ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+
+      {/* ══════════════════════════════════════════════════════
+          PRAYER & BOOKING
+          ══════════════════════════════════════════════════════ */}
+      <section
+        style={{
+          background: "var(--ivory)",
+          padding: "6rem 0",
+        }}
+        aria-label="Prayer and booking"
+      >
+        <div className="container">
+          <div
+            className="community-grid"
+            style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4.5rem", alignItems: "start" }}
+          >
+
+            {/* Prayer Form */}
+            <div className="reveal-left">
+              <p className="gold-label" style={{ marginBottom: "0.75rem" }}>Prayer Requests</p>
+              <h2
+                style={{
+                  fontFamily: "var(--font-heading), serif",
+                  fontSize: "clamp(1.8rem, 3vw, 2.5rem)",
+                  fontWeight: 400,
+                  color: "var(--text-dark)",
+                  marginBottom: "0.85rem",
+                }}
+              >
+                Send Your Prayer Request
+              </h2>
+              <p style={{ color: "#6B5240", fontSize: "0.97rem", lineHeight: 1.78, marginBottom: "2.25rem" }}>
+                Ewura Abena and her team are committed to interceding for you.
+                Share your request and receive prayer.
+              </p>
+              <form
+                action="https://formspree.io/f/placeholder"
+                method="POST"
+                style={{ display: "flex", flexDirection: "column", gap: "1.1rem" }}
+              >
+                <div>
+                  <label className="label">Your Name</label>
+                  <input type="text" name="name" placeholder="Enter your name" className="input" />
+                </div>
+                <div>
+                  <label className="label">Prayer Request</label>
+                  <textarea
+                    name="prayer_request"
+                    rows={5}
+                    placeholder="Share your prayer request..."
+                    className="input"
+                    style={{ resize: "vertical" }}
+                  />
+                </div>
+                <button type="submit" className="btn-primary" style={{ alignSelf: "flex-start" }}>
+                  🙏&nbsp; Submit Prayer Request
+                </button>
+              </form>
+            </div>
+
+            {/* Booking */}
+            <div className="reveal-right">
+              <p className="gold-label" style={{ marginBottom: "0.75rem" }}>Book Ministry</p>
+              <h2
+                style={{
+                  fontFamily: "var(--font-heading), serif",
+                  fontSize: "clamp(1.8rem, 3vw, 2.5rem)",
+                  fontWeight: 400,
+                  color: "var(--text-dark)",
+                  marginBottom: "0.85rem",
+                }}
+              >
+                Invite Ewura Abena
+              </h2>
+              <p style={{ color: "#6B5240", fontSize: "0.97rem", lineHeight: 1.78, marginBottom: "2.25rem" }}>
+                For ministry invitations, conferences, events, and media appearances,
+                reach out to us directly.
+              </p>
+
+              {/* Contact card */}
+              <div
+                style={{
+                  background: "linear-gradient(160deg, var(--kente-green) 0%, var(--kente-deep) 100%)",
+                  border: "1px solid rgba(212,175,55,0.28)",
+                  borderRadius: "1.25rem",
+                  padding: "1.75rem",
+                  marginBottom: "1.5rem",
+                  boxShadow: "0 12px 40px rgba(15,91,58,0.18)",
+                }}
+              >
+                <p
+                  style={{
+                    fontFamily: "var(--font-body), sans-serif",
+                    fontSize: "0.68rem",
+                    letterSpacing: "0.28em",
+                    textTransform: "uppercase",
+                    color: "var(--champagne-gold)",
+                    marginBottom: "1.25rem",
+                    fontWeight: 700,
+                  }}
+                >
+                  Contact Information
+                </p>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
+                  {[
+                    { href: "tel:+447921459335", label: "📞 +447921 459335 (UK)" },
+                    { href: "tel:+233540993540", label: "📞 +233540993540 (GH)" },
+                    { href: "mailto:nustylerecordz@gmail.com", label: "✉ nustylerecordz@gmail.com" },
+                    { href: "https://wa.me/447921459335", label: "💬 WhatsApp (UK)" },
+                  ].map((c) => (
+                    <a
+                      key={c.href}
+                      href={c.href}
+                      target={c.href.startsWith("http") ? "_blank" : undefined}
+                      rel={c.href.startsWith("http") ? "noreferrer" : undefined}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.6rem",
+                        color: "rgba(255,253,248,0.62)",
+                        fontSize: "0.9rem",
+                        transition: "color 0.2s",
+                        textDecoration: "none",
+                      }}
+                      className="booking-contact-link"
+                    >
+                      {c.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              <Link
+                href="/contact"
+                className="btn-primary"
+                style={{ width: "100%", justifyContent: "center", display: "flex" }}
+              >
+                Submit Booking Inquiry
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        <style>{`
+          @media (max-width: 800px) {
+            .community-grid { grid-template-columns: 1fr !important; gap: 3.5rem !important; }
+          }
+          .booking-contact-link:hover { color: var(--champagne-gold) !important; }
+        `}</style>
+      </section>
+    </>
   );
 }

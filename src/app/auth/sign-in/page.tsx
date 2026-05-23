@@ -52,10 +52,10 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="mx-auto max-w-md space-y-4">
+    <div style={{ maxWidth: "420px", margin: "0 auto", padding: "3rem 1rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
       <section className="card space-y-4">
-        <h1 className="section-title">Sign In</h1>
-        <p className="text-sm text-[color:var(--text-muted)]">
+        <h1 className="section-title-dark">Sign In</h1>
+        <p style={{ fontSize: "0.9rem", color: "var(--text-dark-body)" }}>
           Access your fan account and personalized playlists.
         </p>
 
@@ -78,12 +78,12 @@ export default function SignInPage() {
           </button>
         </form>
 
-        {message ? <p className="text-sm text-rose-300">{message}</p> : null}
+        {message ? <p className="text-sm text-rose-600">{message}</p> : null}
       </section>
 
-      <p className="text-sm text-[color:var(--text-muted)]">
+      <p style={{ fontSize: "0.9rem", color: "var(--text-dark-body)" }}>
         New here?{" "}
-        <Link href="/auth/sign-up" className="text-[color:var(--gold)] hover:underline">
+        <Link href="/auth/sign-up" style={{ color: "var(--royal-gold)", fontWeight: 600 }}>
           Create account
         </Link>
       </p>
