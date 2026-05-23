@@ -102,7 +102,7 @@ export default async function HomePage() {
             fill
             priority
             sizes="100vw"
-            quality={85}
+
             className="hero-portrait-bg-img"
             unoptimized={Boolean(content.profile.hero_image_url && !content.profile.hero_image_url.startsWith("/"))}
           />
@@ -157,7 +157,7 @@ export default async function HomePage() {
                       width={72}
                       height={72}
                       className="hero-release-art"
-                      quality={80}
+
                       unoptimized={Boolean((featuredTrack as { artwork_url?: string }).artwork_url)}
                     />
                     <div style={{ flex: 1, minWidth: 0 }}>
@@ -189,7 +189,7 @@ export default async function HomePage() {
               height={680}
               priority
               sizes="(max-width: 900px) 100vw, 50vw"
-              quality={90}
+
               className="hero-portrait-img"
               unoptimized={Boolean(content.profile.hero_image_url && !content.profile.hero_image_url.startsWith("/"))}
             />
@@ -288,7 +288,7 @@ export default async function HomePage() {
                 width={600}
                 height={540}
                 sizes="(max-width: 900px) 100vw, 50vw"
-                quality={85}
+    
                 style={{
                   width: "100%",
                   height: "540px",

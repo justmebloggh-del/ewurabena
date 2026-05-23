@@ -48,8 +48,8 @@ export function NavClient({ isAuthenticated }: NavClientProps) {
           {/* ── Logo: white on hero → gold on scroll ── */}
           <Link href="/" className="nav-logo-link" aria-label="Ewura Abena — Home" onClick={() => setMenuOpen(false)}>
             <div className="logo-wrap">
-              <Image src="/ewuraabenalogo.png" alt="Ewura Abena" width={1536} height={1024} style={{ width: "130px", height: "auto" }} className="logo-white" priority />
-              <Image src="/ewuraabenalogo.png" alt="" aria-hidden="true" width={1536} height={1024} style={{ width: "130px", height: "auto" }} className="logo-gold" priority />
+              <Image src="/ewuraabenalogo.png" alt="Ewura Abena" width={130} height={52} className="logo-white" priority />
+              <Image src="/ewuraabenalogo.png" alt="" aria-hidden="true" width={130} height={52} className="logo-gold" priority />
               <span className="logo-glow-halo" aria-hidden="true" />
             </div>
           </Link>
