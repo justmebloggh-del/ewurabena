@@ -2,6 +2,17 @@ import { samplePublicContent } from "@/lib/sample-data";
 import { createSupabaseServerClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import { type PublicContent } from "@/lib/types";
 
+const FETCH_TIMEOUT_MS = 8000;
+
+function withTimeout<T>(promise: Promise<T>): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) =>
+      setTimeout(() => reject(new Error("Supabase fetch timeout")), FETCH_TIMEOUT_MS)
+    ),
+  ]);
+}
+
 export async function getPublicContent(): Promise<PublicContent> {
   if (!isSupabaseConfigured()) {
     return samplePublicContent;
@@ -20,7 +31,7 @@ export async function getPublicContent(): Promise<PublicContent> {
       announcementsRes,
       donationRes,
       socialRes,
-    ] = await Promise.all([
+    ] = await withTimeout(Promise.all([
       supabase.from("artist_profiles").select("*").order("updated_at", { ascending: false }).limit(1).maybeSingle(),
       supabase.from("albums").select("*").eq("is_published", true).order("release_date", { ascending: false }),
       supabase.from("tracks").select("*").eq("is_published", true).order("track_number", { ascending: true }),
@@ -30,7 +41,7 @@ export async function getPublicContent(): Promise<PublicContent> {
       supabase.from("announcements").select("*").eq("is_published", true).order("created_at", { ascending: false }),
       supabase.from("donation_links").select("*").eq("is_published", true).order("created_at", { ascending: false }),
       supabase.from("social_links").select("*").eq("is_published", true).order("created_at", { ascending: false }),
-    ]);
+    ]));
 
     // Check if any response has an error (e.g., table doesn't exist)
     const hasError = [

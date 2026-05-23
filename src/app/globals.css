@@ -1311,14 +1311,12 @@ img {
 .logo-wrap:hover { transform: scale(1.05); }
 
 .logo-white, .logo-gold {
-  width: 130px; height: 48px; object-fit: contain;
   display: block; user-select: none;
   transition: opacity 0.45s cubic-bezier(0.4,0,0.2,1);
 }
 .logo-gold {
   position: absolute;
   top: 0; left: 0;
-  width: 130px; height: 48px;
 }
 
 /* White silhouette on transparent/dark nav */

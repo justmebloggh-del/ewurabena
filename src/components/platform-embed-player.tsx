@@ -340,7 +340,7 @@ export function PlatformEmbedPlayer({
               src={active.embedUrl}
               width="100%"
               height={active.height}
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture; compute-pressure"
               loading="lazy"
               title={`${trackTitle} on ${active.label}`}
               style={{ display: "block", border: "none" }}

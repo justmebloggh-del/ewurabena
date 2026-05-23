@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import Link from 'next/link';
 import { Track } from '@/lib/types';
 import { FavoriteButton } from './favorite-button';
 
@@ -54,7 +53,7 @@ export function MusicPlayer({ tracks, initialIndex = 0, className = '' }: MusicP
     const audio = audioRef.current;
     if (!audio) return;
 
-    const updateProgress = () => setProgress((audio.currentTime / audio.duration) * 100);
+    const updateProgress = () => setProgress(audio.duration > 0 ? (audio.currentTime / audio.duration) * 100 : 0);
     const setAudioDuration = () => setDuration(audio.duration);
 
     audio.volume = volume;

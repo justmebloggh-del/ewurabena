@@ -540,7 +540,7 @@ export default async function HomePage() {
                       display: "block",
                     }}
                     title={`${track.title} player`}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; compute-pressure"
                     allowFullScreen
                   />
                 ) : track.audio_url ? (
@@ -617,7 +617,7 @@ export default async function HomePage() {
                       src={item.url}
                       style={{ width: "100%", aspectRatio: "16/9", border: "none", display: "block" }}
                       title={item.title}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; compute-pressure"
                       allowFullScreen
                     />
                   ) : item.thumbnail_url ? (
