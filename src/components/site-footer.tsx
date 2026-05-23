@@ -32,8 +32,10 @@ const NAV_COLUMNS = [
   },
 ];
 
+const YEAR = new Date().getFullYear();
+
 export function SiteFooter() {
-  const year = new Date().getFullYear();
+  const year = YEAR;
 
   return (
     <footer className="site-footer">
@@ -252,6 +254,7 @@ export function SiteFooter() {
           }}
         >
           <p
+            suppressHydrationWarning
             style={{
               fontFamily: "var(--font-body), sans-serif",
               fontSize: "0.78rem",
@@ -276,66 +279,6 @@ export function SiteFooter() {
         </div>
       </div>
 
-      <style>{`
-        /* Footer grid layout */
-        .footer-grid {
-          display: grid;
-          grid-template-columns: 1.8fr 1fr 1fr;
-          gap: 4rem;
-        }
-        @media (max-width: 900px) {
-          .footer-grid {
-            grid-template-columns: 1fr 1fr !important;
-            gap: 3rem !important;
-          }
-          .footer-grid > div:first-child {
-            grid-column: 1 / -1;
-          }
-        }
-        @media (max-width: 540px) {
-          .footer-grid {
-            grid-template-columns: 1fr !important;
-            gap: 2.5rem !important;
-          }
-        }
-
-        /* Social pills */
-        .footer-social-pill {
-          display: inline-flex;
-          align-items: center;
-          padding: 0.35rem 0.8rem;
-          border-radius: 9999px;
-          border: 1px solid rgba(212,175,55,0.25);
-          font-family: var(--font-body), sans-serif;
-          font-size: 0.7rem;
-          color: rgba(255,253,249,0.50);
-          font-weight: 500;
-          letter-spacing: 0.04em;
-          transition: all 0.22s ease;
-          text-decoration: none;
-        }
-        .footer-social-pill:hover {
-          color: var(--ivory);
-          border-color: var(--royal-gold);
-          background: rgba(212,175,55,0.16);
-          box-shadow: 0 4px 16px rgba(212,175,55,0.22);
-        }
-
-        /* Nav links */
-        .footer-nav-link {
-          font-family: var(--font-body), sans-serif;
-          font-size: 0.88rem;
-          color: rgba(255,253,249,0.48);
-          font-weight: 400;
-          text-decoration: none;
-          transition: color 0.2s ease;
-          display: block;
-        }
-        .footer-nav-link:hover { color: var(--champagne-gold); }
-
-        /* Contact links */
-        .footer-contact-link:hover { color: var(--champagne-gold) !important; }
-      `}</style>
     </footer>
   );
 }

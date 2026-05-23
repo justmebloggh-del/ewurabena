@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Poppins } from "next/font/google";
+import { Suspense } from "react";
 
 import { FloatingMusicPlayer } from "@/components/floating-music-player";
+import { NavClient } from "@/components/nav-client";
 import { ScrollRevealInit } from "@/components/scroll-reveal-init";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -80,7 +82,9 @@ export default function RootLayout({
       </head>
       <body>
         <div className="app-shell">
-          <SiteHeader />
+          <Suspense fallback={<NavClient isAuthenticated={false} />}>
+            <SiteHeader />
+          </Suspense>
           <main className="flex-1">{children}</main>
           <SiteFooter />
         </div>
