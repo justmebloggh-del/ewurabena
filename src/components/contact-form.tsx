@@ -44,53 +44,46 @@ export function ContactForm() {
     <form
       ref={formRef}
       action={onSubmit}
-      className="space-y-4 rounded-2xl border border-[color:var(--border-soft)] bg-[color:var(--bg-card)] p-6"
+      className="card"
+      style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}
     >
-      <input
-        type="text"
-        name="website"
-        autoComplete="off"
-        tabIndex={-1}
-        aria-hidden="true"
-        className="hidden"
-      />
+      {/* Honeypot */}
+      <input type="text" name="website" autoComplete="off" tabIndex={-1} aria-hidden="true" style={{ display: "none" }} />
+
       <div>
-        <label htmlFor="name" className="label">
-          Full Name
-        </label>
-        <input id="name" name="name" required className="input" />
+        <label htmlFor="name" className="label">Full Name *</label>
+        <input id="name" name="name" required className="input" placeholder="Your full name" />
       </div>
       <div>
-        <label htmlFor="email" className="label">
-          Email
-        </label>
-        <input id="email" name="email" type="email" required className="input" />
+        <label htmlFor="email" className="label">Email Address *</label>
+        <input id="email" name="email" type="email" required className="input" placeholder="your@email.com" />
       </div>
       <div>
-        <label htmlFor="organization" className="label">
-          Organization (Optional)
-        </label>
-        <input id="organization" name="organization" className="input" />
+        <label htmlFor="organization" className="label">Church / Organization</label>
+        <input id="organization" name="organization" className="input" placeholder="Your church or organization" />
       </div>
       <div>
-        <label htmlFor="event_date" className="label">
-          Event Date (Optional)
-        </label>
+        <label htmlFor="event_date" className="label">Event Date</label>
         <input id="event_date" name="event_date" type="date" className="input" />
       </div>
       <div>
-        <label htmlFor="message" className="label">
-          Message
-        </label>
-        <textarea id="message" name="message" required rows={5} className="input" />
+        <label htmlFor="message" className="label">Message & Event Details *</label>
+        <textarea id="message" name="message" required rows={5} className="input" placeholder="Tell us about your event, location, expected attendance, and any other details..." style={{ resize: "vertical" }} />
       </div>
 
-      <button type="submit" disabled={state === "submitting"} className="btn-primary w-full disabled:opacity-60">
-        {state === "submitting" ? "Sending..." : "Send Inquiry"}
+      <button
+        type="submit"
+        disabled={state === "submitting"}
+        className="btn-primary"
+        style={{ width: "100%", justifyContent: "center", opacity: state === "submitting" ? 0.6 : 1 }}
+      >
+        {state === "submitting" ? "Sending..." : "Submit Booking Inquiry"}
       </button>
 
       {message && (
-        <p className={state === "success" ? "text-sm text-emerald-300" : "text-sm text-rose-300"}>{message}</p>
+        <p style={{ fontSize: "0.875rem", color: state === "success" ? "#6ee7b7" : "#fca5a5", textAlign: "center" }}>
+          {message}
+        </p>
       )}
     </form>
   );

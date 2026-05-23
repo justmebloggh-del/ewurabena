@@ -5,7 +5,7 @@ export default async function PortfolioPage() {
   const content = await getPublicContent();
 
   return (
-    <div className="space-y-8">
+    <div className="page-container" style={{ display: "flex", flexDirection: "column", gap: "3rem" }}>
       <section className="card space-y-3">
         <h1 className="section-title">Portfolio</h1>
         <p className="section-subtitle">
