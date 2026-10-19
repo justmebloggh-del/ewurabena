@@ -1,8 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { recordTrackPlay } from "@/lib/record-play";
 
 interface TrackInfo {
+  id?: string;
   title: string;
   album?: string;
   audio_url?: string;
@@ -61,6 +63,7 @@ export function FloatingMusicPlayer() {
       audio.src = detail.audio_url;
       audio.play().catch(() => {});
       setTrack(detail);
+      recordTrackPlay(detail.id);
     };
     window.addEventListener("ea:play", handler);
     return () => window.removeEventListener("ea:play", handler);

@@ -9,6 +9,13 @@ export const contactSubmissionSchema = z.object({
   website: z.string().max(200).optional().default(""),
 });
 
+export const prayerRequestSchema = z.object({
+  name: z.string().trim().min(2).max(120),
+  email: z.string().email().max(200),
+  message: z.string().trim().min(5).max(4000),
+  website: z.string().max(200).optional().default(""),
+});
+
 export const favoriteSchema = z
   .object({
     track_id: z.string().uuid().optional(),
@@ -51,11 +58,14 @@ export const trackSchema = z.object({
   duration_seconds: z.number().int().min(1).optional(),
   track_number: z.number().int().min(1).optional(),
   audio_url: z.string().url().optional().or(z.literal("")),
+  video_url: z.string().url().optional().or(z.literal("")),
   embed_url: z.string().url().optional().or(z.literal("")),
   youtube_url: z.string().url().optional().or(z.literal("")),
   spotify_url: z.string().url().optional().or(z.literal("")),
   apple_music_url: z.string().url().optional().or(z.literal("")),
   audiomack_url: z.string().url().optional().or(z.literal("")),
+  boomplay_url: z.string().url().optional().or(z.literal("")),
+  facebook_url: z.string().url().optional().or(z.literal("")),
   is_published: z.boolean().optional().default(true),
 });
 
@@ -73,7 +83,18 @@ export const mediaItemSchema = z.object({
   url: z.string().url(),
   thumbnail_url: z.string().url().optional().or(z.literal("")),
   caption: z.string().trim().max(1000).optional().default(""),
+  facebook_url: z.string().url().optional().or(z.literal("")),
   is_published: z.boolean().optional().default(true),
+});
+
+export const notificationSchema = z.object({
+  title: z.string().trim().min(2).max(120),
+  body: z.string().trim().min(2).max(2000),
+  target: z.union([z.literal("all"), z.string().uuid()]),
+});
+
+export const trackPlaySchema = z.object({
+  track_id: z.string().uuid(),
 });
 
 export const awardSchema = z.object({

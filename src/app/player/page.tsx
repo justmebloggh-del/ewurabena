@@ -33,7 +33,9 @@ export default async function PlayerPage() {
         <p style={{ fontSize: "1rem", color: "var(--text-dark-body)", maxWidth: "520px", margin: "0 auto 1.5rem", lineHeight: 1.75 }}>
           Dive into soulful gospel worship. Play, queue, and favourite tracks from Grace Overflow &amp; Rebirth.
         </p>
-        <Link href="/" className="btn-ghost" style={{ display: "inline-flex" }}>
+        {/* was btn-ghost (near-white text) on this light-background page —
+            same bug as playlists/page.tsx's "Sign Up Free" button. */}
+        <Link href="/" className="btn-gold" style={{ display: "inline-flex" }}>
           ← Back to Home
         </Link>
       </div>
@@ -48,7 +50,7 @@ export default async function PlayerPage() {
         <p className="gold-label" style={{ marginBottom: "1.5rem", textAlign: "center" }}>Albums</p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem" }}>
           {content.albums.map((album) => (
-            <Link key={album.id} href="/albums" style={{ textDecoration: "none", display: "block" }}>
+            <Link key={album.id} href="/music" style={{ textDecoration: "none", display: "block" }}>
               <article
                 className="card"
                 style={{ overflow: "hidden", padding: 0, transition: "all 0.3s ease" }}

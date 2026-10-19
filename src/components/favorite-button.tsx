@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-type FavoriteButtonProps =
+type FavoriteButtonProps = (
   | {
       trackId: string;
       albumId?: never;
@@ -10,9 +10,17 @@ type FavoriteButtonProps =
   | {
       albumId: string;
       trackId?: never;
-    };
+    }
+) & {
+  // "dark" (default) matches the existing call site inside music/page.tsx's
+  // dark album-header; pass "light" when rendering on a white .track-card
+  // (e.g. the homepage) so the status text doesn't use the near-white
+  // --text-muted token meant for dark backgrounds.
+  theme?: "light" | "dark";
+};
 
 export function FavoriteButton(props: FavoriteButtonProps) {
+  const theme = props.theme ?? "dark";
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState<"idle" | "saved" | "removed" | "error">("idle");
 
@@ -50,7 +58,7 @@ export function FavoriteButton(props: FavoriteButtonProps) {
       <button onClick={removeFavorite} disabled={saving} className="btn-secondary text-xs" type="button">
         Remove
       </button>
-      <span className="text-xs text-[color:var(--text-muted)]">
+      <span className={theme === "light" ? "text-xs text-[color:var(--text-dark-muted)]" : "text-xs text-[color:var(--text-muted)]"}>
         {status === "saved" ? "Saved" : status === "removed" ? "Removed" : status === "error" ? "Error" : ""}
       </span>
     </div>

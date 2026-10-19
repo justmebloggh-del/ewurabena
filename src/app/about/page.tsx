@@ -20,7 +20,7 @@ const MINISTRY_HIGHLIGHTS = [
   { icon: "🌍", title: "Global Influence", desc: "Her present and previous albums have earned her a top position in Ghanaian gospel and on the international scene — UK, USA, Europe, and beyond." },
   { icon: "🎵", title: "Soul Gospel Sound", desc: "As a composer and songwriter, she creates Christ-centred songs that support worship and spiritual growth. Her sound is uniquely hers — and uniquely anointed." },
   { icon: "⚔️", title: "Warrior Queen", desc: "Bold in spirit and graceful in strength. Ewura Abena stands as a warrior intercessor, a voice that fights in the spirit realm through worship." },
-  { icon: "🕊️", title: "DOVVSU Ambassador", desc: "Using music and ministry to advocate for dignity, safety, and restoration for the vulnerable in society." },
+  { icon: "🕊️", title: "DOVVSU Ambassador", desc: "DOVVSU — the Domestic Violence and Victim Support Unit of the Ghana Police Service — named Ewura Abena an ambassador. She uses music and ministry to advocate for dignity, safety, and restoration for the vulnerable in society." },
   { icon: "✨", title: "Healing Ministry", desc: "Wherever she goes, testimonies of healing and breakthrough follow. Her voice carries an anointing that touches the soul and transforms lives." },
   { icon: "🙏", title: "Worship Leadership", desc: "As a worship leader, she creates atmospheres where people encounter God — not through performance, but through genuine, spirit-filled adoration." },
 ];
@@ -37,7 +37,7 @@ export default async function AboutPage() {
           background: "linear-gradient(160deg, var(--kente-deep) 0%, var(--kente-green) 60%, var(--kente-deep) 100%)",
           padding: "8rem 0 6rem",
           overflow: "hidden",
-          borderBottom: "1px solid rgba(212,175,55,0.22)",
+          borderBottom: "1px solid rgba(157,23,77,0.22)",
         }}
       >
         {/* Gold atmospheric glows */}
@@ -46,7 +46,7 @@ export default async function AboutPage() {
           style={{
             position: "absolute",
             inset: 0,
-            background: "radial-gradient(ellipse at 70% 50%, rgba(212,175,55,0.14) 0%, transparent 60%), radial-gradient(ellipse at 20% 80%, rgba(15,91,58,0.20) 0%, transparent 50%)",
+            background: "radial-gradient(ellipse at 70% 50%, rgba(157,23,77,0.14) 0%, transparent 60%), radial-gradient(ellipse at 20% 80%, rgba(157,23,77,0.20) 0%, transparent 50%)",
             pointerEvents: "none",
           }}
         />
@@ -62,7 +62,7 @@ export default async function AboutPage() {
               color: "var(--ivory)",
               margin: "0 0 1rem",
               lineHeight: 1.1,
-              textShadow: "0 4px 40px rgba(212,175,55,0.30)",
+              textShadow: "0 4px 40px rgba(157,23,77,0.30)",
             }}
           >
             {profile.stage_name}
@@ -84,7 +84,7 @@ export default async function AboutPage() {
               fontFamily: "var(--font-heading)",
               fontSize: "clamp(1.1rem, 2.5vw, 1.5rem)",
               fontStyle: "italic",
-              color: "rgba(255,253,248,0.80)",
+              color: "rgba(255,251,252,0.80)",
               maxWidth: "650px",
               margin: "0 auto",
               lineHeight: 1.6,
@@ -97,6 +97,8 @@ export default async function AboutPage() {
           </blockquote>
         </div>
       </section>
+
+      <div className="brand-divider" aria-hidden="true" />
 
       {/* ═══ PORTRAIT + BIO ═══ */}
       <section className="section-light" style={{ padding: "6rem 0" }}>
@@ -117,8 +119,8 @@ export default async function AboutPage() {
                   objectPosition: "center top",
                   borderRadius: "2rem",
                   display: "block",
-                  boxShadow: "0 40px 100px rgba(15,91,58,0.18)",
-                  border: "1px solid rgba(212,175,55,0.22)",
+                  boxShadow: "0 40px 100px rgba(157,23,77,0.18)",
+                  border: "1px solid rgba(157,23,77,0.22)",
                 }}
               />
               {/* Gold + kente border accent */}
@@ -131,7 +133,7 @@ export default async function AboutPage() {
                   right: "1.5rem",
                   bottom: "-1.5rem",
                   borderRadius: "2.25rem",
-                  border: "1px solid rgba(212,175,55,0.30)",
+                  border: "1px solid rgba(157,23,77,0.30)",
                   zIndex: -1,
                   pointerEvents: "none",
                 }}
@@ -175,7 +177,7 @@ export default async function AboutPage() {
               </p>
 
               <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-                <Link href="/albums" className="btn-primary">Listen to Music</Link>
+                <Link href="/music" className="btn-primary">Listen to Music</Link>
                 <Link href="/contact" className="btn-gold">Book Ministry</Link>
               </div>
             </div>
@@ -192,7 +194,7 @@ export default async function AboutPage() {
       {/* ═══ MINISTRY HIGHLIGHTS ═══ */}
       <section className="section-cream" style={{ padding: "6rem 0" }}>
         <div className="container">
-          <div style={{ textAlign: "center", marginBottom: "3.5rem" }} className="reveal">
+          <div style={{ textAlign: "center", marginBottom: "3.5rem" }} className="reveal" suppressHydrationWarning>
             <p className="gold-label" style={{ marginBottom: "0.75rem" }}>Ministry Impact</p>
             <h2
               style={{
@@ -226,6 +228,7 @@ export default async function AboutPage() {
               <div
                 key={item.title}
                 className={`ministry-card reveal reveal-delay-${Math.min(i + 1, 4)}`}
+                suppressHydrationWarning
               >
                 <span style={{ fontSize: "2.5rem", display: "block", marginBottom: "1.1rem" }}>{item.icon}</span>
                 <h3
@@ -251,7 +254,7 @@ export default async function AboutPage() {
       {/* ═══ JOURNEY TIMELINE ═══ */}
       <section className="section-deep" style={{ padding: "6rem 0" }}>
         <div className="container">
-          <div style={{ textAlign: "center", marginBottom: "3.5rem" }} className="reveal">
+          <div style={{ textAlign: "center", marginBottom: "3.5rem" }} className="reveal" suppressHydrationWarning>
             <p className="gold-label" style={{ marginBottom: "0.75rem", color: "var(--champagne-gold)" }}>
               Timeline
             </p>
@@ -281,6 +284,7 @@ export default async function AboutPage() {
                   position: "relative",
                 }}
                 className={`timeline-item reveal reveal-delay-${Math.min(idx + 1, 4)}`}
+                suppressHydrationWarning
               >
                 <div style={{ textAlign: "right", paddingTop: "0.25rem" }}>
                   <span
@@ -298,7 +302,7 @@ export default async function AboutPage() {
                 </div>
                 <div
                   style={{
-                    borderLeft: "2px solid rgba(212,175,55,0.35)",
+                    borderLeft: "2px solid rgba(157,23,77,0.35)",
                     paddingLeft: "2rem",
                     paddingBottom: idx < JOURNEY_MILESTONES.length - 1 ? "0.5rem" : "0",
                     position: "relative",
@@ -330,7 +334,7 @@ export default async function AboutPage() {
                   <p
                     style={{
                       fontSize: "0.95rem",
-                      color: "rgba(255,253,248,0.72)",
+                      color: "rgba(255,251,252,0.72)",
                       lineHeight: 1.78,
                       margin: 0,
                     }}
@@ -355,7 +359,7 @@ export default async function AboutPage() {
       {awards.length > 0 && (
         <section className="section-light" style={{ padding: "6rem 0" }}>
           <div className="container">
-            <div style={{ textAlign: "center", marginBottom: "3rem" }} className="reveal">
+            <div style={{ textAlign: "center", marginBottom: "3rem" }} className="reveal" suppressHydrationWarning>
               <p className="gold-label" style={{ marginBottom: "0.75rem" }}>Recognition</p>
               <h2
                 style={{
@@ -387,10 +391,11 @@ export default async function AboutPage() {
                 <div
                   key={award.id}
                   className={`track-card reveal reveal-delay-${Math.min(i + 1, 4)}`}
+                  suppressHydrationWarning
                   style={{
                     borderLeft: "3px solid var(--royal-gold)",
                     paddingLeft: "1.75rem",
-                    background: "rgba(212,175,55,0.04)",
+                    background: "rgba(157,23,77,0.04)",
                   }}
                 >
                   <h3
@@ -439,7 +444,9 @@ export default async function AboutPage() {
       {/* ═══ CTA STRIP ═══ */}
       <section
         style={{
-          background: "linear-gradient(135deg, var(--deep-gold) 0%, var(--royal-gold) 40%, var(--champagne-gold) 60%, var(--royal-gold) 80%, var(--deep-gold) 100%)",
+          // Dark-to-dark only — see matching comment in contact/page.tsx's
+          // Ministry Promise Strip for why champagne-gold was removed here.
+          background: "linear-gradient(135deg, var(--deep-gold) 0%, var(--royal-gold) 40%, var(--kente-mid) 60%, var(--royal-gold) 80%, var(--deep-gold) 100%)",
           backgroundSize: "200% 100%",
           padding: "5rem 0",
           textAlign: "center",
@@ -452,7 +459,7 @@ export default async function AboutPage() {
               fontFamily: "var(--font-heading)",
               fontSize: "clamp(2rem, 5vw, 3.5rem)",
               fontWeight: 300,
-              color: "var(--kente-deep)",
+              color: "#FFFBFC",
               margin: "0 0 1rem",
               lineHeight: 1.15,
             }}
@@ -462,7 +469,7 @@ export default async function AboutPage() {
           <p
             style={{
               fontSize: "1rem",
-              color: "rgba(8,61,39,0.72)",
+              color: "rgba(255,251,252,0.80)",
               maxWidth: "500px",
               margin: "0 auto 2.5rem",
               lineHeight: 1.78,
@@ -488,21 +495,21 @@ export default async function AboutPage() {
                 textTransform: "uppercase",
                 textDecoration: "none",
                 fontFamily: "var(--font-body)",
-                boxShadow: "0 8px 28px rgba(15,91,58,0.40)",
+                boxShadow: "0 8px 28px rgba(157,23,77,0.40)",
                 transition: "all 0.25s ease",
               }}
             >
               Book Ministry Session
             </Link>
             <Link
-              href="/albums"
+              href="/music"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
                 padding: "0.85rem 2rem",
                 background: "transparent",
-                color: "var(--kente-deep)",
-                border: "2px solid var(--kente-deep)",
+                color: "#FFFBFC",
+                border: "2px solid #FFFBFC",
                 borderRadius: "9999px",
                 fontWeight: 700,
                 fontSize: "0.82rem",

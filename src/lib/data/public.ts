@@ -1,3 +1,5 @@
+import { cache } from "react";
+
 import { samplePublicContent } from "@/lib/sample-data";
 import { createSupabaseServerClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import { type PublicContent } from "@/lib/types";
@@ -13,7 +15,10 @@ function withTimeout<T>(promise: Promise<T>): Promise<T> {
   ]);
 }
 
-export async function getPublicContent(): Promise<PublicContent> {
+// Wrapped in React's cache() so the page component and SiteFooter (both of
+// which call this independently in the same request tree) share a single
+// underlying fetch instead of each paying their own Supabase round-trip.
+export const getPublicContent = cache(async function getPublicContent(): Promise<PublicContent> {
   if (!isSupabaseConfigured()) {
     return samplePublicContent;
   }
@@ -78,4 +83,4 @@ export async function getPublicContent(): Promise<PublicContent> {
   } catch {
     return samplePublicContent;
   }
-}
+});

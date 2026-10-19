@@ -18,7 +18,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   }
 
-  const formspreeEndpoint = process.env.xaqpqggq;
+  // Was reading process.env.xaqpqggq (a literal variable named after the
+  // form ID value, which was never actually set) instead of the real
+  // FORMSPREE_ENDPOINT variable — this form never worked before.
+  const formspreeFormId = process.env.FORMSPREE_ENDPOINT;
+  const formspreeEndpoint = formspreeFormId ? `https://formspree.io/f/${formspreeFormId}` : null;
   if (!formspreeEndpoint) {
     return NextResponse.json(
       { error: "Thank You" },

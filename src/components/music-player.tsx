@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Track } from '@/lib/types';
+import { recordTrackPlay } from '@/lib/record-play';
 import { FavoriteButton } from './favorite-button';
 
 interface MusicPlayerProps {
@@ -19,7 +20,9 @@ export function MusicPlayer({ tracks, initialIndex = 0, className = '' }: MusicP
   const [volume, setVolume] = useState(0.8);
   const [isShuffle, setIsShuffle] = useState(false);
   const [repeat, setRepeat] = useState<'none' | 'one' | 'all'>('none');
-  const [currentTrack, setCurrentTrack] = useState(tracks[initialIndex]);
+  // Derived directly from tracks/currentIndex rather than synced via an
+  // effect — it never needs to be anything other than tracks[currentIndex].
+  const currentTrack = tracks[currentIndex];
 
   const shuffleArray = useCallback((arr: Track[]) => {
     const shuffled = [...arr];
@@ -74,7 +77,6 @@ export function MusicPlayer({ tracks, initialIndex = 0, className = '' }: MusicP
     if (!audio || !tracks[currentIndex]) return;
 
     const track = tracks[currentIndex];
-    setCurrentTrack(track);
 
     if (track.audio_url) {
       audio.src = track.audio_url;
@@ -132,7 +134,7 @@ export function MusicPlayer({ tracks, initialIndex = 0, className = '' }: MusicP
     setRepeat(repeat === 'none' ? 'one' : repeat === 'one' ? 'all' : 'none');
   };
 
-  if (!tracks.length) return <p className="text-muted">No tracks available</p>;
+  if (!tracks.length) return <p className="text-[color:var(--text-dark-muted)]">No tracks available</p>;
 
   return (
     <div className={`music-player bg-gradient-to-b from-[var(--bg-card)] to-pink-100 border border-[color:var(--border-soft)] rounded-2xl p-6 space-y-6 shadow-2xl ${className}`}>
@@ -145,35 +147,40 @@ export function MusicPlayer({ tracks, initialIndex = 0, className = '' }: MusicP
         />
         <div className="min-w-0 flex-1">
           <h3 className="font-semibold text-lg truncate">{currentTrack?.title}</h3>
-          <p className="text-sm text-[color:var(--text-muted)] truncate">Ewura Abena</p>
+          <p className="text-sm text-[color:var(--text-dark-muted)] truncate">Ewura Abena</p>
         </div>
-        <FavoriteButton trackId={currentTrack?.id || ''} />
+        <FavoriteButton trackId={currentTrack?.id || ''} theme="light" />
       </div>
 
       {/* Audio/Embed */}
       {currentTrack?.audio_url ? (
-        <audio ref={audioRef} className="w-full" preload="metadata">
+        <audio
+          ref={audioRef}
+          className="w-full"
+          preload="metadata"
+          onPlay={() => recordTrackPlay(currentTrack?.id)}
+        >
           <source src={currentTrack.audio_url} type="audio/mpeg" />
           Your browser does not support the audio element.
         </audio>
       ) : (
-        <div className="h-20 flex items-center justify-center bg-[color:var(--bg-muted)] rounded-xl text-sm text-[color:var(--text-muted)]">
-          Open external player: {currentTrack?.youtube_url ? <a href={currentTrack.youtube_url} target="_blank" className="text-gold underline">YouTube</a> : 'No audio'}
+        <div className="h-20 flex items-center justify-center bg-[color:var(--soft-pearl)] rounded-xl text-sm text-[color:var(--text-dark-muted)]">
+          Open external player: {currentTrack?.youtube_url ? <a href={currentTrack.youtube_url} target="_blank" className="text-[color:var(--royal-gold)] underline">YouTube</a> : 'No audio'}
         </div>
       )}
 
       {/* Controls */}
       <div className="space-y-4">
         <div className="flex items-center justify-center gap-6">
-          <button onClick={toggleShuffle} className={`p-2 rounded-full transition-all ${isShuffle ? 'bg-gold/20 text-gold' : 'text-[color:var(--text-muted)] hover:text-white'}`}>
+          <button onClick={toggleShuffle} className={`p-2 rounded-full transition-all ${isShuffle ? 'bg-[color:var(--royal-gold)]/20 text-[color:var(--royal-gold)]' : 'text-[color:var(--text-dark-muted)] hover:text-[color:var(--kente-green)]'}`}>
             🔀
           </button>
           <button onClick={handlePrev} className="p-3 text-2xl hover:scale-110 transition-all">⏮</button>
-            <button onClick={togglePlay} className="w-16 h-16 bg-[var(--rose-gold)]/20 hover:bg-[var(--rose-gold)]/40 rounded-full flex items-center justify-center text-2xl font-bold shadow-xl transition-all">
+            <button onClick={togglePlay} className="w-16 h-16 bg-[color:var(--royal-gold)]/20 hover:bg-[color:var(--royal-gold)]/40 rounded-full flex items-center justify-center text-2xl font-bold shadow-xl transition-all">
             {isPlaying ? '⏸' : '▶'}
           </button>
           <button onClick={handleNext} className="p-3 text-2xl hover:scale-110 transition-all">⏭</button>
-          <button onClick={cycleRepeat} className={`p-2 rounded-full transition-all ${repeat !== 'none' ? 'bg-gold/20 text-gold' : 'text-[color:var(--text-muted)] hover:text-white'}`}>
+          <button onClick={cycleRepeat} className={`p-2 rounded-full transition-all ${repeat !== 'none' ? 'bg-[color:var(--royal-gold)]/20 text-[color:var(--royal-gold)]' : 'text-[color:var(--text-dark-muted)] hover:text-[color:var(--kente-green)]'}`}>
             {repeat === 'one' ? '🔂' : repeat === 'all' ? '🔁' : '↻'}
           </button>
         </div>
@@ -196,7 +203,7 @@ export function MusicPlayer({ tracks, initialIndex = 0, className = '' }: MusicP
 
         {/* Volume */}
         <div className="flex items-center gap-2">
-          <span className="text-sm text-[color:var(--text-muted)]">Vol</span>
+          <span className="text-sm text-[color:var(--text-dark-muted)]">Vol</span>
           <input
             type="range"
             min="0"
@@ -210,21 +217,21 @@ export function MusicPlayer({ tracks, initialIndex = 0, className = '' }: MusicP
 
       {/* Tracklist */}
       <div className="space-y-2 max-h-64 overflow-y-auto">
-        <h4 className="font-semibold text-gold uppercase tracking-wide text-xs">Playlist ({tracks.length} tracks)</h4>
+        <h4 className="font-semibold text-[color:var(--royal-gold)] uppercase tracking-wide text-xs">Playlist ({tracks.length} tracks)</h4>
         {tracks.map((track, index) => (
           <button
             key={track.id}
             onClick={() => setCurrentIndex(index)}
-            className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all group hover:bg-gold/10 ${index === currentIndex ? 'bg-gold/20 ring-2 ring-gold/50' : ''}`}
+            className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all group hover:bg-[color:var(--royal-gold)]/10 ${index === currentIndex ? 'bg-[color:var(--royal-gold)]/20 ring-2 ring-[color:var(--royal-gold)]/50' : ''}`}
           >
-            <span className={`text-xl font-bold ${index === currentIndex ? 'text-gold' : 'text-[color:var(--text-muted)]'} flex-shrink-0`}>
+            <span className={`text-xl font-bold ${index === currentIndex ? 'text-[color:var(--royal-gold)]' : 'text-[color:var(--text-dark-muted)]'} flex-shrink-0`}>
               {index + 1}
             </span>
             <div className="min-w-0 flex-1 text-left">
               <p className="font-medium truncate">{track.title}</p>
-              <p className="text-xs text-[color:var(--text-muted)] truncate">Ewura Abena</p>
+              <p className="text-xs text-[color:var(--text-dark-muted)] truncate">Ewura Abena</p>
             </div>
-            <div className="text-xs opacity-0 group-hover:opacity-100 transition-opacity text-gold whitespace-nowrap flex-shrink-0">
+            <div className="text-xs opacity-0 group-hover:opacity-100 transition-opacity text-[color:var(--royal-gold)] whitespace-nowrap flex-shrink-0">
               {track.duration_seconds ? `${Math.floor(track.duration_seconds / 60)}:${(track.duration_seconds % 60).toString().padStart(2, '0')}` : '--:--'}
             </div>
           </button>

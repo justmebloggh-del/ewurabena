@@ -1,5 +1,8 @@
 import Link from "next/link";
 
+import { getPublicContent } from "@/lib/data/public";
+
+// Fallback used only if Supabase has no published social_links rows yet.
 const SOCIAL_LINKS = [
   { label: "Spotify", href: "https://open.spotify.com/artist/66omcxaARiacfGoXuXiHXQ?si=pIX56tJYRWOAl2F6_6wt-Q" },
   { label: "Apple Music", href: "https://music.apple.com/gb/artist/ewura-abena/994868905" },
@@ -16,9 +19,10 @@ const NAV_COLUMNS = [
     title: "Ministry",
     links: [
       { label: "About", href: "/about" },
-      { label: "Music & Albums", href: "/albums" },
+      { label: "Music", href: "/music" },
       { label: "Photo Gallery", href: "/gallery" },
       { label: "Playlists", href: "/playlists" },
+      { label: "Events", href: "/events" },
     ],
   },
   {
@@ -34,27 +38,26 @@ const NAV_COLUMNS = [
 
 const YEAR = new Date().getFullYear();
 
-export function SiteFooter() {
+export async function SiteFooter() {
   const year = YEAR;
+  const { socialLinks: dbSocialLinks } = await getPublicContent();
+  const socialLinks =
+    dbSocialLinks.length > 0
+      ? dbSocialLinks.map((link) => ({ label: link.platform, href: link.url }))
+      : SOCIAL_LINKS;
 
   return (
     <footer className="site-footer">
-      {/* Gold shimmer top border */}
-      <div
-        style={{
-          height: "2px",
-          background: "linear-gradient(90deg, transparent, var(--royal-gold) 20%, var(--champagne-gold) 50%, var(--royal-gold) 80%, transparent)",
-          opacity: 0.80,
-        }}
-        aria-hidden="true"
-      />
+      {/* Kente strip — ties the footer to the heritage identity rather
+          than a flat gold line */}
+      <div className="brand-divider" aria-hidden="true" />
 
       {/* ── CTA Banner ── */}
       <div
         style={{
-          borderBottom: "1px solid rgba(212,175,55,0.18)",
+          borderBottom: "1px solid rgba(157,23,77,0.18)",
           padding: "4rem 0",
-          background: "rgba(212,175,55,0.04)",
+          background: "rgba(157,23,77,0.04)",
           textAlign: "center",
           position: "relative",
           overflow: "hidden",
@@ -66,7 +69,7 @@ export function SiteFooter() {
           style={{
             position: "absolute",
             inset: 0,
-            background: "radial-gradient(ellipse at 50% 100%, rgba(212,175,55,0.18) 0%, transparent 60%)",
+            background: "radial-gradient(ellipse at 50% 100%, rgba(157,23,77,0.18) 0%, transparent 60%)",
             pointerEvents: "none",
           }}
         />
@@ -102,7 +105,7 @@ export function SiteFooter() {
             style={{
               fontFamily: "var(--font-body), sans-serif",
               fontSize: "0.97rem",
-              color: "rgba(255,253,249,0.55)",
+              color: "rgba(255,251,252,0.55)",
               maxWidth: "480px",
               margin: "0 auto 2rem",
               lineHeight: 1.75,
@@ -155,7 +158,7 @@ export function SiteFooter() {
             style={{
               fontFamily: "var(--font-body), sans-serif",
               fontSize: "0.9rem",
-              color: "rgba(255,253,249,0.52)",
+              color: "rgba(255,251,252,0.52)",
               lineHeight: 1.8,
               maxWidth: "300px",
               marginBottom: "2rem",
@@ -184,7 +187,7 @@ export function SiteFooter() {
               <a
                 key={c.href}
                 href={c.href}
-                style={{ color: "rgba(255,253,249,0.50)", textDecoration: "none", transition: "color 0.2s" }}
+                style={{ color: "rgba(255,251,252,0.50)", textDecoration: "none", transition: "color 0.2s" }}
                 className="footer-contact-link"
               >
                 {c.label}
@@ -194,7 +197,7 @@ export function SiteFooter() {
 
           {/* Social links */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-            {SOCIAL_LINKS.map((link) => (
+            {socialLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
@@ -240,7 +243,7 @@ export function SiteFooter() {
       </div>
 
       {/* ── Bottom Bar ── */}
-      <div style={{ borderTop: "1px solid rgba(212,175,55,0.15)" }}>
+      <div style={{ borderTop: "1px solid rgba(157,23,77,0.15)" }}>
         <div
           className="container"
           style={{
@@ -253,23 +256,41 @@ export function SiteFooter() {
             gap: "1rem",
           }}
         >
-          <p
-            suppressHydrationWarning
-            style={{
-              fontFamily: "var(--font-body), sans-serif",
-              fontSize: "0.78rem",
-              color: "rgba(255,253,249,0.35)",
-              margin: 0,
-            }}
-          >
-            © {year} Ewura Abena. All rights reserved.
-          </p>
+          <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
+            <p
+              suppressHydrationWarning
+              style={{
+                fontFamily: "var(--font-body), sans-serif",
+                fontSize: "0.78rem",
+                color: "rgba(255,251,252,0.35)",
+                margin: 0,
+              }}
+            >
+              © {year} Ewura Abena. All rights reserved.
+            </p>
+            <Link
+              href="/admin"
+              style={{
+                fontFamily: "var(--font-body), sans-serif",
+                fontSize: "0.7rem",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "rgba(255,251,252,0.3)",
+                textDecoration: "none",
+                borderLeft: "1px solid rgba(255,251,252,0.2)",
+                paddingLeft: "1.25rem",
+              }}
+              className="footer-contact-link"
+            >
+              Admin
+            </Link>
+          </div>
           <p
             style={{
               fontFamily: "var(--font-heading), serif",
               fontSize: "0.8rem",
               fontStyle: "italic",
-              color: "rgba(212,175,55,0.50)",
+              color: "rgba(157,23,77,0.50)",
               margin: 0,
               letterSpacing: "0.04em",
             }}

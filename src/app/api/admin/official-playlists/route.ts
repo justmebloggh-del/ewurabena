@@ -37,6 +37,48 @@ export async function POST(request: Request) {
   return NextResponse.json({ officialPlaylist: data });
 }
 
+export async function PATCH(request: Request) {
+  const authResult = await requireRouteAdmin();
+  if ("error" in authResult) {
+    return authResult.error;
+  }
+
+  const id = new URL(request.url).searchParams.get("id");
+
+  if (!id) {
+    return NextResponse.json({ error: "Playlist id is required." }, { status: 400 });
+  }
+
+  const payload = await request.json().catch(() => null);
+  const parsed = officialPlaylistSchema.partial().safeParse(payload);
+
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid playlist payload." }, { status: 400 });
+  }
+
+  const d = parsed.data;
+  const update: Record<string, unknown> = {};
+  if (d.title !== undefined) update.title = d.title;
+  if (d.description !== undefined) update.description = nullableString(d.description);
+  if (d.embed_url !== undefined) update.embed_url = nullableString(d.embed_url);
+  if (d.cover_image_url !== undefined) update.cover_image_url = nullableString(d.cover_image_url);
+  if (d.is_published !== undefined) update.is_published = d.is_published;
+
+  const { supabase } = authResult;
+  const { data, error } = await supabase
+    .from("official_playlists")
+    .update(update)
+    .eq("id", id)
+    .select("*")
+    .single();
+
+  if (error) {
+    return NextResponse.json({ error: "Failed to update playlist." }, { status: 500 });
+  }
+
+  return NextResponse.json({ officialPlaylist: data });
+}
+
 export async function DELETE(request: Request) {
   const authResult = await requireRouteAdmin();
   if ("error" in authResult) {

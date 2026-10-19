@@ -18,7 +18,7 @@ export default async function PlaylistsPage() {
         style={{
           background: "linear-gradient(160deg, var(--kente-deep) 0%, var(--kente-green) 60%, var(--kente-deep) 100%)",
           padding: "7rem 0 5rem",
-          borderBottom: "1px solid rgba(212,175,55,0.22)",
+          borderBottom: "1px solid rgba(157,23,77,0.22)",
           position: "relative",
           overflow: "hidden",
           textAlign: "center",
@@ -29,7 +29,7 @@ export default async function PlaylistsPage() {
           style={{
             position: "absolute",
             inset: 0,
-            background: "radial-gradient(ellipse at 50% 60%, rgba(212,175,55,0.18) 0%, transparent 60%)",
+            background: "radial-gradient(ellipse at 50% 60%, rgba(157,23,77,0.18) 0%, transparent 60%)",
             pointerEvents: "none",
           }}
         />
@@ -42,12 +42,12 @@ export default async function PlaylistsPage() {
               fontWeight: 300,
               color: "var(--ivory)",
               margin: "0 0 1rem",
-              textShadow: "0 4px 40px rgba(212,175,55,0.30)",
+              textShadow: "0 4px 40px rgba(157,23,77,0.30)",
             }}
           >
             Official Playlists
           </h1>
-          <p style={{ fontSize: "1rem", color: "rgba(255,253,248,0.78)", maxWidth: "520px", margin: "0 auto", lineHeight: 1.75 }}>
+          <p style={{ fontSize: "1rem", color: "rgba(255,251,252,0.78)", maxWidth: "520px", margin: "0 auto", lineHeight: 1.75 }}>
             Curated worship selections for quiet time, devotion, and encounter with God.
           </p>
         </div>
@@ -87,7 +87,7 @@ export default async function PlaylistsPage() {
                   {playlist.embed_url ? (
                     <iframe
                       src={playlist.embed_url}
-                      style={{ width: "100%", height: "11rem", borderRadius: "0.75rem", border: "1px solid rgba(212,175,55,0.22)", display: "block" }}
+                      style={{ width: "100%", height: "11rem", borderRadius: "0.75rem", border: "1px solid rgba(157,23,77,0.22)", display: "block" }}
                       title={`${playlist.title} player`}
                       allow="autoplay; clipboard-write; encrypted-media; fullscreen"
                     />
@@ -97,7 +97,7 @@ export default async function PlaylistsPage() {
             </div>
           ) : (
             <div style={{ textAlign: "center", padding: "4rem 0" }}>
-              <p style={{ color: "rgba(255,253,248,0.68)", fontSize: "1rem" }}>Playlists coming soon. Check back shortly.</p>
+              <p style={{ color: "rgba(255,251,252,0.68)", fontSize: "1rem" }}>Playlists coming soon. Check back shortly.</p>
             </div>
           )}
         </div>
@@ -107,7 +107,7 @@ export default async function PlaylistsPage() {
       <section
         className="section-light"
         style={{
-          borderTop: "1px solid rgba(212,175,55,0.22)",
+          borderTop: "1px solid rgba(157,23,77,0.22)",
           padding: "5rem 0",
         }}
       >
@@ -141,7 +141,12 @@ export default async function PlaylistsPage() {
             <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", minWidth: "180px" }}>
               <Link href="/fan" className="btn-primary">Open Fan Hub</Link>
               <Link href="/player" className="btn-gold">Launch Player</Link>
-              <Link href="/auth/sign-up" className="btn-ghost" style={{ textAlign: "center" }}>Sign Up Free</Link>
+              {/* was btn-ghost — that variant is near-white text designed
+                  for dark backgrounds; this card sits on a light section,
+                  which made it nearly invisible. btn-secondary (solid rose
+                  fill, white text) is the light-background-appropriate
+                  choice already used correctly elsewhere on the site. */}
+              <Link href="/auth/sign-up" className="btn-secondary" style={{ textAlign: "center" }}>Sign Up Free</Link>
             </div>
           </div>
         </div>

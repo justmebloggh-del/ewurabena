@@ -1,6 +1,7 @@
 "use client";
 
 interface TrackInfo {
+  id?: string;
   title: string;
   album?: string;
   audio_url?: string;
@@ -29,7 +30,7 @@ export function PlayTrackButton({ track, label }: Props) {
       className="platform-badge"
       style={{
         cursor: "pointer",
-        background: "rgba(201,168,76,0.1)",
+        background: "rgba(157,23,77,0.1)",
         border: "1px solid var(--gold)",
         color: "var(--gold)",
         fontFamily: "var(--font-body)",

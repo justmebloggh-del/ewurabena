@@ -8,93 +8,53 @@ interface Props {
 }
 
 export function ImageGallery({ images }: Props) {
-  const [current, setCurrent] = useState(0);
-  const [paused, setPaused] = useState(false);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  const prev = useCallback(() => setCurrent((c) => (c - 1 + images.length) % images.length), [images.length]);
-  const next = useCallback(() => setCurrent((c) => (c + 1) % images.length), [images.length]);
+  const close = useCallback(() => setActiveIndex(null), []);
+  const prev = useCallback(
+    () => setActiveIndex((i) => (i === null ? null : (i - 1 + images.length) % images.length)),
+    [images.length]
+  );
+  const next = useCallback(
+    () => setActiveIndex((i) => (i === null ? null : (i + 1) % images.length)),
+    [images.length]
+  );
 
+  // Keyboard navigation + scroll-lock while the lightbox is open
   useEffect(() => {
-    if (paused) return;
-    const id = setInterval(next, 4500);
-    return () => clearInterval(id);
-  }, [paused, next]);
-
-  // keyboard navigation
-  useEffect(() => {
+    if (activeIndex === null) return;
     const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
       if (e.key === "ArrowLeft") prev();
       if (e.key === "ArrowRight") next();
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [prev, next]);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [activeIndex, close, prev, next]);
 
   return (
-    <div
-      style={{
-        position: "relative",
-        width: "100%",
-        minHeight: "100vh",
-        background: "var(--kente-deep)",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        overflow: "hidden",
-      }}
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
-      {/* Slides */}
-      {images.map((src, i) => (
-        <div
-          key={src}
-          style={{
-            position: "absolute",
-            inset: 0,
-            opacity: i === current ? 1 : 0,
-            transition: "opacity 0.9s ease",
-            pointerEvents: i === current ? "auto" : "none",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Image
-            src={src}
-            alt={`Gallery image ${i + 1}`}
-            fill
-            sizes="100vw"
-            style={{ objectFit: "contain" }}
-            priority={i < 2}
-          />
-        </div>
-      ))}
-
-      {/* Title overlay */}
+    <div style={{ background: "var(--ivory)", minHeight: "100vh" }}>
+      {/* ─── Title banner ─── */}
       <div
         style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 5,
-          padding: "2rem 2rem 3rem",
-          background: "linear-gradient(to bottom, rgba(8,61,39,0.80) 0%, transparent 100%)",
-          pointerEvents: "none",
+          background: "linear-gradient(160deg, var(--kente-deep) 0%, var(--kente-green) 60%, var(--kente-deep) 100%)",
+          padding: "7rem 0 3rem",
           textAlign: "center",
         }}
       >
         <p
           style={{
-            fontSize: "0.62rem",
-            letterSpacing: "0.32em",
+            fontSize: "0.68rem",
+            letterSpacing: "0.36em",
             textTransform: "uppercase",
-            color: "var(--gold)",
-            fontWeight: 600,
+            color: "var(--champagne-gold)",
+            fontWeight: 700,
             fontFamily: "var(--font-body)",
-            margin: "0 0 0.4rem",
+            margin: "0 0 0.75rem",
           }}
         >
           Visual Story
@@ -102,165 +62,213 @@ export function ImageGallery({ images }: Props) {
         <h1
           style={{
             fontFamily: "var(--font-heading)",
-            fontSize: "clamp(2rem, 5vw, 3.5rem)",
+            fontSize: "clamp(2.2rem, 5vw, 3.8rem)",
             fontWeight: 300,
             color: "var(--ivory)",
             margin: 0,
-            letterSpacing: "0.04em",
+            letterSpacing: "0.02em",
           }}
         >
           Photo Gallery
         </h1>
       </div>
+      <div className="brand-divider" aria-hidden="true" />
 
-      {/* Subtle dark vignette on left/right edges */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: "linear-gradient(to right, rgba(8,61,39,0.4) 0%, transparent 15%, transparent 85%, rgba(8,61,39,0.4) 100%)",
-          pointerEvents: "none",
-          zIndex: 1,
-        }}
-      />
-
-      {/* Prev button */}
-      <button
-        type="button"
-        onClick={prev}
-        aria-label="Previous image"
-        style={{
-          position: "absolute",
-          left: "1.25rem",
-          top: "50%",
-          transform: "translateY(-50%)",
-          zIndex: 10,
-          width: "3rem",
-          height: "3rem",
-          borderRadius: "50%",
-          background: "rgba(8,61,39,0.75)",
-          border: "1px solid rgba(201,168,76,0.3)",
-          color: "var(--gold)",
-          fontSize: "1.1rem",
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backdropFilter: "blur(8px)",
-          transition: "all 0.2s",
-        }}
-        onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(201,168,76,0.15)"; }}
-        onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(8,61,39,0.75)"; }}
-      >
-        ❮
-      </button>
-
-      {/* Next button */}
-      <button
-        type="button"
-        onClick={next}
-        aria-label="Next image"
-        style={{
-          position: "absolute",
-          right: "1.25rem",
-          top: "50%",
-          transform: "translateY(-50%)",
-          zIndex: 10,
-          width: "3rem",
-          height: "3rem",
-          borderRadius: "50%",
-          background: "rgba(8,61,39,0.75)",
-          border: "1px solid rgba(201,168,76,0.3)",
-          color: "var(--gold)",
-          fontSize: "1.1rem",
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backdropFilter: "blur(8px)",
-          transition: "all 0.2s",
-        }}
-        onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(201,168,76,0.15)"; }}
-        onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(8,61,39,0.75)"; }}
-      >
-        ❯
-      </button>
-
-      {/* Bottom bar: counter + dots + pause */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: "2rem",
-          left: 0,
-          right: 0,
-          zIndex: 10,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "1.5rem",
-          flexWrap: "wrap",
-          padding: "0 1rem",
-        }}
-      >
-        {/* Counter */}
-        <span
+      {/* ─── Grid ─── */}
+      <div className="container" style={{ padding: "3rem 1.5rem 5rem" }}>
+        <div
           style={{
-            fontSize: "0.68rem",
-            letterSpacing: "0.2em",
-            color: "rgba(201,168,76,0.7)",
-            fontFamily: "var(--font-body)",
-            background: "rgba(8,61,39,0.75)",
-            padding: "0.3rem 0.75rem",
-            borderRadius: "9999px",
-            backdropFilter: "blur(8px)",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+            gap: "1rem",
           }}
         >
-          {current + 1} / {images.length}
-        </span>
-
-        {/* Dots */}
-        <div style={{ display: "flex", gap: "0.4rem", alignItems: "center" }}>
-          {images.map((_, i) => (
+          {images.map((src, i) => (
             <button
-              key={i}
+              key={src}
               type="button"
-              onClick={() => setCurrent(i)}
-              aria-label={`Go to image ${i + 1}`}
+              onClick={() => setActiveIndex(i)}
+              aria-label={`Open photo ${i + 1} of ${images.length}`}
+              className="gallery-thumb"
               style={{
-                width: i === current ? "1.75rem" : "0.5rem",
-                height: "0.5rem",
-                borderRadius: "9999px",
-                background: i === current ? "var(--gold)" : "rgba(255,255,255,0.3)",
-                border: "none",
+                position: "relative",
+                aspectRatio: "4 / 5",
+                borderRadius: "1rem",
+                overflow: "hidden",
+                border: "1px solid rgba(157,23,77,0.22)",
                 cursor: "pointer",
                 padding: 0,
-                transition: "all 0.3s ease",
+                background: "var(--kente-light)",
               }}
-            />
+            >
+              <Image
+                src={src}
+                alt={`Ewura Abena — ministry photo ${i + 1}`}
+                fill
+                sizes="(max-width: 700px) 50vw, (max-width: 1100px) 33vw, 25vw"
+                style={{ objectFit: "cover" }}
+                className="gallery-thumb-img"
+                loading={i < 6 ? "eager" : "lazy"}
+                // Next's image optimizer refuses any private-IP source
+                // (e.g. a local `supabase start` instance on 127.0.0.1) as
+                // an SSRF guard — only relevant in local dev, since a real
+                // Supabase project is a public HTTPS domain.
+                unoptimized={process.env.NODE_ENV !== "production"}
+              />
+              <span className="gallery-thumb-overlay" aria-hidden="true" />
+            </button>
           ))}
         </div>
+      </div>
 
-        {/* Pause/play */}
-        <button
-          type="button"
-          onClick={() => setPaused((p) => !p)}
-          aria-label={paused ? "Resume slideshow" : "Pause slideshow"}
+      {/* ─── Lightbox ─── */}
+      {activeIndex !== null && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Photo viewer"
+          onClick={close}
           style={{
-            fontSize: "0.68rem",
-            letterSpacing: "0.12em",
-            color: "rgba(201,168,76,0.7)",
-            fontFamily: "var(--font-body)",
-            background: "rgba(8,61,39,0.75)",
-            padding: "0.3rem 0.75rem",
-            borderRadius: "9999px",
-            border: "1px solid rgba(201,168,76,0.2)",
-            cursor: "pointer",
-            backdropFilter: "blur(8px)",
+            position: "fixed",
+            inset: 0,
+            zIndex: 3000,
+            background: "rgba(24,6,14,0.94)",
+            backdropFilter: "blur(10px)",
+            WebkitBackdropFilter: "blur(10px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "1.5rem",
           }}
         >
-          {paused ? "▶ Play" : "⏸ Pause"}
-        </button>
-      </div>
+          {/* Close */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              close();
+            }}
+            aria-label="Close photo viewer"
+            style={{
+              position: "absolute",
+              top: "1.25rem",
+              right: "1.25rem",
+              zIndex: 10,
+              width: "2.75rem",
+              height: "2.75rem",
+              borderRadius: "50%",
+              background: "rgba(131,24,67,0.75)",
+              border: "1px solid rgba(157,23,77,0.3)",
+              color: "var(--gold)",
+              fontSize: "1.1rem",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            ✕
+          </button>
+
+          {/* Prev */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              prev();
+            }}
+            aria-label="Previous photo"
+            style={{
+              position: "absolute",
+              left: "1rem",
+              top: "50%",
+              transform: "translateY(-50%)",
+              zIndex: 10,
+              width: "3rem",
+              height: "3rem",
+              borderRadius: "50%",
+              background: "rgba(131,24,67,0.75)",
+              border: "1px solid rgba(157,23,77,0.3)",
+              color: "var(--gold)",
+              fontSize: "1.1rem",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            ❮
+          </button>
+
+          {/* Image */}
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: "relative",
+              width: "100%",
+              maxWidth: "900px",
+              height: "min(80vh, 900px)",
+            }}
+          >
+            <Image
+              src={images[activeIndex]}
+              alt={`Ewura Abena — ministry photo ${activeIndex + 1}`}
+              fill
+              sizes="90vw"
+              style={{ objectFit: "contain" }}
+              priority
+              unoptimized={process.env.NODE_ENV !== "production"}
+            />
+          </div>
+
+          {/* Next */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              next();
+            }}
+            aria-label="Next photo"
+            style={{
+              position: "absolute",
+              right: "1rem",
+              top: "50%",
+              transform: "translateY(-50%)",
+              zIndex: 10,
+              width: "3rem",
+              height: "3rem",
+              borderRadius: "50%",
+              background: "rgba(131,24,67,0.75)",
+              border: "1px solid rgba(157,23,77,0.3)",
+              color: "var(--gold)",
+              fontSize: "1.1rem",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            ❯
+          </button>
+
+          {/* Counter */}
+          <p
+            style={{
+              position: "absolute",
+              bottom: "1.25rem",
+              left: 0,
+              right: 0,
+              textAlign: "center",
+              color: "rgba(255,251,252,0.55)",
+              fontSize: "0.75rem",
+              letterSpacing: "0.1em",
+              fontFamily: "var(--font-body)",
+            }}
+          >
+            {activeIndex + 1} / {images.length}
+          </p>
+        </div>
+      )}
     </div>
   );
 }

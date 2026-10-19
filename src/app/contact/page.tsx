@@ -35,7 +35,7 @@ export default function ContactPage() {
           padding: "8rem 0 6rem",
           overflow: "hidden",
           textAlign: "center",
-          borderBottom: "1px solid rgba(212,175,55,0.22)",
+          borderBottom: "1px solid rgba(157,23,77,0.22)",
         }}
       >
         {/* Gold atmospheric glow */}
@@ -44,7 +44,7 @@ export default function ContactPage() {
           style={{
             position: "absolute",
             inset: 0,
-            background: "radial-gradient(ellipse at 50% 60%, rgba(212,175,55,0.18) 0%, transparent 60%)",
+            background: "radial-gradient(ellipse at 50% 60%, rgba(157,23,77,0.18) 0%, transparent 60%)",
             pointerEvents: "none",
           }}
         />
@@ -60,7 +60,7 @@ export default function ContactPage() {
               color: "var(--ivory)",
               margin: "0 0 1rem",
               lineHeight: 1.1,
-              textShadow: "0 4px 40px rgba(212,175,55,0.30)",
+              textShadow: "0 4px 40px rgba(157,23,77,0.30)",
             }}
           >
             Book Ewura Abena
@@ -68,7 +68,7 @@ export default function ContactPage() {
           <p
             style={{
               fontSize: "1rem",
-              color: "rgba(255,253,248,0.78)",
+              color: "rgba(255,251,252,0.78)",
               maxWidth: "560px",
               margin: "0 auto",
               lineHeight: 1.78,
@@ -138,7 +138,7 @@ export default function ContactPage() {
                         padding: "0.75rem 1rem",
                         borderRadius: "0.85rem",
                         background: "var(--ivory)",
-                        border: "1px solid rgba(212,175,55,0.20)",
+                        border: "1px solid rgba(157,23,77,0.20)",
                         transition: "all 0.22s ease",
                       }}
                       className="contact-item-link"
@@ -235,19 +235,23 @@ export default function ContactPage() {
           }
           .contact-item-link:hover {
             border-color: var(--royal-gold) !important;
-            background: rgba(212,175,55,0.06) !important;
+            background: rgba(157,23,77,0.06) !important;
             transform: translateX(4px);
           }
         `}</style>
       </section>
 
       {/* ═══ KENTE DIVIDER ═══ */}
-      <div className="kente-divider" aria-hidden="true" />
+      <div className="brand-divider" aria-hidden="true" />
 
       {/* ═══ MINISTRY PROMISE STRIP ═══ */}
       <section
         style={{
-          background: "linear-gradient(135deg, var(--deep-gold) 0%, var(--royal-gold) 40%, var(--champagne-gold) 60%, var(--royal-gold) 80%, var(--deep-gold) 100%)",
+          // Dark-to-dark only (no champagne-gold/pale stop) — that stop
+          // made part of this animated gradient pale while the text color
+          // stayed dark, which was unreadable wherever the pale portion
+          // scrolled under the text.
+          background: "linear-gradient(135deg, var(--deep-gold) 0%, var(--royal-gold) 40%, var(--kente-mid) 60%, var(--royal-gold) 80%, var(--deep-gold) 100%)",
           backgroundSize: "200% 100%",
           padding: "4rem 0",
           textAlign: "center",
@@ -261,7 +265,7 @@ export default function ContactPage() {
               fontSize: "clamp(1.4rem, 3vw, 2rem)",
               fontWeight: 300,
               fontStyle: "italic",
-              color: "var(--kente-deep)",
+              color: "#FFFBFC",
               margin: "0 0 0.5rem",
               lineHeight: 1.4,
             }}
@@ -274,7 +278,7 @@ export default function ContactPage() {
               fontSize: "0.70rem",
               letterSpacing: "0.30em",
               textTransform: "uppercase",
-              color: "rgba(8,61,39,0.70)",
+              color: "rgba(255,251,252,0.80)",
               fontWeight: 700,
             }}
           >

@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 
+import { FavoriteButton } from "@/components/favorite-button";
 import { PlayTrackButton } from "@/components/play-track-button";
 import { PlatformEmbedPlayer } from "@/components/platform-embed-player";
+import { TrackAudio, TrackVideo } from "@/components/track-audio";
+import { WatchOnTvBadge } from "@/components/watch-on-tv-badge";
 import { getPublicContent } from "@/lib/data/public";
+import { trackHasTvVideo } from "@/lib/tv-channel";
 
 export const metadata: Metadata = {
   title: "Music | Ewura Abena",
   description:
-    "Stream Ewura Abena's soul gospel music on Spotify, Apple Music, Audiomack, Boomplay and more. Listen to all tracks, albums and playlists.",
+    "Stream Ewura Abena's soul gospel music on Spotify, Apple Music, Audiomack, Boomplay and more. Browse the full discography by album.",
 };
 
 export default async function MusicPage() {
@@ -20,7 +24,7 @@ export default async function MusicPage() {
         style={{
           background: "linear-gradient(160deg, var(--kente-deep) 0%, var(--kente-green) 60%, var(--kente-deep) 100%)",
           padding: "7rem 0 5rem",
-          borderBottom: "1px solid rgba(212,175,55,0.22)",
+          borderBottom: "1px solid rgba(157,23,77,0.22)",
           position: "relative",
           overflow: "hidden",
           textAlign: "center",
@@ -31,13 +35,13 @@ export default async function MusicPage() {
           style={{
             position: "absolute",
             inset: 0,
-            background: "radial-gradient(ellipse at 50% 60%, rgba(212,175,55,0.18) 0%, transparent 60%)",
+            background: "radial-gradient(ellipse at 50% 60%, rgba(157,23,77,0.18) 0%, transparent 60%)",
             pointerEvents: "none",
           }}
         />
         <div className="container" style={{ position: "relative" }}>
           <p className="gold-label" style={{ marginBottom: "0.75rem" }}>
-            Streaming
+            Streaming &amp; Discography
           </p>
           <h1
             style={{
@@ -46,7 +50,7 @@ export default async function MusicPage() {
               fontWeight: 300,
               color: "var(--ivory)",
               margin: "0 0 1rem",
-              textShadow: "0 4px 40px rgba(212,175,55,0.30)",
+              textShadow: "0 4px 40px rgba(157,23,77,0.30)",
             }}
           >
             Music
@@ -54,7 +58,7 @@ export default async function MusicPage() {
           <p
             style={{
               fontSize: "1rem",
-              color: "rgba(255,253,248,0.78)",
+              color: "rgba(255,251,252,0.78)",
               maxWidth: "500px",
               margin: "0 auto 2.5rem",
               lineHeight: 1.75,
@@ -70,15 +74,15 @@ export default async function MusicPage() {
               { label: "♪ Apple Music", href: "#apple" },
               { label: "◈ Audiomack", href: "#audiomack" },
               { label: "▶ Boomplay", href: "#boomplay" },
-              { label: "⊙ All Tracks", href: "#tracks" },
+              { label: "⊙ Discography", href: "#discography" },
             ].map(({ label, href }) => (
               <a
                 key={href}
                 href={href}
                 className="platform-badge"
                 style={{
-                  background: "rgba(212,175,55,0.12)",
-                  border: "1px solid rgba(212,175,55,0.45)",
+                  background: "rgba(157,23,77,0.12)",
+                  border: "1px solid rgba(157,23,77,0.45)",
                   fontSize: "0.75rem",
                 }}
               >
@@ -165,11 +169,17 @@ export default async function MusicPage() {
               boxShadow: "0 20px 60px rgba(0,0,0,0.35)",
             }}
           >
+            {/* Apple's own reference embed code uses this exact allow
+                (wildcard origins) + an explicit sandbox attribute — without
+                them the widget loads (200 OK) but silently renders an
+                empty gray placeholder with no track data, which is what
+                was actually happening here before this fix. */}
             <iframe
               src="https://embed.music.apple.com/gb/artist/ewura-abena/994868905"
               width="100%"
               height="450"
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              allow="autoplay *; encrypted-media *;"
+              sandbox="allow-same-origin allow-scripts allow-top-navigation-by-user-activation allow-popups"
               loading="lazy"
               title="Ewura Abena on Apple Music"
               style={{ display: "block", border: "none" }}
@@ -230,17 +240,35 @@ export default async function MusicPage() {
               >
                 Ewura Abena on Audiomack
               </p>
-              <p style={{ color: "rgba(255,253,248,0.68)", fontSize: "0.9rem", margin: 0 }}>
-                Stream all songs, albums, and playlists on Audiomack
+              <p style={{ color: "rgba(255,251,252,0.80)", fontSize: "0.9rem", margin: 0 }}>
+                {/* was 0.68 opacity — only 4.25:1 against the lighter end of
+                    this section's gradient background, below WCAG AA's 4.5:1 */}
+                Listen right here, or explore the full catalog on Audiomack.
               </p>
             </div>
+
+            {/* Real in-site playback: Audiomack doesn't support embedding a
+                full artist profile, so rather than send listeners away with
+                no way to actually hear anything, this plays the same real
+                audio files directly. */}
+            {content.tracks.filter((t) => t.audio_url).slice(0, 2).length > 0 && (
+              <div style={{ width: "100%", maxWidth: "440px", display: "flex", flexDirection: "column", gap: "0.85rem" }}>
+                {content.tracks.filter((t) => t.audio_url).slice(0, 2).map((track) => (
+                  <div key={track.id} style={{ textAlign: "left" }}>
+                    <p style={{ fontSize: "0.8rem", color: "rgba(255,251,252,0.85)", margin: "0 0 0.35rem", fontFamily: "var(--font-body)" }}>{track.title}</p>
+                    <TrackAudio trackId={track.id} src={track.audio_url} style={{ width: "100%", accentColor: "var(--gold)" }} />
+                  </div>
+                ))}
+              </div>
+            )}
+
             <a
               href="https://audiomack.com/ewuraabenamusiq"
               target="_blank"
               rel="noreferrer"
               className="btn-secondary"
             >
-              ◈ Open Audiomack ↗
+              ◈ See Full Catalog on Audiomack ↗
             </a>
           </div>
         </div>
@@ -299,7 +327,8 @@ export default async function MusicPage() {
                     >
                       Ewura Abena
                     </p>
-                    <p style={{ fontSize: "0.78rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.55)", margin: 0, fontFamily: "var(--font-body)" }}>
+                    <p style={{ fontSize: "0.78rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.80)", margin: 0, fontFamily: "var(--font-body)" }}>
+                      {/* was 0.55 opacity — only 3.30:1, fails WCAG AA (needs 4.5:1) */}
                       Artist · Boomplay
                     </p>
                   </div>
@@ -321,6 +350,20 @@ export default async function MusicPage() {
                   ))}
                 </div>
 
+                {/* Real in-site playback: there's no confirmed public embed
+                    format for Boomplay at all, so rather than a dead-end
+                    redirect, play the same real audio files directly. */}
+                {content.tracks.filter((t) => t.audio_url).slice(0, 2).length > 0 && (
+                  <div style={{ width: "100%", maxWidth: "380px", display: "flex", flexDirection: "column", gap: "0.85rem" }}>
+                    {content.tracks.filter((t) => t.audio_url).slice(0, 2).map((track) => (
+                      <div key={track.id} style={{ textAlign: "left" }}>
+                        <p style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.85)", margin: "0 0 0.35rem", fontFamily: "var(--font-body)" }}>{track.title}</p>
+                        <TrackAudio trackId={track.id} src={track.audio_url} style={{ width: "100%" }} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
                 <a
                   href="https://www.boomplay.com/share/artist/2829036"
                   target="_blank"
@@ -341,7 +384,7 @@ export default async function MusicPage() {
                     transition: "all 0.2s",
                   }}
                 >
-                  ▶ Open on Boomplay ↗
+                  ▶ See Full Catalog on Boomplay ↗
                 </a>
               </div>
             </div>
@@ -356,8 +399,8 @@ export default async function MusicPage() {
         </div>
       </section>
 
-      {/* ── All Tracks ── */}
-      <section id="tracks" className="section-dark">
+      {/* ── Discography, grouped by album ── */}
+      <section id="discography" className="section-dark">
         <div className="container">
           <p className="gold-label" style={{ marginBottom: "0.75rem" }}>Discography</p>
           <h2
@@ -366,91 +409,165 @@ export default async function MusicPage() {
               fontSize: "clamp(1.8rem, 3.5vw, 2.5rem)",
               fontWeight: 300,
               color: "var(--ivory)",
-              margin: "0 0 2.5rem",
+              margin: "0 0 3rem",
             }}
           >
-            All Tracks
+            Albums &amp; Tracks
           </h2>
 
-          <div style={{ display: "grid", gap: "1.25rem", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))" }}>
-            {content.tracks.map((track) => {
-              const album = content.albums.find((a) => a.id === track.album_id);
+          <div style={{ display: "flex", flexDirection: "column", gap: "4rem" }}>
+            {content.albums.map((album) => {
+              const albumTracks = content.tracks.filter((track) => track.album_id === album.id);
+
               return (
-                <div key={track.id} className="track-card">
-                  <div style={{ marginBottom: "0.85rem" }}>
-                    <p
-                      style={{
-                        fontSize: "0.62rem",
-                        letterSpacing: "0.2em",
-                        textTransform: "uppercase",
-                        color: "var(--champagne-gold)",
-                        margin: "0 0 0.25rem",
-                        fontFamily: "var(--font-body)",
-                      }}
-                    >
-                      {album?.title ?? "Single"}
-                      {track.track_number ? ` · Track ${track.track_number}` : ""}
-                    </p>
-                    <h3
-                      style={{
-                        fontFamily: "var(--font-heading)",
-                        fontSize: "1.3rem",
-                        fontWeight: 400,
-                        color: "var(--kente-green)",
-                        margin: 0,
-                      }}
-                    >
-                      {track.title}
-                    </h3>
-                  </div>
-
-                  {/* Direct audio preview */}
-                  {track.audio_url && (
-                    <audio
-                      controls
-                      src={track.audio_url}
-                      style={{ width: "100%", marginBottom: "0.85rem", accentColor: "var(--gold)" }}
-                      preload="none"
-                    />
-                  )}
-
-                  {/* Platform badges + inline play */}
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                    {track.audio_url && (
-                      <PlayTrackButton
-                        track={{
-                          title: track.title,
-                          album: album?.title,
-                          audio_url: track.audio_url,
-                          cover_url: album?.cover_image_url ?? undefined,
-                          spotify_url: track.spotify_url ?? undefined,
-                          apple_music_url: track.apple_music_url ?? undefined,
-                          audiomack_url: track.audiomack_url ?? undefined,
+                <article key={album.id}>
+                  {/* Album header */}
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "220px 1fr",
+                      gap: "2.5rem",
+                      alignItems: "start",
+                      marginBottom: "2.5rem",
+                    }}
+                    className="album-header"
+                  >
+                    <div style={{ position: "relative" }}>
+                      <img
+                        src={album.cover_image_url || "https://images.unsplash.com/photo-1485579149621-3123dd979885?auto=format&fit=crop&w=900&q=80"}
+                        alt={`${album.title} cover art`}
+                        style={{
+                          width: "100%",
+                          height: "220px",
+                          objectFit: "cover",
+                          borderRadius: "1rem",
+                          display: "block",
+                          boxShadow: "0 20px 60px rgba(0,0,0,0.4)",
                         }}
-                        label="Play in Player"
                       />
-                    )}
-                    <PlatformEmbedPlayer
-                      trackTitle={track.title}
-                      youtube_url={track.youtube_url}
-                      youtube_embed_url={track.embed_url}
-                      spotify_url={track.spotify_url}
-                      apple_music_url={track.apple_music_url}
-                      audiomack_url={track.audiomack_url}
-                    />
+                      <div
+                        style={{
+                          position: "absolute",
+                          inset: "-1px",
+                          borderRadius: "1rem",
+                          background: "linear-gradient(135deg, rgba(157,23,77,0.4), transparent 60%)",
+                          pointerEvents: "none",
+                        }}
+                      />
+                    </div>
+
+                    <div style={{ paddingTop: "0.5rem" }}>
+                      <p style={{ fontSize: "0.68rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--champagne-gold)", marginBottom: "0.5rem", fontWeight: 600 }}>
+                        Album
+                      </p>
+                      <h3
+                        style={{
+                          fontFamily: "var(--font-heading)",
+                          fontSize: "clamp(1.6rem, 3.5vw, 2.4rem)",
+                          fontWeight: 300,
+                          color: "var(--ivory)",
+                          margin: "0 0 0.75rem",
+                        }}
+                      >
+                        {album.title}
+                      </h3>
+                      {album.description && (
+                        <p style={{ fontSize: "0.95rem", color: "rgba(255,251,252,0.72)", lineHeight: 1.75, maxWidth: "500px", marginBottom: "1.25rem" }}>
+                          {album.description}
+                        </p>
+                      )}
+                      {album.release_date && (
+                        <p style={{ fontSize: "0.72rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--champagne-gold)", marginBottom: "1.25rem" }}>
+                          Released: {album.release_date}
+                        </p>
+                      )}
+                      <FavoriteButton albumId={album.id} />
+                    </div>
                   </div>
-                </div>
+
+                  {/* Tracks */}
+                  <div style={{ borderTop: "1px solid rgba(157,23,77,0.22)", paddingTop: "2rem" }}>
+                    <div style={{ display: "grid", gap: "1.25rem", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))" }}>
+                      {albumTracks.map((track) => (
+                        <div key={track.id} className="track-card">
+                          <div style={{ marginBottom: "1rem" }}>
+                            {/* was --champagne-gold (a dark-section-only color,
+                                ~1.08:1 contrast here) — this label sits on the
+                                white .track-card nested inside the dark
+                                Discography section, not directly on the dark
+                                background, so it needs the light-card color
+                                instead (same family .gold-label defaults to
+                                outside dark sections). */}
+                            <p style={{ fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--royal-gold)", marginBottom: "0.3rem" }}>
+                              {track.track_number ? `Track ${track.track_number}` : ""}
+                            </p>
+                            <h4
+                              style={{
+                                fontFamily: "var(--font-heading)",
+                                fontSize: "1.35rem",
+                                fontWeight: 400,
+                                color: "var(--kente-green)",
+                                margin: 0,
+                              }}
+                            >
+                              {track.title}
+                            </h4>
+                          </div>
+
+                          {track.video_url ? (
+                            <TrackVideo trackId={track.id} src={track.video_url} style={{ height: "10rem", objectFit: "cover", marginBottom: "1rem", border: "1px solid rgba(157,23,77,0.22)" }} />
+                          ) : track.audio_url ? (
+                            <TrackAudio trackId={track.id} src={track.audio_url} style={{ width: "100%", marginBottom: "1rem", accentColor: "var(--gold)" }} />
+                          ) : null}
+
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                            {track.audio_url && (
+                              <PlayTrackButton
+                                track={{
+                                  id: track.id,
+                                  title: track.title,
+                                  album: album.title,
+                                  audio_url: track.audio_url,
+                                  cover_url: album.cover_image_url ?? undefined,
+                                  spotify_url: track.spotify_url ?? undefined,
+                                  apple_music_url: track.apple_music_url ?? undefined,
+                                  audiomack_url: track.audiomack_url ?? undefined,
+                                }}
+                                label="Play"
+                              />
+                            )}
+                            <WatchOnTvBadge trackId={track.id} hasVideo={trackHasTvVideo(track)} />
+                            <PlatformEmbedPlayer
+                              trackTitle={track.title}
+                              spotify_url={track.spotify_url}
+                              apple_music_url={track.apple_music_url}
+                              audiomack_url={track.audiomack_url}
+                              boomplay_url={track.boomplay_url}
+                              facebook_url={track.facebook_url}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </article>
               );
             })}
           </div>
         </div>
+
+        <style>{`
+          @media (max-width: 640px) {
+            .album-header { grid-template-columns: 1fr !important; }
+          }
+        `}</style>
       </section>
 
       {/* ── All Platforms CTA ── */}
       <section
         className="section-light"
         style={{
-          borderTop: "1px solid rgba(212,175,55,0.22)",
+          borderTop: "1px solid rgba(157,23,77,0.22)",
           padding: "4.5rem 0",
           textAlign: "center",
         }}

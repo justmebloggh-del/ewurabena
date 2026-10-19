@@ -1,5 +1,8 @@
+import Link from "next/link";
+
 import { getPublicContent } from "@/lib/data/public";
-import { toEmbeddableVideoUrl } from "@/lib/media";
+import { tvLinkFor } from "@/lib/tv-channel";
+import { youtubeThumbnail } from "@/lib/youtube";
 
 export default async function PortfolioPage() {
   const content = await getPublicContent();
@@ -18,19 +21,19 @@ export default async function PortfolioPage() {
         <div className="grid gap-4 md:grid-cols-3">
           <article className="card">
             <h3 className="text-xl">Worship Outreach</h3>
-            <p className="mt-2 text-sm text-[color:var(--text-muted)]">
+            <p className="mt-2 text-sm text-[color:var(--text-dark-muted)]">
               Leading worship and spiritual gatherings in churches, community events, and international faith programs.
             </p>
           </article>
           <article className="card">
             <h3 className="text-xl">Mentorship</h3>
-            <p className="mt-2 text-sm text-[color:var(--text-muted)]">
+            <p className="mt-2 text-sm text-[color:var(--text-dark-muted)]">
               Supporting the next generation of gospel musicians through discipleship and songwriting mentorship.
             </p>
           </article>
           <article className="card">
             <h3 className="text-xl">Advocacy</h3>
-            <p className="mt-2 text-sm text-[color:var(--text-muted)]">
+            <p className="mt-2 text-sm text-[color:var(--text-dark-muted)]">
               Public ministry and advocacy as DOVVSU ambassador focused on dignity and community protection.
             </p>
           </article>
@@ -46,15 +49,27 @@ export default async function PortfolioPage() {
               {item.kind === "image" ? (
                 <img src={item.url} alt={item.title} className="h-64 w-full rounded-xl object-cover" />
               ) : (
-                <iframe
-                  src={toEmbeddableVideoUrl(item.url)}
-                  className="h-64 w-full rounded-xl border border-[color:var(--border-soft)]"
-                  title={item.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
+                <Link
+                  href={tvLinkFor(item.id)}
+                  className="group relative block h-64 w-full overflow-hidden rounded-xl border border-[color:var(--border-soft)]"
+                >
+                  {item.thumbnail_url || youtubeThumbnail(item.url) ? (
+                    <img
+                      src={item.thumbnail_url || youtubeThumbnail(item.url) || undefined}
+                      alt={item.title}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="h-full w-full bg-[color:var(--kente-deep)]" />
+                  )}
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 transition-opacity group-hover:opacity-100">
+                    <span className="platform-badge" style={{ background: "rgba(255,255,255,0.95)" }}>
+                      ▶ Watch on Ewura Abena TV
+                    </span>
+                  </div>
+                </Link>
               )}
-              {item.caption ? <p className="text-sm text-[color:var(--text-muted)]">{item.caption}</p> : null}
+              {item.caption ? <p className="text-sm text-[color:var(--text-dark-muted)]">{item.caption}</p> : null}
             </article>
           ))}
         </div>
@@ -66,7 +81,7 @@ export default async function PortfolioPage() {
           {content.awards.map((award) => (
             <article key={award.id} className="card">
               <h3 className="text-xl">{award.title}</h3>
-              <p className="mt-2 text-sm text-[color:var(--text-muted)]">{award.description}</p>
+              <p className="mt-2 text-sm text-[color:var(--text-dark-muted)]">{award.description}</p>
               <p className="mt-3 text-xs uppercase tracking-[0.22em] text-[color:var(--gold)]">
                 {award.awarded_on || "Date pending"}
               </p>

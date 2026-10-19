@@ -35,6 +35,41 @@ export async function POST(request: Request) {
   return NextResponse.json({ award: data });
 }
 
+export async function PATCH(request: Request) {
+  const authResult = await requireRouteAdmin();
+  if ("error" in authResult) {
+    return authResult.error;
+  }
+
+  const id = new URL(request.url).searchParams.get("id");
+
+  if (!id) {
+    return NextResponse.json({ error: "Award id is required." }, { status: 400 });
+  }
+
+  const payload = await request.json().catch(() => null);
+  const parsed = awardSchema.partial().safeParse(payload);
+
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid award payload." }, { status: 400 });
+  }
+
+  const d = parsed.data;
+  const update: Record<string, unknown> = {};
+  if (d.title !== undefined) update.title = d.title;
+  if (d.description !== undefined) update.description = nullableString(d.description);
+  if (d.awarded_on !== undefined) update.awarded_on = nullableString(d.awarded_on);
+
+  const { supabase } = authResult;
+  const { data, error } = await supabase.from("awards").update(update).eq("id", id).select("*").single();
+
+  if (error) {
+    return NextResponse.json({ error: "Failed to update award." }, { status: 500 });
+  }
+
+  return NextResponse.json({ award: data });
+}
+
 export async function DELETE(request: Request) {
   const authResult = await requireRouteAdmin();
   if ("error" in authResult) {

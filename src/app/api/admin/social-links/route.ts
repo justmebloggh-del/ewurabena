@@ -35,6 +35,41 @@ export async function POST(request: Request) {
   return NextResponse.json({ socialLink: data });
 }
 
+export async function PATCH(request: Request) {
+  const authResult = await requireRouteAdmin();
+  if ("error" in authResult) {
+    return authResult.error;
+  }
+
+  const id = new URL(request.url).searchParams.get("id");
+
+  if (!id) {
+    return NextResponse.json({ error: "Social link id is required." }, { status: 400 });
+  }
+
+  const payload = await request.json().catch(() => null);
+  const parsed = socialLinkSchema.partial().safeParse(payload);
+
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid social link payload." }, { status: 400 });
+  }
+
+  const d = parsed.data;
+  const update: Record<string, unknown> = {};
+  if (d.platform !== undefined) update.platform = d.platform;
+  if (d.url !== undefined) update.url = d.url;
+  if (d.is_published !== undefined) update.is_published = d.is_published;
+
+  const { supabase } = authResult;
+  const { data, error } = await supabase.from("social_links").update(update).eq("id", id).select("*").single();
+
+  if (error) {
+    return NextResponse.json({ error: "Failed to update social link." }, { status: 500 });
+  }
+
+  return NextResponse.json({ socialLink: data });
+}
+
 export async function DELETE(request: Request) {
   const authResult = await requireRouteAdmin();
   if ("error" in authResult) {

@@ -44,6 +44,11 @@ const albums: Album[] = [
   },
 ];
 
+// audio_url values are placeholder demo audio (generic instrumental test
+// files, not real songs) so the native <audio> player has something that
+// actually plays while Supabase isn't configured. The previous freesound.org
+// links had been deleted at the source and returned 404 — verified via curl
+// before swapping, not guessed. Replace with real track audio once available.
 const tracks: Track[] = [
   {
     id: "track-1",
@@ -51,12 +56,13 @@ const tracks: Track[] = [
     title: "Grace Overflow Intro",
     duration_seconds: 242,
     track_number: 1,
-    audio_url: "https://freesound.org/data/previews/171/171104_2291516-lq.mp3",
+    audio_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
     embed_url: "https://www.youtube.com/embed/videoseries?si=i8xJl5-K5IqWH7mw&list=PLX0PJMHFz9wbcpUJ3UpjsZLqbcsdrQZuc",
     youtube_url: "https://www.youtube.com/playlist?list=PLX0PJMHFz9wbcpUJ3UpjsZLqbcsdrQZuc",
     spotify_url: "https://open.spotify.com/artist/66omcxaARiacfGoXuXiHXQ?si=pIX56tJYRWOAl2F6_6wt-Q",
     apple_music_url: "https://music.apple.com/gb/artist/ewura-abena/994868905",
     audiomack_url: "https://audiomack.com/ewuraabenamusiq",
+    boomplay_url: "https://www.boomplay.com/share/artist/2829036",
     is_published: true,
   },
   {
@@ -65,12 +71,13 @@ const tracks: Track[] = [
     title: "Rebirth Anthem",
     duration_seconds: 275,
     track_number: 1,
-    audio_url: "https://freesound.org/data/previews/387/387739_7037-lq.mp3",
+    audio_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
     embed_url: "https://www.youtube.com/embed/videoseries?list=PLX0PJMHFz9wbxRLE0Shpx5MKUjoR83q-a",
     youtube_url: "https://youtube.com/playlist?list=PLX0PJMHFz9wbxRLE0Shpx5MKUjoR83q-a&si=3fysHR5vYvrtXD_u",
     spotify_url: "https://open.spotify.com/artist/66omcxaARiacfGoXuXiHXQ?si=pIX56tJYRWOAl2F6_6wt-Q",
     apple_music_url: "https://music.apple.com/gb/artist/ewura-abena/994868905",
     audiomack_url: "https://audiomack.com/ewuraabenamusiq",
+    boomplay_url: "https://www.boomplay.com/share/artist/2829036",
     is_published: true,
   },
   {
@@ -79,12 +86,13 @@ const tracks: Track[] = [
     title: "Show Them (Live)",
     duration_seconds: 320,
     track_number: 2,
-    audio_url: "https://freesound.org/data/previews/612/612121_12834907-lq.mp3", // CC0 choir
+    audio_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", // placeholder demo audio
     embed_url: "https://www.youtube.com/embed/jyp91bsLUkw",
     youtube_url: "https://www.youtube.com/watch?v=jyp91bsLUkw",
     spotify_url: "https://open.spotify.com/artist/66omcxaARiacfGoXuXiHXQ",
     apple_music_url: "https://music.apple.com/gb/artist/ewura-abena/994868905",
     audiomack_url: "https://audiomack.com/ewuraabenamusiq",
+    boomplay_url: "https://www.boomplay.com/share/artist/2829036",
     is_published: true,
   },
   {
@@ -93,12 +101,13 @@ const tracks: Track[] = [
     title: "All Is Well",
     duration_seconds: 298,
     track_number: 3,
-    audio_url: "https://freesound.org/data/previews/344/344638_5121236-lq.mp3", // CC0 Gospel organ
+    audio_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3", // placeholder demo audio
     embed_url: "https://www.youtube.com/embed/-3pYM4IbUhg",
     youtube_url: "https://www.youtube.com/watch?v=-3pYM4IbUhg",
     spotify_url: "https://open.spotify.com/artist/66omcxaARiacfGoXuXiHXQ",
     apple_music_url: "https://music.apple.com/gb/artist/ewura-abena/994868905",
     audiomack_url: "https://audiomack.com/ewuraabenamusiq",
+    boomplay_url: "https://www.boomplay.com/share/artist/2829036",
     is_published: true,
   },
   {
@@ -107,12 +116,16 @@ const tracks: Track[] = [
     title: "This Far",
     duration_seconds: 265,
     track_number: 4,
-    audio_url: "https://freesound.org/data/previews/219/219800_3098997-lq.mp3", // CC0 worship
+    audio_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3", // placeholder demo audio
+    // No verified direct YouTube/Spotify track link found for this song —
+    // left blank rather than linking to a generic search-results page,
+    // which would look like a broken/dead-end link to fans.
     embed_url: "",
-    youtube_url: "https://www.youtube.com/results?search_query=ewura+abena+this+far",
-    spotify_url: "https://open.spotify.com/search/ewura%20abena",
+    youtube_url: "",
+    spotify_url: "",
     apple_music_url: "https://music.apple.com/gb/artist/ewura-abena/994868905",
     audiomack_url: "https://audiomack.com/ewuraabenamusiq",
+    boomplay_url: "https://www.boomplay.com/share/artist/2829036",
     is_published: true,
   },
   {
@@ -121,12 +134,14 @@ const tracks: Track[] = [
     title: "KamaKama Worship",
     duration_seconds: 312,
     track_number: 5,
-    audio_url: "https://freesound.org/data/previews/316/316462_4921504-lq.mp3", // CC0 piano worship
+    audio_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3", // placeholder demo audio
+    // Same as above — no verified direct track link found.
     embed_url: "",
-    youtube_url: "https://www.youtube.com/results?search_query=ewura+abena+kamakama",
-    spotify_url: "https://open.spotify.com/search/ewura%20abena",
+    youtube_url: "",
+    spotify_url: "",
     apple_music_url: "https://music.apple.com/gb/artist/ewura-abena/994868905",
     audiomack_url: "https://audiomack.com/ewuraabenamusiq",
+    boomplay_url: "https://www.boomplay.com/share/artist/2829036",
     is_published: true,
   },
 ];

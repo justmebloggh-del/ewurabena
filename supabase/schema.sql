@@ -43,6 +43,7 @@ create table if not exists public.tracks (
   spotify_url text,
   apple_music_url text,
   audiomack_url text,
+  boomplay_url text,
   is_published boolean not null default true,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
@@ -273,3 +274,47 @@ create policy "admin_social_manage" on public.social_links for all
 using (public.is_admin(auth.uid())) with check (public.is_admin(auth.uid()));
 create policy "admin_notifications_insert" on public.fan_notifications for insert
 with check (public.is_admin(auth.uid()));
+
+-- Migration: add boomplay_url to tracks (safe to re-run; no-op if the
+-- table was already created with this column via the definition above).
+alter table public.tracks add column if not exists boomplay_url text;
+
+-- Migration: Facebook video support, track play analytics, and a storage
+-- bucket for admin file uploads (safe to re-run).
+alter table public.tracks add column if not exists facebook_url text;
+alter table public.tracks add column if not exists play_count integer not null default 0;
+alter table public.tracks add column if not exists video_url text;
+alter table public.media_items add column if not exists facebook_url text;
+
+create or replace function public.increment_track_play(p_track_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  update public.tracks set play_count = play_count + 1 where id = p_track_id;
+end;
+$$;
+
+grant execute on function public.increment_track_play(uuid) to anon, authenticated;
+
+insert into storage.buckets (id, name, public)
+values ('media', 'media', true)
+on conflict (id) do nothing;
+
+drop policy if exists "media_public_read" on storage.objects;
+create policy "media_public_read" on storage.objects
+for select using (bucket_id = 'media');
+
+drop policy if exists "media_admin_write" on storage.objects;
+create policy "media_admin_write" on storage.objects
+for insert with check (bucket_id = 'media' and public.is_admin(auth.uid()));
+
+drop policy if exists "media_admin_update" on storage.objects;
+create policy "media_admin_update" on storage.objects
+for update using (bucket_id = 'media' and public.is_admin(auth.uid()));
+
+drop policy if exists "media_admin_delete" on storage.objects;
+create policy "media_admin_delete" on storage.objects
+for delete using (bucket_id = 'media' and public.is_admin(auth.uid()));

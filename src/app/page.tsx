@@ -1,9 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 
+import { EwuraAbenaTV } from "@/components/ewura-abena-tv";
 import { FavoriteButton } from "@/components/favorite-button";
 import { PlatformEmbedPlayer } from "@/components/platform-embed-player";
+import { PrayerRequestForm } from "@/components/prayer-request-form";
+import { TrackAudio, TrackVideo } from "@/components/track-audio";
+import { WatchOnTvBadge } from "@/components/watch-on-tv-badge";
 import { getPublicContent } from "@/lib/data/public";
+import { buildTVChannel, trackHasTvVideo } from "@/lib/tv-channel";
 
 /* ── Streaming platforms opened in-app ── */
 const IN_APP_PLATFORMS = new Set(["spotify", "boomplay", "apple music", "audiomac", "audiomack"]);
@@ -135,7 +141,7 @@ export default async function HomePage() {
 
             {/* CTAs */}
             <div className="hero-ctas">
-              <Link href="/albums" className="btn-primary btn-hero">
+              <Link href="/music" className="btn-primary btn-hero">
                 ▶&nbsp; Listen Now
               </Link>
               <Link href="/gallery" className="btn-ghost btn-hero">
@@ -164,7 +170,7 @@ export default async function HomePage() {
                       <span className="hero-release-label">Latest Release</span>
                       <span className="hero-release-title">{featuredTrack.title}</span>
                       <div className="hero-release-actions">
-                        <Link href="/albums" className="btn-primary btn-stream-play">
+                        <Link href="/music" className="btn-primary btn-stream-play">
                           ▶ Play
                         </Link>
                         <div className="hero-platform-row">
@@ -209,6 +215,8 @@ export default async function HomePage() {
       </section>
 
 
+      <div className="brand-divider" aria-hidden="true" />
+
       {/* ══════════════════════════════════════════════════════
           TICKER — Ministry identity strip
           ══════════════════════════════════════════════════════ */}
@@ -229,7 +237,7 @@ export default async function HomePage() {
           ══════════════════════════════════════════════════════ */}
       <section className="section-cream" aria-label="Ministry pillars">
         <div className="container">
-          <div style={{ textAlign: "center", marginBottom: "3.5rem" }} className="reveal">
+          <div style={{ textAlign: "center", marginBottom: "3.5rem" }} className="reveal" suppressHydrationWarning>
             <p className="gold-label" style={{ marginBottom: "0.75rem" }}>The Calling</p>
             <h2 className="section-title-dark" style={{ fontSize: "clamp(2rem,4vw,2.8rem)" }}>
               Ministry &amp; Purpose
@@ -250,6 +258,7 @@ export default async function HomePage() {
               <div
                 key={pillar.title}
                 className={`ministry-card reveal reveal-delay-${i + 1}`}
+                suppressHydrationWarning
               >
                 <span className="ministry-icon">{pillar.icon}</span>
                 <h3
@@ -263,7 +272,7 @@ export default async function HomePage() {
                 >
                   {pillar.title}
                 </h3>
-                <p style={{ fontSize: "0.92rem", color: "#5E5048", lineHeight: 1.75 }}>
+                <p style={{ fontSize: "0.92rem", color: "#5E4050", lineHeight: 1.75 }}>
                   {pillar.desc}
                 </p>
               </div>
@@ -281,7 +290,7 @@ export default async function HomePage() {
           <div className="about-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "5rem", alignItems: "center" }}>
 
             {/* Portrait */}
-            <div className="reveal-left" style={{ position: "relative" }}>
+            <div className="reveal-left" style={{ position: "relative" }} suppressHydrationWarning>
               <Image
                 src={content.profile.hero_image_url || "/ea.jpg"}
                 alt="Ewura Abena portrait"
@@ -296,7 +305,7 @@ export default async function HomePage() {
                   objectPosition: "center top",
                   borderRadius: "2rem",
                   boxShadow: "0 40px 100px rgba(0,0,0,0.14)",
-                  border: "1px solid rgba(212,175,55,0.22)",
+                  border: "1px solid rgba(157,23,77,0.22)",
                   display: "block",
                 }}
                 unoptimized={Boolean(content.profile.hero_image_url && !content.profile.hero_image_url.startsWith("/"))}
@@ -311,7 +320,7 @@ export default async function HomePage() {
                   right: "1.5rem",
                   bottom: "-1.5rem",
                   borderRadius: "2.25rem",
-                  border: "1px solid rgba(212,175,55,0.28)",
+                  border: "1px solid rgba(157,23,77,0.28)",
                   zIndex: -1,
                   pointerEvents: "none",
                 }}
@@ -319,12 +328,12 @@ export default async function HomePage() {
             </div>
 
             {/* Copy */}
-            <div className="reveal-right">
+            <div className="reveal-right" suppressHydrationWarning>
               <p className="gold-label" style={{ marginBottom: "0.75rem" }}>The Story</p>
               <h2 className="section-title-dark" style={{ fontSize: "clamp(2rem,4vw,2.8rem)", marginBottom: "1.5rem" }}>
                 The Warrior Queen
               </h2>
-              <p style={{ fontSize: "1rem", color: "#5E5048", lineHeight: 1.85, marginBottom: "2.5rem" }}>
+              <p style={{ fontSize: "1rem", color: "#5E4050", lineHeight: 1.85, marginBottom: "2.5rem" }}>
                 {content.profile.bio || heroBio}
               </p>
 
@@ -338,8 +347,8 @@ export default async function HomePage() {
                   borderRadius: "1.25rem",
                   overflow: "hidden",
                   marginBottom: "2.5rem",
-                  border: "1px solid rgba(212,175,55,0.28)",
-                  boxShadow: "0 12px 40px rgba(212,175,55,0.14)",
+                  border: "1px solid rgba(157,23,77,0.28)",
+                  boxShadow: "0 12px 40px rgba(157,23,77,0.14)",
                 }}
               >
                 {FACTS.map((fact, i) => (
@@ -348,7 +357,7 @@ export default async function HomePage() {
                     style={{
                       textAlign: "center",
                       padding: "1.5rem 0.75rem",
-                      borderRight: i < FACTS.length - 1 ? "1px solid rgba(212,175,55,0.14)" : "none",
+                      borderRight: i < FACTS.length - 1 ? "1px solid rgba(157,23,77,0.14)" : "none",
                     }}
                   >
                     <span className="stat-number">{fact.number}</span>
@@ -386,8 +395,8 @@ export default async function HomePage() {
           padding: "5rem 0",
           position: "relative",
           overflow: "hidden",
-          borderTop: "1px solid rgba(212,175,55,0.22)",
-          borderBottom: "1px solid rgba(212,175,55,0.22)",
+          borderTop: "1px solid rgba(157,23,77,0.22)",
+          borderBottom: "1px solid rgba(157,23,77,0.22)",
         }}
         aria-label="Scripture"
       >
@@ -400,14 +409,14 @@ export default async function HomePage() {
             left: "25%",
             width: "600px",
             height: "600px",
-            background: "radial-gradient(circle, rgba(212,175,55,0.30) 0%, rgba(230,199,123,0.12) 50%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(157,23,77,0.30) 0%, rgba(244,114,182,0.12) 50%, transparent 70%)",
             filter: "blur(60px)",
             animation: "orb-drift 12s ease-in-out infinite",
             pointerEvents: "none",
           }}
         />
         <div className="container" style={{ textAlign: "center", position: "relative", zIndex: 1 }}>
-          <div className="reveal">
+          <div className="reveal" suppressHydrationWarning>
             <p className="gold-label" style={{ marginBottom: "1.75rem", color: "var(--champagne-gold)" }}>
               Word of Faith
             </p>
@@ -450,7 +459,7 @@ export default async function HomePage() {
           ══════════════════════════════════════════════════════ */}
       <section className="section-pearl" aria-label="Featured music">
         <div className="container">
-          <div style={{ marginBottom: "3.5rem" }} className="reveal">
+          <div style={{ marginBottom: "3.5rem" }} className="reveal" suppressHydrationWarning>
             <p className="gold-label" style={{ marginBottom: "0.75rem" }}>Discography</p>
             <h2 className="section-title-dark" style={{ fontSize: "clamp(2rem,4vw,2.8rem)" }}>
               Featured Music
@@ -471,6 +480,7 @@ export default async function HomePage() {
               <article
                 key={track.id}
                 className={`track-card reveal reveal-delay-${Math.min(idx + 1, 4)}`}
+                suppressHydrationWarning
               >
                 {/* Track header */}
                 <div
@@ -492,7 +502,7 @@ export default async function HomePage() {
                       justifyContent: "center",
                       flexShrink: 0,
                       fontSize: "1.4rem",
-                      boxShadow: "0 8px 24px rgba(212,175,55,0.30)",
+                      boxShadow: "0 8px 24px rgba(157,23,77,0.30)",
                     }}
                   >
                     🎵
@@ -528,24 +538,15 @@ export default async function HomePage() {
                 </div>
 
                 {/* Embedded player */}
-                {track.embed_url ? (
-                  <iframe
-                    src={track.embed_url}
-                    style={{
-                      width: "100%",
-                      height: "9rem",
-                      borderRadius: "0.85rem",
-                      border: "1px solid rgba(212,175,55,0.22)",
-                      marginBottom: "1rem",
-                      display: "block",
-                    }}
-                    title={`${track.title} player`}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; compute-pressure"
-                    allowFullScreen
+                {track.video_url ? (
+                  <TrackVideo
+                    trackId={track.id}
+                    src={track.video_url}
+                    style={{ height: "9rem", objectFit: "cover", marginBottom: "1rem", border: "1px solid rgba(157,23,77,0.22)" }}
                   />
                 ) : track.audio_url ? (
-                  <audio
-                    controls
+                  <TrackAudio
+                    trackId={track.id}
                     src={track.audio_url}
                     style={{
                       width: "100%",
@@ -556,24 +557,25 @@ export default async function HomePage() {
                 ) : null}
 
                 {/* Platform links */}
-                <div style={{ marginBottom: "1rem" }}>
+                <div style={{ marginBottom: "1rem", display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                  <WatchOnTvBadge trackId={track.id} hasVideo={trackHasTvVideo(track)} />
                   <PlatformEmbedPlayer
                     trackTitle={track.title}
-                    youtube_url={track.youtube_url}
-                    youtube_embed_url={track.embed_url}
                     spotify_url={track.spotify_url}
                     apple_music_url={track.apple_music_url}
                     audiomack_url={track.audiomack_url}
+                    boomplay_url={track.boomplay_url}
+                    facebook_url={track.facebook_url}
                   />
                 </div>
 
-                <FavoriteButton trackId={track.id} />
+                <FavoriteButton trackId={track.id} theme="light" />
               </article>
             ))}
           </div>
 
-          <div style={{ textAlign: "center", marginTop: "3.5rem" }} className="reveal">
-            <Link href="/albums" className="btn-primary" style={{ marginRight: "1rem" }}>
+          <div style={{ textAlign: "center", marginTop: "3.5rem" }} className="reveal" suppressHydrationWarning>
+            <Link href="/music" className="btn-primary" style={{ marginRight: "1rem" }}>
               Full Discography
             </Link>
             <Link href="/playlists" className="btn-gold">
@@ -587,10 +589,9 @@ export default async function HomePage() {
       {/* ══════════════════════════════════════════════════════
           VIDEO / LIVE MINISTRY
           ══════════════════════════════════════════════════════ */}
-      {content.mediaItems.length > 0 && (
-        <section className="section-cream" aria-label="Videos and live ministry">
+      <section className="section-cream" aria-label="Videos and live ministry">
           <div className="container">
-            <div style={{ marginBottom: "3.5rem" }} className="reveal">
+            <div style={{ marginBottom: "3.5rem" }} className="reveal" suppressHydrationWarning>
               <p className="gold-label" style={{ marginBottom: "0.75rem" }}>Visual Ministry</p>
               <h2 className="section-title-dark" style={{ fontSize: "clamp(2rem,4vw,2.8rem)" }}>
                 Live Ministrations &amp; Videos
@@ -600,69 +601,26 @@ export default async function HomePage() {
               </p>
             </div>
 
-            <div
-              style={{
-                display: "grid",
-                gap: "1.5rem",
-                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-              }}
-            >
-              {content.mediaItems.slice(0, 3).map((item, idx) => (
-                <article
-                  key={item.id}
-                  className={`video-card reveal reveal-delay-${Math.min(idx + 1, 3)}`}
-                >
-                  {item.kind === "video" && item.url ? (
-                    <iframe
-                      src={item.url}
-                      style={{ width: "100%", aspectRatio: "16/9", border: "none", display: "block" }}
-                      title={item.title}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; compute-pressure"
-                      allowFullScreen
-                    />
-                  ) : item.thumbnail_url ? (
-                    <img
-                      src={item.thumbnail_url}
-                      alt={item.title}
-                      style={{ width: "100%", aspectRatio: "16/9", objectFit: "cover" }}
-                    />
-                  ) : null}
-
-                  <div style={{ padding: "1.5rem" }}>
-                    <h3
-                      style={{
-                        fontFamily: "var(--font-heading), serif",
-                        fontSize: "1.3rem",
-                        fontWeight: 400,
-                        color: "var(--text-dark)",
-                        margin: "0 0 0.5rem",
-                      }}
-                    >
-                      {item.title}
-                    </h3>
-                    {item.caption && (
-                      <p
-                        style={{
-                          fontSize: "0.88rem",
-                          color: "#6B5240",
-                          lineHeight: 1.7,
-                          margin: 0,
-                        }}
-                      >
-                        {item.caption}
-                      </p>
-                    )}
-                  </div>
-                </article>
-              ))}
+            <div id="ewura-abena-tv" className="reveal" style={{ marginBottom: "3rem", scrollMarginTop: "6rem" }} suppressHydrationWarning>
+              <Suspense fallback={null}>
+                <EwuraAbenaTV videos={buildTVChannel(content)} />
+              </Suspense>
             </div>
 
-            <div style={{ textAlign: "center", marginTop: "3rem" }} className="reveal">
-              <Link href="/gallery" className="btn-gold">View All Media</Link>
+            <div style={{ textAlign: "center" }} className="reveal" suppressHydrationWarning>
+              <a
+                href="https://www.youtube.com/playlist?list=PLX0PJMHFz9wbcpUJ3UpjsZLqbcsdrQZuc"
+                target="_blank"
+                rel="noreferrer"
+                className="btn-gold"
+                style={{ marginRight: "1rem" }}
+              >
+                Full Video Library on YouTube ↗
+              </a>
+              <Link href="/gallery" className="btn-gold">View Photo Gallery</Link>
             </div>
           </div>
         </section>
-      )}
 
 
       {/* ══════════════════════════════════════════════════════
@@ -683,12 +641,12 @@ export default async function HomePage() {
           style={{
             position: "absolute",
             inset: 0,
-            background: "radial-gradient(ellipse at 50% 50%, rgba(212,175,55,0.10) 0%, transparent 65%)",
+            background: "radial-gradient(ellipse at 50% 50%, rgba(157,23,77,0.10) 0%, transparent 65%)",
             pointerEvents: "none",
           }}
         />
         <div className="container" style={{ position: "relative", zIndex: 1 }}>
-          <div style={{ textAlign: "center", marginBottom: "3.5rem" }} className="reveal">
+          <div style={{ textAlign: "center", marginBottom: "3.5rem" }} className="reveal" suppressHydrationWarning>
             <p className="gold-label" style={{ marginBottom: "0.75rem" }}>Testimonies</p>
             <h2 className="section-title-dark" style={{ fontSize: "clamp(2rem,4vw,2.8rem)" }}>
               Lives Transformed
@@ -745,7 +703,7 @@ export default async function HomePage() {
                       style={{
                         fontFamily: "var(--font-body), sans-serif",
                         fontSize: "0.7rem",
-                        color: "#A89480",
+                        color: "var(--text-dark-muted)", // was #A8809A — only 3.38:1 on white, fails WCAG AA
                         marginTop: "0.15rem",
                         letterSpacing: "0.08em",
                       }}
@@ -767,7 +725,7 @@ export default async function HomePage() {
       {content.awards.length > 0 && (
         <section className="section-deep" aria-label="Awards and recognition">
           <div className="container">
-            <div style={{ textAlign: "center", marginBottom: "3.5rem" }} className="reveal">
+            <div style={{ textAlign: "center", marginBottom: "3.5rem" }} className="reveal" suppressHydrationWarning>
               <p className="gold-label" style={{ marginBottom: "0.75rem", color: "var(--champagne-gold)" }}>
                 Recognition
               </p>
@@ -790,6 +748,7 @@ export default async function HomePage() {
                 <div
                   key={award.id}
                   className={`card-dark reveal reveal-delay-${Math.min(i + 1, 4)}`}
+                  suppressHydrationWarning
                   style={{ borderLeft: "3px solid var(--royal-gold)", paddingLeft: "1.75rem" }}
                 >
                   <h3
@@ -803,7 +762,7 @@ export default async function HomePage() {
                   >
                     {award.title}
                   </h3>
-                  <p style={{ fontSize: "0.9rem", color: "rgba(255,253,248,0.62)", lineHeight: 1.72, margin: 0 }}>
+                  <p style={{ fontSize: "0.9rem", color: "rgba(255,251,252,0.62)", lineHeight: 1.72, margin: 0 }}>
                     {award.description}
                   </p>
                   {award.awarded_on && (
@@ -835,13 +794,13 @@ export default async function HomePage() {
         style={{
           background: "linear-gradient(160deg, var(--ivory-warm) 0%, var(--warm-beige) 100%)",
           padding: "6rem 0",
-          borderTop: "1px solid rgba(212,175,55,0.18)",
-          borderBottom: "1px solid rgba(212,175,55,0.18)",
+          borderTop: "1px solid rgba(157,23,77,0.18)",
+          borderBottom: "1px solid rgba(157,23,77,0.18)",
         }}
         aria-label="Streaming and social platforms"
       >
         <div className="container">
-          <div style={{ textAlign: "center", marginBottom: "3rem" }} className="reveal">
+          <div style={{ textAlign: "center", marginBottom: "3rem" }} className="reveal" suppressHydrationWarning>
             <p className="gold-label" style={{ marginBottom: "0.75rem" }}>Stream Everywhere</p>
             <h2 className="section-title-dark" style={{ fontSize: "clamp(2rem,4vw,2.8rem)" }}>
               Find Ewura Abena
@@ -853,6 +812,7 @@ export default async function HomePage() {
 
           <div
             className="reveal"
+            suppressHydrationWarning
             style={{
               display: "flex",
               flexWrap: "wrap",
@@ -881,12 +841,12 @@ export default async function HomePage() {
 
           {/* Donation Links */}
           {content.donationLinks.filter((d) => d.is_published).length > 0 && (
-            <div style={{ textAlign: "center", marginTop: "4rem" }} className="reveal">
+            <div style={{ textAlign: "center", marginTop: "4rem" }} className="reveal" suppressHydrationWarning>
               <hr className="gold-divider" style={{ marginBottom: "2.5rem" }} />
               <p className="gold-label" style={{ marginBottom: "1rem" }}>Partner with the Ministry</p>
               <p
                 style={{
-                  color: "#6B5240",
+                  color: "#6B4055",
                   fontSize: "0.97rem",
                   maxWidth: "500px",
                   margin: "0 auto 1.75rem",
@@ -934,7 +894,7 @@ export default async function HomePage() {
           >
 
             {/* Prayer Form */}
-            <div className="reveal-left">
+            <div className="reveal-left" suppressHydrationWarning>
               <p className="gold-label" style={{ marginBottom: "0.75rem" }}>Prayer Requests</p>
               <h2
                 style={{
@@ -947,37 +907,15 @@ export default async function HomePage() {
               >
                 Send Your Prayer Request
               </h2>
-              <p style={{ color: "#6B5240", fontSize: "0.97rem", lineHeight: 1.78, marginBottom: "2.25rem" }}>
+              <p style={{ color: "#6B4055", fontSize: "0.97rem", lineHeight: 1.78, marginBottom: "2.25rem" }}>
                 Ewura Abena and her team are committed to interceding for you.
                 Share your request and receive prayer.
               </p>
-              <form
-                action="https://formspree.io/f/placeholder"
-                method="POST"
-                style={{ display: "flex", flexDirection: "column", gap: "1.1rem" }}
-              >
-                <div>
-                  <label className="label">Your Name</label>
-                  <input type="text" name="name" placeholder="Enter your name" className="input" />
-                </div>
-                <div>
-                  <label className="label">Prayer Request</label>
-                  <textarea
-                    name="prayer_request"
-                    rows={5}
-                    placeholder="Share your prayer request..."
-                    className="input"
-                    style={{ resize: "vertical" }}
-                  />
-                </div>
-                <button type="submit" className="btn-primary" style={{ alignSelf: "flex-start" }}>
-                  🙏&nbsp; Submit Prayer Request
-                </button>
-              </form>
+              <PrayerRequestForm />
             </div>
 
             {/* Booking */}
-            <div className="reveal-right">
+            <div className="reveal-right" suppressHydrationWarning>
               <p className="gold-label" style={{ marginBottom: "0.75rem" }}>Book Ministry</p>
               <h2
                 style={{
@@ -990,7 +928,7 @@ export default async function HomePage() {
               >
                 Invite Ewura Abena
               </h2>
-              <p style={{ color: "#6B5240", fontSize: "0.97rem", lineHeight: 1.78, marginBottom: "2.25rem" }}>
+              <p style={{ color: "#6B4055", fontSize: "0.97rem", lineHeight: 1.78, marginBottom: "2.25rem" }}>
                 For ministry invitations, conferences, events, and media appearances,
                 reach out to us directly.
               </p>
@@ -999,11 +937,11 @@ export default async function HomePage() {
               <div
                 style={{
                   background: "linear-gradient(160deg, var(--kente-green) 0%, var(--kente-deep) 100%)",
-                  border: "1px solid rgba(212,175,55,0.28)",
+                  border: "1px solid rgba(157,23,77,0.28)",
                   borderRadius: "1.25rem",
                   padding: "1.75rem",
                   marginBottom: "1.5rem",
-                  boxShadow: "0 12px 40px rgba(15,91,58,0.18)",
+                  boxShadow: "0 12px 40px rgba(157,23,77,0.18)",
                 }}
               >
                 <p
@@ -1035,7 +973,7 @@ export default async function HomePage() {
                         display: "flex",
                         alignItems: "center",
                         gap: "0.6rem",
-                        color: "rgba(255,253,248,0.62)",
+                        color: "rgba(255,251,252,0.62)",
                         fontSize: "0.9rem",
                         transition: "color 0.2s",
                         textDecoration: "none",

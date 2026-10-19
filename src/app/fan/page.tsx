@@ -52,7 +52,7 @@ export default async function FanPage() {
             <p style={{ fontSize: "0.9rem", color: "var(--text-dark-muted)" }}>No notifications yet.</p>
           ) : (
             fanData.notifications.map((note) => (
-              <article key={note.id} style={{ borderRadius: "0.75rem", border: "1px solid rgba(212,175,55,0.22)", padding: "0.75rem" }}>
+              <article key={note.id} style={{ borderRadius: "0.75rem", border: "1px solid rgba(157,23,77,0.22)", padding: "0.75rem" }}>
                 <h3 style={{ fontWeight: 600, color: "var(--kente-green)", margin: 0 }}>{note.title}</h3>
                 <p style={{ marginTop: "0.25rem", fontSize: "0.875rem", color: "var(--text-dark-body)" }}>{note.body}</p>
               </article>

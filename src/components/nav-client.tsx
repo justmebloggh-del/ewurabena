@@ -8,8 +8,8 @@ const NAV_ITEMS = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
   { href: '/music', label: 'Music' },
-  { href: '/albums', label: 'Albums' },
   { href: '/gallery', label: 'Gallery' },
+  { href: '/events', label: 'Events' },
   { href: '/contact', label: 'Booking' },
 ];
 
@@ -19,6 +19,7 @@ interface NavClientProps {
 
 export function NavClient({ isAuthenticated }: NavClientProps) {
   const [scrolled, setScrolled] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -27,6 +28,24 @@ export function NavClient({ isAuthenticated }: NavClientProps) {
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Logo flashes gold for as long as the page is actively being scrolled
+  // (either direction), reverting once scrolling pauses. Debounced on a
+  // timer reset per scroll event, since there's no native "scroll end"
+  // event with broad-enough browser support to rely on here.
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+    const onScroll = () => {
+      setIsScrolling(true);
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => setIsScrolling(false), 220);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   useEffect(() => {
@@ -42,14 +61,19 @@ export function NavClient({ isAuthenticated }: NavClientProps) {
 
   return (
     <>
-      <header className={`premium-nav ${scrolled ? 'nav-scrolled' : ''}`} role="banner">
+      <header className={`premium-nav ${scrolled ? 'nav-scrolled' : ''} ${isScrolling ? 'is-scroll-active' : ''}`} role="banner">
         <div className="nav-inner container">
 
-          {/* ── Logo: white on hero → gold on scroll ── */}
+          {/* ── Logo v2: user-supplied full-color badge artwork (treble
+                 clef + "Ewura Abena" wordmark on its own dark backdrop).
+                 Shown as a single image — no color-cycling/cross-fade
+                 needed since it carries its own fixed colors and
+                 background. Shine sweep + gold-pulse glow on scroll are
+                 layered on top as overlays, not recolors. */}
           <Link href="/" className="nav-logo-link" aria-label="Ewura Abena — Home" onClick={() => setMenuOpen(false)}>
             <div className="logo-wrap">
-              <Image src="/ewuraabenalogo.png" alt="Ewura Abena" width={130} height={52} className="logo-white" priority />
-              <Image src="/ewuraabenalogo.png" alt="" aria-hidden="true" width={130} height={52} className="logo-gold" priority />
+              <Image src="/ewuraabenalogo.png" alt="Ewura Abena" width={124} height={68} className="logo-badge-img" priority />
+              <span className="logo-shine" aria-hidden="true" />
               <span className="logo-glow-halo" aria-hidden="true" />
             </div>
           </Link>

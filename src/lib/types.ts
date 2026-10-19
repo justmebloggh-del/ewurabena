@@ -32,11 +32,15 @@ export type Track = {
   duration_seconds: number | null;
   track_number: number | null;
   audio_url: string | null;
+  video_url?: string | null;
   embed_url: string | null;
   youtube_url: string | null;
   spotify_url: string | null;
   apple_music_url: string | null;
   audiomack_url?: string | null;
+  boomplay_url?: string | null;
+  facebook_url?: string | null;
+  play_count?: number;
   is_published: boolean;
 };
 
@@ -73,7 +77,15 @@ export type MediaItem = {
   url: string;
   thumbnail_url: string | null;
   caption: string | null;
+  facebook_url?: string | null;
   is_published: boolean;
+};
+
+export type FanSummary = {
+  id: string;
+  email: string;
+  full_name: string | null;
+  created_at: string;
 };
 
 export type Award = {

@@ -31,10 +31,17 @@ const poppins = Poppins({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#0F5B3A",
+  themeColor: "#9D174D",
 };
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://ewuraabena.com";
+
+// Interim share image reusing an existing brand photo — replace with a
+// dedicated 1200x630 branded graphic when one is available.
+const SHARE_IMAGE = "/ea3.jpg";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Ewura Abena | Global Gospel Minister & Warrior Queen",
   description:
     "Official website of Ewura Abena — Global Gospel Minister, Worship Leader, Singer, Composer, Songwriter, and DOVVSU Ambassador. A voice of light, love, healing, and unwavering faith.",
@@ -56,12 +63,37 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_GB",
     siteName: "Ewura Abena Official",
+    images: [{ url: SHARE_IMAGE, width: 1200, height: 1500, alt: "Ewura Abena" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Ewura Abena | Global Gospel Minister",
     description: "A voice of light, love, healing, and unwavering faith.",
+    images: [SHARE_IMAGE],
   },
+};
+
+const PERSON_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Ewura Abena",
+  alternateName: "Warrior Queen",
+  description:
+    "Global Gospel Minister, Worship Leader, Singer, Composer, Songwriter, and DOVVSU Ambassador — a voice of light, love, healing, and unwavering faith.",
+  jobTitle: ["Gospel Minister", "Worship Leader", "Singer", "Songwriter"],
+  nationality: "Ghanaian",
+  url: SITE_URL,
+  image: `${SITE_URL}${SHARE_IMAGE}`,
+  sameAs: [
+    "https://open.spotify.com/artist/66omcxaARiacfGoXuXiHXQ",
+    "https://music.apple.com/gb/artist/ewura-abena/994868905",
+    "https://audiomack.com/ewuraabenamusiq",
+    "https://www.boomplay.com/share/artist/2829036",
+    "https://www.youtube.com/playlist?list=PLX0PJMHFz9wbcpUJ3UpjsZLqbcsdrQZuc",
+    "https://www.instagram.com/ewuraabenamusiq",
+    "https://www.facebook.com/EwuraAbenaOfficial",
+    "https://www.tiktok.com/@ewuraabenamusiq",
+  ],
 };
 
 export default function RootLayout({
@@ -79,6 +111,10 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://audiomack.com" />
         <link rel="dns-prefetch" href="https://www.youtube.com" />
         <link rel="dns-prefetch" href="https://www.boomplay.com" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(PERSON_JSON_LD) }}
+        />
       </head>
       <body>
         <div className="app-shell">
