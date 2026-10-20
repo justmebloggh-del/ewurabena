@@ -71,6 +71,12 @@ export const metadata: Metadata = {
     description: "A voice of light, love, healing, and unwavering faith.",
     images: [SHARE_IMAGE],
   },
+  // Set once a property is added in Google Search Console (Settings >
+  // Ownership verification > HTML tag) — paste just the content value,
+  // not the whole <meta> tag.
+  ...(process.env.GOOGLE_SITE_VERIFICATION
+    ? { verification: { google: process.env.GOOGLE_SITE_VERIFICATION } }
+    : {}),
 };
 
 const PERSON_JSON_LD = {

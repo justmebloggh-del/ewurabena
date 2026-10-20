@@ -7,7 +7,10 @@ const ROUTES: { path: string; priority: number; changeFrequency: "daily" | "week
   { path: "/about", priority: 0.8, changeFrequency: "monthly" },
   { path: "/music", priority: 0.9, changeFrequency: "weekly" },
   { path: "/gallery", priority: 0.6, changeFrequency: "monthly" },
+  { path: "/portfolio", priority: 0.6, changeFrequency: "monthly" },
   { path: "/playlists", priority: 0.6, changeFrequency: "weekly" },
+  { path: "/events", priority: 0.7, changeFrequency: "weekly" },
+  { path: "/player", priority: 0.5, changeFrequency: "weekly" },
   { path: "/contact", priority: 0.7, changeFrequency: "monthly" },
 ];
 

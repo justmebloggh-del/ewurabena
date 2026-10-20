@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -11,6 +12,13 @@ import { WatchOnTvBadge } from "@/components/watch-on-tv-badge";
 import { firstEmbeddableCatalog } from "@/lib/catalog-embeds";
 import { getPublicContent } from "@/lib/data/public";
 import { buildTVChannel, trackHasTvVideo } from "@/lib/tv-channel";
+
+export const metadata: Metadata = {
+  title: "Ewura Abena | Global Gospel Minister & Warrior Queen",
+  description:
+    "Official website of Ewura Abena — Global Gospel Minister, Worship Leader, Singer, Composer, Songwriter, and DOVVSU Ambassador. Stream her music, watch Ewura Abena TV, and book her for ministry.",
+  alternates: { canonical: "/" },
+};
 
 /* ── Streaming platforms opened in-app ── */
 const IN_APP_PLATFORMS = new Set(["spotify", "boomplay", "apple music", "audiomac", "audiomack"]);

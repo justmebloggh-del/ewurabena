@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { getPublicContent } from "@/lib/data/public";
 import { tvLinkFor } from "@/lib/tv-channel";
 import { youtubeThumbnail } from "@/lib/youtube";
+
+export const metadata: Metadata = {
+  title: "Portfolio | Ewura Abena",
+  description:
+    "Ministry impact, media highlights, and awards — Ewura Abena's portfolio as a global gospel minister and DOVVSU ambassador.",
+};
 
 export default async function PortfolioPage() {
   const content = await getPublicContent();
