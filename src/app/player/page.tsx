@@ -7,7 +7,8 @@ import type { Track } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: "Music Player | Ewura Abena",
-  description: "Listen to Ewura Abena's soul gospel music — play, queue, and favourite tracks from Grace Overflow & Rebirth.",
+  description: "Listen to Ghanaian-UK gospel minister Ewura Abena's soul gospel music — play, queue, and favourite tracks from Grace Overflow & Rebirth.",
+  alternates: { canonical: "/player" },
 };
 
 export default async function PlayerPage() {

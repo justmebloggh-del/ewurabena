@@ -12,7 +12,8 @@ import { trackHasTvVideo } from "@/lib/tv-channel";
 export const metadata: Metadata = {
   title: "Music | Ewura Abena",
   description:
-    "Stream Ewura Abena's soul gospel music on Spotify, Apple Music, Audiomack, Boomplay and more. Browse the full discography by album.",
+    "Stream Ghanaian-UK gospel minister Ewura Abena's soul gospel music — Grace Overflow, Rebirth, and more — on Spotify, Apple Music, Audiomack, Boomplay and more.",
+  alternates: { canonical: "/music" },
 };
 
 export default async function MusicPage() {

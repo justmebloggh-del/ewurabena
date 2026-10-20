@@ -5,7 +5,8 @@ import { getPublicContent } from "@/lib/data/public";
 
 export const metadata: Metadata = {
   title: "Gallery | Ewura Abena",
-  description: "Photo gallery of Ewura Abena — ministry moments, worship sessions, events, and life behind the music.",
+  description: "Photo gallery of Ewura Abena — Ghanaian-UK gospel minister's ministry moments, worship sessions, events, and life behind the music.",
+  alternates: { canonical: "/gallery" },
 };
 
 // Curated baseline photos shipped with the site. Images the admin adds via

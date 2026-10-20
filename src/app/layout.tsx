@@ -88,6 +88,19 @@ const PERSON_JSON_LD = {
     "Global Gospel Minister, Worship Leader, Singer, Composer, Songwriter, and DOVVSU Ambassador — a voice of light, love, healing, and unwavering faith.",
   jobTitle: ["Gospel Minister", "Worship Leader", "Singer", "Songwriter"],
   nationality: "Ghanaian",
+  // Both markets she's publicly active in — strengthens entity matching
+  // for regional/local searches of her name in either country.
+  homeLocation: [
+    { "@type": "Place", address: { "@type": "PostalAddress", addressCountry: "GH" } },
+    { "@type": "Place", address: { "@type": "PostalAddress", addressCountry: "GB" } },
+  ],
+  award: [
+    "Songwriter of the Year — Vodafone Ghana Music Awards",
+    "Female Vocal Performance — Vodafone Ghana Music Awards",
+    "Gospel Song of the Year — Vodafone Ghana Music Awards",
+    "Ghana Music Awards UK",
+    "Ghana Music Awards Europe",
+  ],
   url: SITE_URL,
   image: `${SITE_URL}${SHARE_IMAGE}`,
   sameAs: [
@@ -95,11 +108,19 @@ const PERSON_JSON_LD = {
     "https://music.apple.com/gb/artist/ewura-abena/994868905",
     "https://audiomack.com/ewuraabenamusiq",
     "https://www.boomplay.com/share/artist/2829036",
-    "https://www.youtube.com/playlist?list=PLX0PJMHFz9wbcpUJ3UpjsZLqbcsdrQZuc",
+    "https://www.youtube.com/channel/UCTHQYaJQEDHKMfvmGLBOJOg",
     "https://www.instagram.com/ewuraabenamusiq",
     "https://www.facebook.com/EwuraAbenaOfficial",
     "https://www.tiktok.com/@ewuraabenamusiq",
   ],
+};
+
+const WEBSITE_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Ewura Abena Official",
+  alternateName: "Ewura Abena",
+  url: SITE_URL,
 };
 
 export default function RootLayout({
@@ -121,6 +142,16 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(PERSON_JSON_LD) }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(WEBSITE_JSON_LD) }}
+        />
+        {/* Bing Webmaster Tools ownership verification — set once a site
+            is added there (Settings > Ownership verification), same
+            pattern as GOOGLE_SITE_VERIFICATION. */}
+        {process.env.BING_SITE_VERIFICATION ? (
+          <meta name="msvalidate.01" content={process.env.BING_SITE_VERIFICATION} />
+        ) : null}
       </head>
       <body>
         <div className="app-shell">

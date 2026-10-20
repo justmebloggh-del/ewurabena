@@ -8,7 +8,8 @@ import { youtubeThumbnail } from "@/lib/youtube";
 export const metadata: Metadata = {
   title: "Portfolio | Ewura Abena",
   description:
-    "Ministry impact, media highlights, and awards — Ewura Abena's portfolio as a global gospel minister and DOVVSU ambassador.",
+    "Ministry impact, media highlights, and awards — Ewura Abena's portfolio as a Ghanaian-UK global gospel minister and DOVVSU ambassador.",
+  alternates: { canonical: "/portfolio" },
 };
 
 export default async function PortfolioPage() {

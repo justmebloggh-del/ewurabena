@@ -4,7 +4,8 @@ const EVENTBRITE_ORGANIZER_URL = "https://www.eventbrite.co.uk/o/113643407031";
 
 export const metadata: Metadata = {
   title: "Events | Ewura Abena",
-  description: "Upcoming crusades, worship concerts, and ministry events with Ewura Abena — tickets via Eventbrite.",
+  description: "Upcoming crusades, worship concerts, and ministry events with Ghanaian-UK gospel minister Ewura Abena — tickets via Eventbrite.",
+  alternates: { canonical: "/events" },
 };
 
 export default function EventsPage() {

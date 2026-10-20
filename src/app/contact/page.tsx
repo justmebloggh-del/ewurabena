@@ -4,7 +4,8 @@ import { ContactForm } from "@/components/contact-form";
 
 export const metadata: Metadata = {
   title: "Booking & Contact | Ewura Abena",
-  description: "Book Ewura Abena for ministry engagements, conferences, church events, and media appearances.",
+  description: "Book Ghanaian-UK gospel minister Ewura Abena for ministry engagements, conferences, church events, and media appearances.",
+  alternates: { canonical: "/contact" },
 };
 
 const MINISTRY_SERVICES = [

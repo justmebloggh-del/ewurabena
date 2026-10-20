@@ -6,7 +6,8 @@ import { getPublicContent } from "@/lib/data/public";
 export const metadata: Metadata = {
   title: "About | Ewura Abena — Warrior Queen",
   description:
-    "The story of Ewura Abena — Global Gospel Minister, Warrior Queen, DOVVSU Ambassador. A voice of light, love, healing, and unwavering faith.",
+    "The story of Ewura Abena — Ghanaian-UK Global Gospel Minister, Warrior Queen, DOVVSU Ambassador. A voice of light, love, healing, and unwavering faith.",
+  alternates: { canonical: "/about" },
 };
 
 const JOURNEY_MILESTONES = [

@@ -5,7 +5,8 @@ import { getPublicContent } from "@/lib/data/public";
 
 export const metadata: Metadata = {
   title: "Playlists | Ewura Abena",
-  description: "Official worship playlists and curated selections from Ewura Abena. Create your own playlists in the fan hub.",
+  description: "Official worship playlists and curated selections from Ghanaian-UK gospel minister Ewura Abena. Create your own playlists in the fan hub.",
+  alternates: { canonical: "/playlists" },
 };
 
 export default async function PlaylistsPage() {
