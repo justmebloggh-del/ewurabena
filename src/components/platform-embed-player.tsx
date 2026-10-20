@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 
+import { type TrackInfo, playTrackInline } from "@/components/play-track-button";
+import { toAppleMusicEmbed, toAudiomackEmbed, toFacebookVideoEmbed, toSpotifyEmbed } from "@/lib/catalog-embeds";
+
 interface Props {
   trackTitle: string;
   spotify_url?: string | null;
@@ -9,54 +12,32 @@ interface Props {
   audiomack_url?: string | null;
   boomplay_url?: string | null;
   facebook_url?: string | null;
+  /**
+   * Boomplay has no public embed/widget at all (confirmed: no official
+   * developer docs, no unofficial embed format in use anywhere), and
+   * Audiomack only embeds for a specific song/album/playlist link, not an
+   * artist profile. For those cases there is no way to actually stream
+   * that platform in-site — so instead of ever linking out to a new tab,
+   * the badge plays this exact track through the site's own player.
+   * Undefined (no audio_url on the track) → that badge isn't rendered at
+   * all, since showing something that can neither embed nor play would
+   * just be a dead end. (A function prop can't be passed here — the
+   * callers are Server Components — so this carries plain track data and
+   * the component calls playTrackInline itself.)
+   */
+  fallbackTrack?: TrackInfo;
 }
 
 interface Platform {
   label: string;
   icon: string;
-  /** Defined → opens in modal iframe. Null → opens as external link. */
+  /** Null → this platform can't embed its own player for this URL. */
   embedUrl: string | null;
-  /** Always the canonical external URL (used as fallback & aria-label). */
-  externalUrl: string;
   height: number;
 }
 
 interface ActivePlayer extends Platform {
   embedUrl: string; // narrowed: cannot be null when active
-}
-
-/* ─── URL Converters ─── */
-
-function toSpotifyEmbed(url: string): string {
-  const clean = url.split("?")[0];
-  return clean.replace("open.spotify.com/", "open.spotify.com/embed/");
-}
-
-function toAppleMusicEmbed(url: string): string {
-  return url.replace("music.apple.com/", "embed.music.apple.com/");
-}
-
-// Facebook's documented video plugin: wraps any public video permalink in
-// their own iframe player, no app review or access token required.
-function toFacebookVideoEmbed(url: string): string {
-  return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false`;
-}
-
-/**
- * Returns an Audiomack embed URL only when the path identifies a specific
- * song, album, or playlist (≥2 path segments after the hostname).
- * Artist-profile-only URLs (e.g. audiomack.com/ewuraabenamusiq) cannot be
- * embedded and return null — the badge falls back to an external link.
- */
-function toAudiomackEmbed(url: string): string | null {
-  try {
-    const u = new URL(url);
-    const segments = u.pathname.replace(/^\/|\/$/g, "").split("/").filter(Boolean);
-    // Need at least artist + song/album slug to embed
-    if (segments.length < 2) return null;
-    return `https://audiomack.com/embed/${segments.join("/")}`;
-  } catch { /* ignore */ }
-  return null;
 }
 
 /* ─── Component ─── */
@@ -68,6 +49,7 @@ export function PlatformEmbedPlayer({
   audiomack_url,
   boomplay_url,
   facebook_url,
+  fallbackTrack,
 }: Props) {
   const [active, setActive] = useState<ActivePlayer | null>(null);
 
@@ -91,7 +73,6 @@ export function PlatformEmbedPlayer({
             label: "Spotify",
             icon: "♫",
             embedUrl: toSpotifyEmbed(spotify_url),
-            externalUrl: spotify_url,
             height: 380,
           }
         : null,
@@ -100,7 +81,6 @@ export function PlatformEmbedPlayer({
             label: "Apple Music",
             icon: "♪",
             embedUrl: toAppleMusicEmbed(apple_music_url),
-            externalUrl: apple_music_url,
             height: 450,
           }
         : null,
@@ -109,7 +89,6 @@ export function PlatformEmbedPlayer({
             label: "Audiomack",
             icon: "◈",
             embedUrl: toAudiomackEmbed(audiomack_url),
-            externalUrl: audiomack_url,
             height: 165,
           }
         : null,
@@ -117,11 +96,7 @@ export function PlatformEmbedPlayer({
         ? {
             label: "Boomplay",
             icon: "▶",
-            // Boomplay has no confirmed public iframe-embed URL format for
-            // arbitrary songs, so this always opens as an external link
-            // rather than risk silently embedding a broken iframe.
             embedUrl: null,
-            externalUrl: boomplay_url,
             height: 0,
           }
         : null,
@@ -130,7 +105,6 @@ export function PlatformEmbedPlayer({
             label: "Facebook",
             icon: "f",
             embedUrl: toFacebookVideoEmbed(facebook_url),
-            externalUrl: facebook_url,
             height: 400,
           }
         : null,
@@ -141,47 +115,33 @@ export function PlatformEmbedPlayer({
 
   // Platforms that can open in the modal
   const embeddable = platforms.filter((p): p is ActivePlayer => p.embedUrl !== null);
+  // Badges actually worth showing: either embeddable, or — when not — still
+  // playable in-site via the site's own audio (never a dead/external link).
+  const visible = platforms.filter((p) => p.embedUrl !== null || fallbackTrack);
+
+  if (visible.length === 0) return null;
 
   return (
     <>
       {/* Badge row */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-        {platforms.map((p) =>
-          p.embedUrl ? (
-            /* Modal trigger */
-            <button
-              key={p.label}
-              onClick={() => setActive(p as ActivePlayer)}
-              className="platform-badge"
-              style={{
-                cursor: "pointer",
-                background: "rgba(255,255,255,0.05)",
-                fontFamily: "var(--font-body)",
-                border: "1px solid rgba(157,23,77,0.35)",
-              }}
-              type="button"
-              aria-label={`Play ${trackTitle} on ${p.label}`}
-            >
-              {p.icon} {p.label}
-            </button>
-          ) : (
-            /* External link fallback (e.g. Audiomack artist profile) */
-            <a
-              key={p.label}
-              href={p.externalUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="platform-badge"
-              style={{
-                background: "rgba(255,255,255,0.05)",
-                border: "1px solid rgba(157,23,77,0.35)",
-              }}
-              aria-label={`Open ${trackTitle} on ${p.label}`}
-            >
-              {p.icon} {p.label} ↗
-            </a>
-          )
-        )}
+        {visible.map((p) => (
+          <button
+            key={p.label}
+            onClick={() => (p.embedUrl ? setActive(p as ActivePlayer) : fallbackTrack && playTrackInline(fallbackTrack))}
+            className="platform-badge"
+            style={{
+              cursor: "pointer",
+              background: "rgba(255,255,255,0.05)",
+              fontFamily: "var(--font-body)",
+              border: "1px solid rgba(157,23,77,0.35)",
+            }}
+            type="button"
+            aria-label={`Play ${trackTitle} on ${p.label}`}
+          >
+            {p.icon} {p.label}
+          </button>
+        ))}
       </div>
 
       {/* Modal */}

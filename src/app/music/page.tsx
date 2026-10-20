@@ -5,6 +5,7 @@ import { PlayTrackButton } from "@/components/play-track-button";
 import { PlatformEmbedPlayer } from "@/components/platform-embed-player";
 import { TrackAudio, TrackVideo } from "@/components/track-audio";
 import { WatchOnTvBadge } from "@/components/watch-on-tv-badge";
+import { firstEmbeddableCatalog } from "@/lib/catalog-embeds";
 import { getPublicContent } from "@/lib/data/public";
 import { trackHasTvVideo } from "@/lib/tv-channel";
 
@@ -488,7 +489,9 @@ export default async function MusicPage() {
                   {/* Tracks */}
                   <div style={{ borderTop: "1px solid rgba(157,23,77,0.22)", paddingTop: "2rem" }}>
                     <div style={{ display: "grid", gap: "1.25rem", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))" }}>
-                      {albumTracks.map((track) => (
+                      {albumTracks.map((track) => {
+                      const catalogFallback = !track.video_url && !track.audio_url ? firstEmbeddableCatalog(track) : null;
+                      return (
                         <div key={track.id} className="track-card">
                           <div style={{ marginBottom: "1rem" }}>
                             {/* was --champagne-gold (a dark-section-only color,
@@ -518,6 +521,18 @@ export default async function MusicPage() {
                             <TrackVideo trackId={track.id} src={track.video_url} style={{ height: "10rem", objectFit: "cover", marginBottom: "1rem", border: "1px solid rgba(157,23,77,0.22)" }} />
                           ) : track.audio_url ? (
                             <TrackAudio trackId={track.id} src={track.audio_url} style={{ width: "100%", marginBottom: "1rem", accentColor: "var(--gold)" }} />
+                          ) : catalogFallback ? (
+                            // No uploaded audio/video — automatically play
+                            // from whichever streaming catalog link is
+                            // available, instead of leaving the card with
+                            // no player at all until a badge is clicked.
+                            <iframe
+                              src={catalogFallback.embedUrl}
+                              style={{ width: "100%", height: `${catalogFallback.height}px`, borderRadius: "0.75rem", border: "1px solid rgba(157,23,77,0.22)", marginBottom: "1rem", display: "block" }}
+                              title={`${track.title} on ${catalogFallback.label}`}
+                              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                              loading="lazy"
+                            />
                           ) : null}
 
                           <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
@@ -544,10 +559,25 @@ export default async function MusicPage() {
                               audiomack_url={track.audiomack_url}
                               boomplay_url={track.boomplay_url}
                               facebook_url={track.facebook_url}
+                              fallbackTrack={
+                                track.audio_url
+                                  ? {
+                                      id: track.id,
+                                      title: track.title,
+                                      album: album.title,
+                                      audio_url: track.audio_url,
+                                      cover_url: album.cover_image_url ?? undefined,
+                                      spotify_url: track.spotify_url ?? undefined,
+                                      apple_music_url: track.apple_music_url ?? undefined,
+                                      audiomack_url: track.audiomack_url ?? undefined,
+                                    }
+                                  : undefined
+                              }
                             />
                           </div>
                         </div>
-                      ))}
+                      );
+                      })}
                     </div>
                   </div>
                 </article>

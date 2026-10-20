@@ -23,7 +23,7 @@ a2 as (
 )
 insert into public.tracks (album_id, title, duration_seconds, track_number, audio_url, embed_url, youtube_url, spotify_url, apple_music_url, audiomack_url, boomplay_url, is_published)
 select a1.id, 'Grace Overflow Intro', 242, 1,
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+  null,
   'https://www.youtube.com/embed/videoseries?si=i8xJl5-K5IqWH7mw&list=PLX0PJMHFz9wbcpUJ3UpjsZLqbcsdrQZuc',
   'https://www.youtube.com/playlist?list=PLX0PJMHFz9wbcpUJ3UpjsZLqbcsdrQZuc',
   'https://open.spotify.com/artist/66omcxaARiacfGoXuXiHXQ?si=pIX56tJYRWOAl2F6_6wt-Q',
@@ -34,7 +34,7 @@ select a1.id, 'Grace Overflow Intro', 242, 1,
 from a1
 union all
 select a2.id, 'Rebirth Anthem', 275, 1,
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+  null,
   'https://www.youtube.com/embed/videoseries?list=PLX0PJMHFz9wbxRLE0Shpx5MKUjoR83q-a',
   'https://youtube.com/playlist?list=PLX0PJMHFz9wbxRLE0Shpx5MKUjoR83q-a&si=3fysHR5vYvrtXD_u',
   'https://open.spotify.com/artist/66omcxaARiacfGoXuXiHXQ?si=pIX56tJYRWOAl2F6_6wt-Q',
@@ -45,7 +45,7 @@ select a2.id, 'Rebirth Anthem', 275, 1,
 from a2
 union all
 select a1.id, 'Show Them (Live)', 320, 2,
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+  null,
   'https://www.youtube.com/embed/jyp91bsLUkw',
   'https://www.youtube.com/watch?v=jyp91bsLUkw',
   'https://open.spotify.com/artist/66omcxaARiacfGoXuXiHXQ',
@@ -56,7 +56,7 @@ select a1.id, 'Show Them (Live)', 320, 2,
 from a1
 union all
 select a2.id, 'All Is Well', 298, 3,
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
+  null,
   'https://www.youtube.com/embed/-3pYM4IbUhg',
   'https://www.youtube.com/watch?v=-3pYM4IbUhg',
   'https://open.spotify.com/artist/66omcxaARiacfGoXuXiHXQ',
@@ -67,7 +67,7 @@ select a2.id, 'All Is Well', 298, 3,
 from a2
 union all
 select a1.id, 'This Far', 265, 4,
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
+  null,
   null, null, null,
   'https://music.apple.com/gb/artist/ewura-abena/994868905',
   'https://audiomack.com/ewuraabenamusiq',
@@ -76,7 +76,7 @@ select a1.id, 'This Far', 265, 4,
 from a1
 union all
 select a2.id, 'KamaKama Worship', 312, 5,
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
+  null,
   null, null, null,
   'https://music.apple.com/gb/artist/ewura-abena/994868905',
   'https://audiomack.com/ewuraabenamusiq',

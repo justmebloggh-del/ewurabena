@@ -1,6 +1,6 @@
 "use client";
 
-interface TrackInfo {
+export interface TrackInfo {
   id?: string;
   title: string;
   album?: string;
@@ -16,17 +16,21 @@ interface Props {
   label?: string;
 }
 
+// Shared with PlatformEmbedPlayer: when a catalog platform (Boomplay,
+// or Audiomack without a song-specific link) has no way to embed its own
+// player, clicking that badge plays this exact track in-site through the
+// floating player instead of ever opening a new tab.
+export function playTrackInline(track: TrackInfo) {
+  window.dispatchEvent(new CustomEvent("ea:play", { detail: track }));
+}
+
 export function PlayTrackButton({ track, label }: Props) {
   if (!track.audio_url) return null;
-
-  function play() {
-    window.dispatchEvent(new CustomEvent("ea:play", { detail: track }));
-  }
 
   return (
     <button
       type="button"
-      onClick={play}
+      onClick={() => playTrackInline(track)}
       className="platform-badge"
       style={{
         cursor: "pointer",

@@ -8,6 +8,7 @@ import { PlatformEmbedPlayer } from "@/components/platform-embed-player";
 import { PrayerRequestForm } from "@/components/prayer-request-form";
 import { TrackAudio, TrackVideo } from "@/components/track-audio";
 import { WatchOnTvBadge } from "@/components/watch-on-tv-badge";
+import { firstEmbeddableCatalog } from "@/lib/catalog-embeds";
 import { getPublicContent } from "@/lib/data/public";
 import { buildTVChannel, trackHasTvVideo } from "@/lib/tv-channel";
 
@@ -476,7 +477,9 @@ export default async function HomePage() {
               gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
             }}
           >
-            {content.tracks.slice(0, 4).map((track, idx) => (
+            {content.tracks.slice(0, 4).map((track, idx) => {
+            const catalogFallback = !track.video_url && !track.audio_url ? firstEmbeddableCatalog(track) : null;
+            return (
               <article
                 key={track.id}
                 className={`track-card reveal reveal-delay-${Math.min(idx + 1, 4)}`}
@@ -554,6 +557,17 @@ export default async function HomePage() {
                       accentColor: "var(--royal-gold)",
                     }}
                   />
+                ) : catalogFallback ? (
+                  // No uploaded audio/video — automatically play from
+                  // whichever streaming catalog link is available, instead
+                  // of leaving the card with no player until a badge click.
+                  <iframe
+                    src={catalogFallback.embedUrl}
+                    style={{ width: "100%", height: `${catalogFallback.height}px`, borderRadius: "0.85rem", border: "1px solid rgba(157,23,77,0.22)", marginBottom: "1rem", display: "block" }}
+                    title={`${track.title} on ${catalogFallback.label}`}
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"
+                  />
                 ) : null}
 
                 {/* Platform links */}
@@ -565,13 +579,26 @@ export default async function HomePage() {
                     apple_music_url={track.apple_music_url}
                     audiomack_url={track.audiomack_url}
                     boomplay_url={track.boomplay_url}
+                    fallbackTrack={
+                      track.audio_url
+                        ? {
+                            id: track.id,
+                            title: track.title,
+                            audio_url: track.audio_url,
+                            spotify_url: track.spotify_url ?? undefined,
+                            apple_music_url: track.apple_music_url ?? undefined,
+                            audiomack_url: track.audiomack_url ?? undefined,
+                          }
+                        : undefined
+                    }
                     facebook_url={track.facebook_url}
                   />
                 </div>
 
                 <FavoriteButton trackId={track.id} theme="light" />
               </article>
-            ))}
+            );
+            })}
           </div>
 
           <div style={{ textAlign: "center", marginTop: "3.5rem" }} className="reveal" suppressHydrationWarning>
