@@ -92,6 +92,40 @@ values
   ('Show Them', 'video', 'https://www.youtube.com/embed/jyp91bsLUkw', null, 'SHOW THEM is prayer chant song birthed from deep groaning and supplication. It is a call on the Lord to rise to our defense for his own glory''s sake. As you sing and pray with this song, may the God who answered Elijah by fire answer you speedily', true),
   ('All is Well', 'video', 'https://www.youtube.com/embed/-3pYM4IbUhg', null, 'It is a declaration of the truth and our truth, that the God who delights in the prosperity of his children is our God and surely he will prosper everything that concerns me', true);
 
+-- Full video catalog pulled from the official YouTube channel
+-- (https://www.youtube.com/channel/UCTHQYaJQEDHKMfvmGLBOJOg) so "Ewura
+-- Abena TV" has her real uploads instead of just the 2 videos above.
+insert into public.media_items (title, kind, url, thumbnail_url, is_published)
+values
+  ('Ewura Abena - It Is Finished (Live)', 'video', 'https://www.youtube.com/embed/4tFLGLhkIA0', 'https://i.ytimg.com/vi/4tFLGLhkIA0/hq720.jpg?sqp=-oaymwE2COgCEMoBSFXyq4qpAygIARUAAIhCGAFwAcABBvABAfgB_gmAAtAFigIMCAAQARhlIE4oYTAP&rs=AOn4CLA42BidLpaWmfeNYCHnMdPSxaLfXA', true),
+  ('GRACE OVERFLOW 2026 || Break Bread and Chains [Promo Video]', 'video', 'https://www.youtube.com/embed/MfZSFUsh-qU', 'https://i.ytimg.com/vi/MfZSFUsh-qU/hq720.jpg', true),
+  ('Ewura Abena - Yehowa Behwe Me [ Official Visualiser]', 'video', 'https://www.youtube.com/embed/uXgl7yoImkY', 'https://i.ytimg.com/vi/uXgl7yoImkY/hq720.jpg', true),
+  ('Ewura Abena - Only I Know [ Official Visualiser ]', 'video', 'https://www.youtube.com/embed/0ddANFvXGuU', 'https://i.ytimg.com/vi/0ddANFvXGuU/hq720.jpg', true),
+  ('Ewura Abena - Ebefa [ Official Visualiser ]', 'video', 'https://www.youtube.com/embed/0FsDwS2x9yU', 'https://i.ytimg.com/vi/0FsDwS2x9yU/hq720.jpg', true),
+  ('Ewura Abena - GRACE (Adom) [Official Visualiser]', 'video', 'https://www.youtube.com/embed/of8YKBQpReU', 'https://i.ytimg.com/vi/of8YKBQpReU/hq720.jpg', true),
+  ('Ewura Abena - Your Goodness Ft Yadah [ Official Visualiser ]', 'video', 'https://www.youtube.com/embed/BcEDEtShmDE', 'https://i.ytimg.com/vi/BcEDEtShmDE/hq720.jpg', true),
+  ('Ewura Abena - Ebefa (It Will Be) || Lyrics Visualiser', 'video', 'https://www.youtube.com/embed/joynMr37ML8', 'https://i.ytimg.com/vi/joynMr37ML8/hq720.jpg', true),
+  ('An electrifying Experience!! Ewura Abena ministers "SHOW THEM"', 'video', 'https://www.youtube.com/embed/z2I7NDPsyKQ', 'https://i.ytimg.com/vi/z2I7NDPsyKQ/hq720.jpg', true),
+  ('Ewura Abena - Show Them (Lyrics Video)', 'video', 'https://www.youtube.com/embed/HjkamxfaDac', 'https://i.ytimg.com/vi/HjkamxfaDac/hq720.jpg', true),
+  ('Ewura Abena - SHOW THEM (The Prayer) [ visualiser ]', 'video', 'https://www.youtube.com/embed/MCmLQocprM0', 'https://i.ytimg.com/vi/MCmLQocprM0/hq720.jpg', true),
+  ('Ewura Abena - All Is Well (Lyrics Video)', 'video', 'https://www.youtube.com/embed/i2lq7hYLksw', 'https://i.ytimg.com/vi/i2lq7hYLksw/hq720.jpg', true),
+  ('Ewura Abena - Warrior (Official Video)', 'video', 'https://www.youtube.com/embed/LaX5JVUUHz4', 'https://i.ytimg.com/vi/LaX5JVUUHz4/hq720.jpg', true),
+  ('Ewura Abena - Nokwarfo (REBIRTH LIVE)', 'video', 'https://www.youtube.com/embed/3AyluGEw7cA', 'https://i.ytimg.com/vi/3AyluGEw7cA/hq720.jpg', true),
+  ('Ewura Abena - Warrior (Performance Video)', 'video', 'https://www.youtube.com/embed/XTU0mQfPnGw', 'https://i.ytimg.com/vi/XTU0mQfPnGw/hq720.jpg', true),
+  ('Ewura Abena - REBIRTH album launch recap', 'video', 'https://www.youtube.com/embed/qhozE-Fz9_Y', 'https://i.ytimg.com/vi/qhozE-Fz9_Y/hq720.jpg', true),
+  ('Ewura Abena - Faithful ft. Amy Newman (Viral Video)', 'video', 'https://www.youtube.com/embed/3G90TMixHyw', 'https://i.ytimg.com/vi/3G90TMixHyw/hq720.jpg', true),
+  ('Ewura Abena - Faithful (Rebirth) short', 'video', 'https://www.youtube.com/embed/n7FOPDPvacM', 'https://i.ytimg.com/vi/n7FOPDPvacM/hq720.jpg', true),
+  ('Ewura Abena - Show Them (Live Performance Video)', 'video', 'https://www.youtube.com/embed/gcuoBKIbvUc', 'https://i.ytimg.com/vi/gcuoBKIbvUc/hq720.jpg', true),
+  ('Ewura Abena''s "REBIRTH" album', 'video', 'https://www.youtube.com/embed/d5sGPqDiQB8', 'https://i.ytimg.com/vi/d5sGPqDiQB8/hq720.jpg', true),
+  ('Ewura Abena - Warrior (Lyrics Video)', 'video', 'https://www.youtube.com/embed/_wPd4xXbjuo', 'https://i.ytimg.com/vi/_wPd4xXbjuo/hq720.jpg', true),
+  ('Ewura Abena - Warrior Queen (Rebirth) short', 'video', 'https://www.youtube.com/embed/irpahi4P1DU', 'https://i.ytimg.com/vi/irpahi4P1DU/hq720.jpg', true),
+  ('Ewura Abena - Show Them (Visualiser)', 'video', 'https://www.youtube.com/embed/iqGNSlIo6Dc', 'https://i.ytimg.com/vi/iqGNSlIo6Dc/hq720.jpg', true),
+  ('Ewura Abena - My Confidence ft Adelaide De Seer (Official Audio)', 'video', 'https://www.youtube.com/embed/Yn9MNrxJSrw', 'https://i.ytimg.com/vi/Yn9MNrxJSrw/hq720.jpg', true),
+  ('Ewura Abena - No One But You ft. Ladybel (Official Audio)', 'video', 'https://www.youtube.com/embed/fSgMEXiJlCY', 'https://i.ytimg.com/vi/fSgMEXiJlCY/hq720.jpg', true),
+  ('Ewura Abena - Yehowah (Official Audio)', 'video', 'https://www.youtube.com/embed/xTZf_4w9BeQ', 'https://i.ytimg.com/vi/xTZf_4w9BeQ/hq720.jpg', true),
+  ('Ewura Abena - This Far (Official Audio)', 'video', 'https://www.youtube.com/embed/UcTAhgVp0kA', 'https://i.ytimg.com/vi/UcTAhgVp0kA/hq720.jpg', true),
+  ('Ewura Abena - Faithful ft. Amy Newman (Official Audio)', 'video', 'https://www.youtube.com/embed/Js62QEWgJGY', 'https://i.ytimg.com/vi/Js62QEWgJGY/hq720.jpg', true);
+
 insert into public.awards (title, description, awarded_on)
 values ('Song ''This Far'' Recognition', 'The success of ''This Far'' earned numerous nominations and recognition, including Songwriter of the Year, Female Vocal Performance, and Gospel Song of the Year at Vodafone Ghana Music Awards 2023, Ghana Music Awards UK 2023, and Ghana Music Awards Europe.', '2023-01-01');
 
