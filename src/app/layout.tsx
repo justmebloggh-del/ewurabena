@@ -94,13 +94,11 @@ const PERSON_JSON_LD = {
     { "@type": "Place", address: { "@type": "PostalAddress", addressCountry: "GH" } },
     { "@type": "Place", address: { "@type": "PostalAddress", addressCountry: "GB" } },
   ],
-  award: [
-    "Songwriter of the Year — Vodafone Ghana Music Awards",
-    "Female Vocal Performance — Vodafone Ghana Music Awards",
-    "Gospel Song of the Year — Vodafone Ghana Music Awards",
-    "Ghana Music Awards UK",
-    "Ghana Music Awards Europe",
-  ],
+  // No `award` field here on purpose: schema.org's award property asserts a
+  // confirmed win, but independent sources (VGMA's own 2023 winners list)
+  // show "This Far" was nominated in these categories, with other artists
+  // winning them that year — not confirmed as her win. Re-add once the
+  // actual result is verified directly against the awards body.
   url: SITE_URL,
   image: `${SITE_URL}${SHARE_IMAGE}`,
   sameAs: [
