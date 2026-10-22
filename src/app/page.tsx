@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 
+import { HeroSlideshow } from "@/components/hero-slideshow";
 import { EwuraAbenaTV } from "@/components/ewura-abena-tv";
 import { FavoriteButton } from "@/components/favorite-button";
 import { PlatformEmbedPlayer } from "@/components/platform-embed-player";
@@ -11,6 +12,7 @@ import { TrackAudio, TrackVideo } from "@/components/track-audio";
 import { WatchOnTvBadge } from "@/components/watch-on-tv-badge";
 import { firstEmbeddableCatalog } from "@/lib/catalog-embeds";
 import { getPublicContent } from "@/lib/data/public";
+import { GALLERY_IMAGES } from "@/lib/gallery-images";
 import { buildTVChannel, trackHasTvVideo } from "@/lib/tv-channel";
 
 export const metadata: Metadata = {
@@ -98,6 +100,11 @@ export default async function HomePage() {
     "Voice of Healing",
     "Voice of Light",
   ];
+
+  const adminImages = content.mediaItems.filter((item) => item.kind === "image").map((item) => item.url);
+  const heroSlides = Array.from(
+    new Set([content.profile.hero_image_url || "/ea3.jpg", ...adminImages, ...GALLERY_IMAGES]),
+  );
 
   const featuredTrack = content.tracks?.[0];
   const heroBio = content.profile.bio?.slice(0, 220) + "…" || "A vessel of God's glory — ministering healing, worship, and grace to the nations.";
@@ -197,17 +204,7 @@ export default async function HomePage() {
 
           {/* ── Right: Portrait ── */}
           <div className="hero-portrait-figure">
-            <Image
-              src={content.profile.hero_image_url || "/ea3.jpg"}
-              alt="Ewura Abena"
-              width={600}
-              height={680}
-              priority
-              sizes="(max-width: 900px) 100vw, 50vw"
-
-              className="hero-portrait-img"
-              unoptimized={Boolean(content.profile.hero_image_url && !content.profile.hero_image_url.startsWith("/"))}
-            />
+            <HeroSlideshow images={heroSlides} />
             <div className="hero-portrait-glow" aria-hidden="true" />
             <div className="hero-portrait-badge" aria-hidden="true">
               <span className="hero-badge-number">15+</span>

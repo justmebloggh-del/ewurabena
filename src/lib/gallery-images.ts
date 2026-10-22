@@ -1,0 +1,22 @@
+// Curated baseline photos shipped with the site. Images the admin adds via
+// the dashboard (stored in media_items) are prepended to this list — these
+// static files aren't admin-deletable since they're not database rows.
+export const GALLERY_IMAGES = [
+  "/ea.jpg",
+  "/ea2.jpg",
+  "/ea3.jpg",
+  "/ea5.jpg",
+  "/eaa.jpg",
+  "/earr.jpg",
+  "/ewu.jpg",
+  "/ewublu.jpg",
+  "/ewusit.jpg",
+  "/ebefam.jpg",
+  "/ep.jpg",
+  "/kam.jpg",
+  "/rebirth.jpg",
+  "/showthem.jpg",
+  "/all1.jpg",
+  "/alls.jpg",
+  "/ambassadoralflyer.jpg",
+];

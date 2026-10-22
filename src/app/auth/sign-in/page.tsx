@@ -30,7 +30,7 @@ export default function SignInPage() {
     setMessage("");
 
     try {
-      const email = String(formData.get("email") || "");
+      const email = String(formData.get("email") || "").trim();
       const password = String(formData.get("password") || "");
       const supabase = createSupabaseBrowserClient();
 
