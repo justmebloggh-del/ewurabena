@@ -30,3 +30,10 @@ export const GALLERY_IMAGES = [
   "/e2.jpg",
   "/obuasi.jpeg",
 ];
+
+// Single source for every page that shows the gallery (Gallery page, home hero
+// slideshow), so a photo added here or in the admin dashboard appears in both.
+export function getAllGalleryImages(mediaItems: { kind: string; url: string }[]) {
+  const adminImages = mediaItems.filter((item) => item.kind === "image").map((item) => item.url);
+  return Array.from(new Set([...adminImages, ...GALLERY_IMAGES]));
+}

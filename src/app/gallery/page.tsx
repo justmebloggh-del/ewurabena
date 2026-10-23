@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { ImageGallery } from "@/components/image-gallery";
 import { getPublicContent } from "@/lib/data/public";
-import { GALLERY_IMAGES } from "@/lib/gallery-images";
+import { getAllGalleryImages } from "@/lib/gallery-images";
 
 export const metadata: Metadata = {
   title: "Gallery | Ewura Abena",
@@ -12,8 +12,7 @@ export const metadata: Metadata = {
 
 export default async function GalleryPage() {
   const content = await getPublicContent();
-  const adminImages = content.mediaItems.filter((item) => item.kind === "image").map((item) => item.url);
-  const images = [...adminImages, ...GALLERY_IMAGES];
+  const images = getAllGalleryImages(content.mediaItems);
 
   return (
     <ImageGallery images={images} />

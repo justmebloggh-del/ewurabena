@@ -12,7 +12,7 @@ import { TrackAudio, TrackVideo } from "@/components/track-audio";
 import { WatchOnTvBadge } from "@/components/watch-on-tv-badge";
 import { firstEmbeddableCatalog } from "@/lib/catalog-embeds";
 import { getPublicContent } from "@/lib/data/public";
-import { GALLERY_IMAGES } from "@/lib/gallery-images";
+import { getAllGalleryImages } from "@/lib/gallery-images";
 import { buildTVChannel, trackHasTvVideo } from "@/lib/tv-channel";
 
 export const metadata: Metadata = {
@@ -101,9 +101,8 @@ export default async function HomePage() {
     "Voice of Light",
   ];
 
-  const adminImages = content.mediaItems.filter((item) => item.kind === "image").map((item) => item.url);
   const heroSlides = Array.from(
-    new Set([content.profile.hero_image_url || "/ea3.jpg", ...adminImages, ...GALLERY_IMAGES]),
+    new Set([content.profile.hero_image_url || "/ea3.jpg", ...getAllGalleryImages(content.mediaItems)]),
   );
 
   const featuredTrack = content.tracks?.[0];
