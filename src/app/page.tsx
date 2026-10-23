@@ -101,9 +101,10 @@ export default async function HomePage() {
     "Voice of Light",
   ];
 
-  const heroSlides = Array.from(
-    new Set([content.profile.hero_image_url || "/ea3.jpg", ...getAllGalleryImages(content.mediaItems)]),
-  );
+  // Newest photos first; the profile hero image is only added if the gallery lacks it.
+  const heroSlides = getAllGalleryImages(content.mediaItems);
+  const heroImage = content.profile.hero_image_url || "/ea3.jpg";
+  if (!heroSlides.includes(heroImage)) heroSlides.push(heroImage);
 
   const featuredTrack = content.tracks?.[0];
   const heroBio = content.profile.bio?.slice(0, 220) + "…" || "A vessel of God's glory — ministering healing, worship, and grace to the nations.";
