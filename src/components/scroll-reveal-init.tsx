@@ -37,12 +37,35 @@ export function ScrollRevealInit() {
       { threshold: 0.08, rootMargin: '0px 0px 200px 0px' }
     );
 
-    const elements = document.querySelectorAll(
-      '.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-delay-1, .reveal-delay-2, .reveal-delay-3, .reveal-delay-4'
-    );
-    elements.forEach((el) => observer.observe(el));
+    const SELECTOR =
+      '.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-delay-1, .reveal-delay-2, .reveal-delay-3, .reveal-delay-4';
 
-    return () => observer.disconnect();
+    const watch = (root: ParentNode) => {
+      if (root instanceof Element && root.matches(SELECTOR)) observer.observe(root);
+      root.querySelectorAll(SELECTOR).forEach((el) => observer.observe(el));
+    };
+
+    watch(document);
+
+    // The page body streams in AFTER this layout-level component has already
+    // mounted (the root loading.tsx skeleton renders first, then the real
+    // page replaces it). A one-time querySelectorAll at mount therefore found
+    // nothing, and every .reveal element that arrived later stayed at
+    // opacity: 0 forever — a blank homepage until a refresh happened to win
+    // the race. Watching for newly inserted nodes closes that gap.
+    const mutations = new MutationObserver((records) => {
+      records.forEach((record) =>
+        record.addedNodes.forEach((node) => {
+          if (node instanceof Element) watch(node);
+        })
+      );
+    });
+    mutations.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      mutations.disconnect();
+      observer.disconnect();
+    };
   }, [pathname]);
 
   return null;

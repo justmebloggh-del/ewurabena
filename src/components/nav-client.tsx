@@ -10,14 +10,16 @@ const NAV_ITEMS = [
   { href: '/music', label: 'Music' },
   { href: '/gallery', label: 'Gallery' },
   { href: '/events', label: 'Events' },
+  { href: '/fan', label: 'Fan Hub' },
   { href: '/contact', label: 'Booking' },
 ];
 
 interface NavClientProps {
   isAuthenticated: boolean;
+  isAdmin?: boolean;
 }
 
-export function NavClient({ isAuthenticated }: NavClientProps) {
+export function NavClient({ isAuthenticated, isAdmin = false }: NavClientProps) {
   const [scrolled, setScrolled] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -89,8 +91,11 @@ export function NavClient({ isAuthenticated }: NavClientProps) {
           <div className="nav-auth-desktop">
             {isAuthenticated ? (
               <>
-                <Link href="/fan" className="nav-btn-ghost">Fan Hub</Link>
-                <Link href="/admin" className="nav-btn-gold">Admin</Link>
+                {isAdmin ? (
+                  <Link href="/admin" className="nav-btn-gold">Admin</Link>
+                ) : (
+                  <Link href="/fan/profile" className="nav-btn-gold">My Profile</Link>
+                )}
               </>
             ) : (
               <>
@@ -131,8 +136,11 @@ export function NavClient({ isAuthenticated }: NavClientProps) {
           <div className="mobile-ctas">
             {isAuthenticated ? (
               <>
-                <Link href="/fan" className="mobile-cta-btn" onClick={() => setMenuOpen(false)}>Fan Hub</Link>
-                <Link href="/admin" className="mobile-cta-btn mobile-cta-gold" onClick={() => setMenuOpen(false)}>Admin</Link>
+                {isAdmin ? (
+                  <Link href="/admin" className="mobile-cta-btn mobile-cta-gold" onClick={() => setMenuOpen(false)}>Admin</Link>
+                ) : (
+                  <Link href="/fan/profile" className="mobile-cta-btn mobile-cta-gold" onClick={() => setMenuOpen(false)}>My Profile</Link>
+                )}
               </>
             ) : (
               <>

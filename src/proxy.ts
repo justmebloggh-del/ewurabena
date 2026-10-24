@@ -14,7 +14,12 @@ export async function proxy(request: NextRequest) {
     return response;
   }
 
-  if (!request.nextUrl.pathname.startsWith("/fan") && !request.nextUrl.pathname.startsWith("/admin")) {
+  // The Fan Hub feed, ministry updates and public fan profiles are open to
+  // read; only the admin area and the fan's private pages need a session.
+  const path = request.nextUrl.pathname;
+  const needsSession =
+    path.startsWith("/admin") || path.startsWith("/fan/music") || path.startsWith("/fan/profile");
+  if (!needsSession) {
     return response;
   }
 
