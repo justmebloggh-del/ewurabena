@@ -3,6 +3,15 @@
 // static files aren't admin-deletable since they're not database rows.
 // Keep this list newest-first: add new photos at the TOP.
 export const GALLERY_IMAGES = [
+  "/slide-window-bw.jpg",
+  "/slide-laugh-coat.jpg",
+  "/slide-vest-full.jpg",
+  "/slide-vest-smile.jpg",
+  "/slide-white-hood-bw.jpg",
+  "/slide-white-hood.jpg",
+  "/slide-plaid-dance.jpg",
+  "/slide-brick-hood.jpg",
+  "/slide-brick-smile.jpg",
   "/E77.jpeg",
   "/RED.jpeg",
   "/E7.jpg",

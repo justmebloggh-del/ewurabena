@@ -111,7 +111,7 @@ export default async function AboutPage() {
             {/* Portrait */}
             <div style={{ position: "relative" }}>
               <img
-                src={profile.hero_image_url || "/ea3.jpg"}
+                src="/about-portrait.jpg"
                 alt="Ewura Abena portrait"
                 style={{
                   width: "100%",
@@ -171,10 +171,20 @@ export default async function AboutPage() {
                   fontSize: "1rem",
                   color: "var(--text-dark-body)",
                   lineHeight: 1.88,
-                  marginBottom: "2rem",
+                  marginBottom: "1.25rem",
                 }}
               >
                 The WARRIOR QUEEN welcomes you to her official platform — a space dedicated to sharing her music, ministry, and mission. With a heart for worship and a passion for spreading the gospel, {profile.stage_name} has become a beacon of hope and inspiration in the Ghanaian gospel music scene and far beyond.
+              </p>
+              <p
+                style={{
+                  fontSize: "1rem",
+                  color: "var(--text-dark-body)",
+                  lineHeight: 1.88,
+                  marginBottom: "2rem",
+                }}
+              >
+                She is currently a Brand Ambassador for the Ghana Police Service Domestic Violence and Victims Support Unit (DOVVSU).
               </p>
 
               <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
