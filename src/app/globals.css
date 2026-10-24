@@ -208,11 +208,13 @@ h1, h2, h3, h4 {
   background: linear-gradient(
     90deg,
     var(--champagne-gold) 0%,
-    var(--royal-gold)     22%,
+    #F9A8D4               22%,
     #FFFBFC               48%,
-    var(--royal-gold)     75%,
+    #F9A8D4               75%,
     var(--champagne-gold) 100%
   );
+  /* Every stop is light: the old rose (#9D174D) stops vanished into the
+     rose hero background, leaving half the name unreadable. */
   background-size: 250% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1568,6 +1570,7 @@ img {
 /* ── Mobile Full-Screen Overlay ── */
 .mobile-overlay {
   position: fixed; inset: 0; z-index: 190;
+  height: 100vh; height: 100dvh; overflow-y: auto; overscroll-behavior: contain;
   background: linear-gradient(160deg, #FFFBFC 0%, #FDF2F6 50%, rgba(250,238,244,0.92) 100%);
   display: flex; align-items: center;
   justify-content: center; flex-direction: column;
@@ -1959,3 +1962,82 @@ a.fh-action { text-decoration: none !important; display: inline-block; }
 .fh-photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.75rem; }
 .fh-photos figure { margin: 0; display: flex; flex-direction: column; gap: 0.4rem; align-items: flex-start; }
 .fh-photos img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 0.9rem; }
+
+
+/* ════════════════════════════════════
+   MOBILE-FIRST POLISH
+   Most visitors browse on phones, so this block (kept last so it wins)
+   enforces comfortable tap targets (≥44px), readable text (≥12px,
+   16px in form fields so iOS doesn't zoom), a slimmer header, and
+   safe-area spacing for notched phones.
+   ════════════════════════════════════ */
+
+/* The "Book Ministry" hero button never had the shared button base styles,
+   so it rendered as a plain box. Give it the same pill shape as its siblings. */
+.btn-hero-solid {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem;
+  padding: 0.75rem 1.7rem; min-height: 2.85rem; border-radius: 9999px;
+  font-family: var(--font-body), sans-serif; font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.11em; text-transform: uppercase; text-decoration: none; white-space: nowrap;
+  transition: all 0.30s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 5rem; }
+a, button, summary, label[for], select { touch-action: manipulation; }
+img, video, iframe { max-width: 100%; }
+.hero { min-height: 100vh; min-height: 100svh; }
+
+@media (max-width: 768px) {
+  a, button { -webkit-tap-highlight-color: rgba(157,23,77,0.14); }
+
+  /* Typing in a field must never zoom the page on iPhone. */
+  input, select, textarea,
+  .fh-composer textarea, .fh-form textarea, .fh-form input, .fh-composer select,
+  .fh-comment-form input, .fh-row select, .fh-search { font-size: 16px; }
+
+  /* Slimmer header: the 100px logo bar ate ~15% of a phone screen. */
+  .logo-wrap { width: 96px; height: 52px; border-radius: 11px; }
+  .nav-inner { padding-top: 0.55rem; padding-bottom: 0.55rem; }
+  .hamburger { width: 44px; height: 44px; }
+  .mobile-overlay { background: #FFFBFC; }
+  .mobile-nav-item { padding: 0.7rem 1rem; }
+  .mobile-overlay { justify-content: safe center; }
+  .mobile-overlay-inner { padding-top: 4.5rem; padding-bottom: calc(2rem + env(safe-area-inset-bottom)); gap: 1.25rem; }
+  .booking-contact-link { display: inline-block; padding: 0.7rem 0; min-height: 44px; box-sizing: border-box; }
+  .mobile-ctas a, .mobile-cta-btn { min-height: 48px; }
+
+  /* Tap targets */
+  .btn-primary, .btn-gold, .btn-secondary, .btn-ghost, .btn-hero-solid { min-height: 48px; }
+  .platform-badge { min-height: 44px; }
+  .footer-nav-link, .footer-contact-link { display: block; padding: 0.65rem 0; min-height: 44px; box-sizing: border-box; }
+  .footer-social-pill { min-height: 44px; padding: 0 1rem; font-size: 0.8rem; color: rgba(255,251,252,0.75); }
+  .footer-nav-link { color: rgba(255,251,252,0.72); }
+  .hero-slide-dot { position: relative; }
+  .hero-slide-dot::after { content: ""; position: absolute; inset: -14px -5px; }
+  .hero-slide-dots { gap: 0.55rem; }
+  .fh-tabs { top: 4rem; }
+  .fh-tabs a, .fh-switch button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+  .fh-action, .fh-file { min-height: 44px; display: inline-flex; align-items: center; }
+  .fh-link { padding: 0.6rem 0.35rem; }
+  .fh-composer-bar .btn-primary { min-height: 48px; }
+
+  /* Readable text: nothing under 12px */
+  .gold-label, .hero-eyebrow, .ticker-item, .stat-label, .hero-platform-pill,
+  .hero-release-label, .hero-badge-label, .testimonial-author, .fh-badge, .fh-author small,
+  .fh-song-text small, .fh-note { font-size: 0.75rem; }
+  .btn-primary, .btn-gold, .btn-secondary, .btn-ghost, .btn-hero-solid, .platform-badge { font-size: 0.78rem; }
+
+  /* Cards: win back width on small screens */
+  .card { padding: 1.25rem; }
+  .fh-card { padding: 1rem; }
+
+  /* Hero: headline and buttons reachable without a long scroll */
+  .hero-inner { gap: 1.75rem; padding-top: 5rem; padding-bottom: 3rem; }
+  .hero-ctas > a { flex: 1 1 100%; }
+
+  /* Floating music player: thumb-sized scrubber, clear of the home indicator */
+  .floating-player { padding-bottom: calc(0.7rem + env(safe-area-inset-bottom)); }
+  .player-range { height: 6px; }
+  .player-range::-webkit-slider-thumb { width: 22px; height: 22px; }
+  .player-range::-moz-range-thumb { width: 22px; height: 22px; }
+}

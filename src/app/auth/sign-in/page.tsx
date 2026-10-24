@@ -83,7 +83,7 @@ export default function SignInPage() {
 
       <p style={{ fontSize: "0.9rem", color: "var(--text-dark-body)" }}>
         New here?{" "}
-        <Link href="/auth/sign-up" style={{ color: "var(--royal-gold)", fontWeight: 600 }}>
+        <Link href="/auth/sign-up" style={{ color: "var(--royal-gold)", fontWeight: 600, display: "inline-block", padding: "0.7rem 0.25rem" }}>
           Create account
         </Link>
       </p>
