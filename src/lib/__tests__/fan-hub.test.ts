@@ -49,3 +49,22 @@ describe("getDownloadUrl", () => {
     expect(getDownloadUrl(null, "Song")).toBeNull();
   });
 });
+
+import { canOptimize } from "@/lib/images";
+import { smallYouTubeThumbnail } from "@/lib/youtube";
+
+describe("image helpers", () => {
+  it("swaps big YouTube thumbnails for the 320px one", () => {
+    expect(smallYouTubeThumbnail("https://i.ytimg.com/vi/MfZSFUsh-qU/hq720.jpg")).toBe("https://i.ytimg.com/vi/MfZSFUsh-qU/mqdefault.jpg");
+    expect(smallYouTubeThumbnail("https://img.youtube.com/vi/abc_123/hqdefault.jpg")).toBe("https://img.youtube.com/vi/abc_123/mqdefault.jpg");
+    expect(smallYouTubeThumbnail("https://example.com/pic.jpg")).toBe("https://example.com/pic.jpg");
+  });
+
+  it("only optimises hosts next.config allows", () => {
+    expect(canOptimize("/ea.jpg")).toBe(true);
+    expect(canOptimize("https://abc.supabase.co/storage/v1/object/public/media/a.jpg")).toBe(true);
+    expect(canOptimize("https://images.unsplash.com/photo-1")).toBe(true);
+    expect(canOptimize("https://random-host.com/a.jpg")).toBe(false);
+    expect(canOptimize("http://abc.supabase.co/storage/v1/object/public/a.jpg")).toBe(false);
+  });
+});

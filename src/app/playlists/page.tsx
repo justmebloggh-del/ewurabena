@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { getPublicContent } from "@/lib/data/public";
+import { AppImage } from "@/components/app-image";
 
 export const metadata: Metadata = {
   title: "Playlists | Ewura Abena",
@@ -35,7 +36,7 @@ export default async function PlaylistsPage() {
           }}
         />
         <div className="container" style={{ position: "relative" }}>
-          <p className="gold-label" style={{ marginBottom: "0.75rem" }}>Worship Selections</p>
+          <p className="gold-label" style={{ marginBottom: "0.75rem", color: "#F9A8D4" }}>Worship Selections</p>
           <h1
             style={{
               fontFamily: "var(--font-heading)",
@@ -62,9 +63,12 @@ export default async function PlaylistsPage() {
               {content.officialPlaylists.map((playlist) => (
                 <article key={playlist.id} className="card">
                   {playlist.cover_image_url && (
-                    <img
+                    <AppImage
                       src={playlist.cover_image_url}
                       alt={playlist.title}
+                      width={800}
+                      height={400}
+                      sizes="(max-width: 640px) 100vw, 400px"
                       style={{ width: "100%", height: "200px", objectFit: "cover", borderRadius: "0.75rem", marginBottom: "1.25rem", display: "block" }}
                     />
                   )}

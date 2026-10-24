@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { AppImage } from "@/components/app-image";
+
 import { getPublicContent } from "@/lib/data/public";
 
 export const metadata: Metadata = {
@@ -110,12 +112,16 @@ export default async function AboutPage() {
           >
             {/* Portrait */}
             <div style={{ position: "relative" }}>
-              <img
+              <AppImage
                 src="/about-portrait.jpg"
                 alt="Ewura Abena portrait"
+                width={1200}
+                height={1500}
+                sizes="(max-width: 900px) 100vw, 45vw"
+                priority
                 style={{
                   width: "100%",
-                  height: "600px",
+                  height: "min(600px, 125vw)",
                   objectFit: "cover",
                   objectPosition: "center top",
                   borderRadius: "2rem",

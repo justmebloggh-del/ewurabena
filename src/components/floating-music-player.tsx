@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { recordTrackPlay } from "@/lib/record-play";
+import { AppImage } from "@/components/app-image";
 
 interface TrackInfo {
   id?: string;
@@ -138,9 +139,12 @@ export function FloatingMusicPlayer() {
         {/* Track info */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", minWidth: 0 }}>
           {track.cover_url && (
-            <img
+            <AppImage
               src={track.cover_url}
               alt={track.title}
+              width={80}
+              height={80}
+              sizes="40px"
               style={{ width: "40px", height: "40px", borderRadius: "0.4rem", objectFit: "cover", flexShrink: 0 }}
             />
           )}

@@ -4,6 +4,7 @@ import { Suspense } from "react";
 
 import { FloatingMusicPlayer } from "@/components/floating-music-player";
 import { NavClient } from "@/components/nav-client";
+import { GlassInit } from "@/components/glass-init";
 import { ScrollRevealInit } from "@/components/scroll-reveal-init";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -162,6 +163,7 @@ export default function RootLayout({
         </div>
         <FloatingMusicPlayer />
         <ScrollRevealInit />
+        <GlassInit />
       </body>
     </html>
   );

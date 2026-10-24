@@ -24,7 +24,7 @@ export function ProfileEditor({ userId, initial }: Props) {
     setMessage(null);
     try {
       if (!file.type.startsWith("image/")) throw new Error("Please choose a photo.");
-      const media = await uploadFanMedia(file, userId);
+      const media = await uploadFanMedia(file, userId, { avatar: true });
       setAvatar(media.url);
     } catch (err) {
       setMessage({ ok: false, text: err instanceof Error ? err.message : "Upload failed." });

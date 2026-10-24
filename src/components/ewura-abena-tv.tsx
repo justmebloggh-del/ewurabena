@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { type TVVideo } from "@/lib/tv-channel";
-import { toYouTubeEmbed, youtubeThumbnail } from "@/lib/youtube";
+import { smallYouTubeThumbnail, toYouTubeEmbed, youtubeThumbnail } from "@/lib/youtube";
 
 type Props = {
   videos: TVVideo[];
@@ -171,7 +171,15 @@ export function EwuraAbenaTV({ videos }: Props) {
                   }}
                 >
                   {thumb ? (
-                    <img src={thumb} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                    <img
+                      src={smallYouTubeThumbnail(thumb)}
+                      alt=""
+                      width={320}
+                      height={180}
+                      loading="lazy"
+                      decoding="async"
+                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                    />
                   ) : null}
                 </div>
                 <p

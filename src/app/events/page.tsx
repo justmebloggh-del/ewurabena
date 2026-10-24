@@ -32,7 +32,7 @@ export default function EventsPage() {
           }}
         />
         <div className="container" style={{ position: "relative" }}>
-          <p className="gold-label" style={{ marginBottom: "0.75rem" }}>Crusades &amp; Worship Concerts</p>
+          <p className="gold-label" style={{ marginBottom: "0.75rem", color: "#F9A8D4" }}>Crusades &amp; Worship Concerts</p>
           <h1
             style={{
               fontFamily: "var(--font-heading)",

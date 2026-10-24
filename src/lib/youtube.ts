@@ -56,3 +56,13 @@ export function youtubeThumbnail(url: string): string | null {
   const id = extractYouTubeId(url);
   return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
 }
+
+/**
+ * YouTube serves the same thumbnail at several sizes. Admin-pasted links are
+ * usually the 1280px "hq720"/"maxres" one — far too big for a 160px list tile
+ * on a phone. Swap to the 320x180 version (always exists for every video).
+ */
+export function smallYouTubeThumbnail(url: string): string {
+  const match = url.match(/^(https:\/\/(?:i|img)\.ytimg\.com\/vi\/[\w-]+\/|https:\/\/img\.youtube\.com\/vi\/[\w-]+\/)(?:maxresdefault|sddefault|hqdefault|hq720)\.jpg/);
+  return match ? `${match[1]}mqdefault.jpg` : url;
+}

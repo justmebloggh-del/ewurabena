@@ -3,13 +3,9 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-const INTERVAL_MS = 5000;
+import { canOptimize } from "@/lib/images";
 
-// Local files and Supabase storage are allowed by next.config remotePatterns,
-// so Next can resize them; anything else is served as-is.
-function canOptimize(src: string) {
-  return src.startsWith("/") || /^https:\/\/[^/]+\.supabase\.(co|com)\/storage\/v1\/object\/public\//.test(src);
-}
+const INTERVAL_MS = 5000;
 
 export function HeroSlideshow({ images }: { images: string[] }) {
   const [index, setIndex] = useState(0);

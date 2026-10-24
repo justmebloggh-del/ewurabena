@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getPublicContent } from "@/lib/data/public";
 import { tvLinkFor } from "@/lib/tv-channel";
 import { youtubeThumbnail } from "@/lib/youtube";
+import { AppImage } from "@/components/app-image";
 
 export const metadata: Metadata = {
   title: "Portfolio | Ewura Abena",
@@ -18,8 +19,8 @@ export default async function PortfolioPage() {
   return (
     <div className="page-container" style={{ display: "flex", flexDirection: "column", gap: "3rem" }}>
       <section className="card space-y-3">
-        <h1 className="section-title">Portfolio</h1>
-        <p className="section-subtitle">
+        <h1 className="section-title-dark">Portfolio</h1>
+        <p className="section-subtitle-dark">
           Ministry impact, media highlights, and recognitions that reflect Ewura Abena&apos;s mission.
         </p>
       </section>
@@ -55,16 +56,19 @@ export default async function PortfolioPage() {
             <article key={item.id} className="card space-y-2">
               <h3 className="text-xl">{item.title}</h3>
               {item.kind === "image" ? (
-                <img src={item.url} alt={item.title} className="h-64 w-full rounded-xl object-cover" />
+                <AppImage src={item.url} alt={item.title} width={800} height={512} sizes="(max-width: 768px) 100vw, 50vw" className="h-64 w-full rounded-xl object-cover" />
               ) : (
                 <Link
                   href={tvLinkFor(item.id)}
                   className="group relative block h-64 w-full overflow-hidden rounded-xl border border-[color:var(--border-soft)]"
                 >
                   {item.thumbnail_url || youtubeThumbnail(item.url) ? (
-                    <img
-                      src={item.thumbnail_url || youtubeThumbnail(item.url) || undefined}
+                    <AppImage
+                      src={(item.thumbnail_url || youtubeThumbnail(item.url))!}
                       alt={item.title}
+                      width={640}
+                      height={360}
+                      sizes="(max-width: 768px) 100vw, 50vw"
                       className="h-full w-full object-cover"
                     />
                   ) : (

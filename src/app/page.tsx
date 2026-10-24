@@ -449,7 +449,7 @@ export default async function HomePage() {
                 fontSize: "0.72rem",
                 letterSpacing: "0.28em",
                 textTransform: "uppercase",
-                color: "var(--royal-gold)",
+                color: "#F9A8D4",
                 fontWeight: 700,
               }}
             >
@@ -804,7 +804,7 @@ export default async function HomePage() {
                         fontSize: "0.68rem",
                         letterSpacing: "0.22em",
                         textTransform: "uppercase",
-                        color: "var(--deep-gold)",
+                        color: "#F9A8D4",
                         marginTop: "0.85rem",
                       }}
                     >
@@ -1005,7 +1005,7 @@ export default async function HomePage() {
                         display: "flex",
                         alignItems: "center",
                         gap: "0.6rem",
-                        color: "rgba(255,251,252,0.62)",
+                        color: "rgba(255,251,252,0.88)",
                         fontSize: "0.9rem",
                         transition: "color 0.2s",
                         textDecoration: "none",

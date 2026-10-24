@@ -66,7 +66,7 @@
   /* Text on LIGHT (ivory) backgrounds */
   --text-dark:         #2B0E1A;
   --text-dark-body:    #4A2234;
-  --text-dark-muted:   #86566A;
+  --text-dark-muted:   #613547;
 
   /* Text on DARK (kente green) backgrounds */
   --text-main:         #FFFBFC;
@@ -1171,7 +1171,7 @@ h1, h2, h3, h4 {
    ════════════════════════════════════ */
 .page-container {
   width: 100%; max-width: 1200px;
-  margin: 0 auto; padding: 3rem 1.5rem;
+  margin: 0 auto; padding: 7.5rem 1.5rem 3rem; /* clears the fixed header */
 }
 
 /* Boomplay / streaming cards */
@@ -1314,7 +1314,7 @@ h1, h2, h3, h4 {
   .section-mid, .section-dark, .section-glass, .section-deep,
   .section-kente, .section-warm-dark { padding: 3.5rem 0; }
   .hero-inner { padding-top: 5.5rem; }
-  .page-container { padding: 2rem 1rem; }
+  .page-container { padding: 5.5rem 1rem 2rem; }
 }
 
 /* ════════════════════════════════════
@@ -1415,6 +1415,28 @@ img {
   flex-shrink: 0;
 }
 .logo-wrap:hover { transform: scale(1.05); }
+
+/* Liquid highlight: a soft rose blob that swims around the badge, blended
+   over the artwork like light moving through water. */
+.logo-liquid-glow {
+  position: absolute; inset: -30%;
+  pointer-events: none; mix-blend-mode: screen; opacity: 0.55;
+  background:
+    radial-gradient(circle at 30% 40%, rgba(249,168,212,0.55) 0, transparent 38%),
+    radial-gradient(circle at 70% 65%, rgba(255,251,252,0.35) 0, transparent 30%);
+  animation: logo-liquid-swim 9s ease-in-out infinite;
+}
+@keyframes logo-liquid-swim {
+  0%   { transform: translate(-12%, -6%) rotate(0deg) scale(1); }
+  33%  { transform: translate(14%, 8%) rotate(120deg) scale(1.15); }
+  66%  { transform: translate(-6%, 12%) rotate(240deg) scale(0.95); }
+  100% { transform: translate(-12%, -6%) rotate(360deg) scale(1); }
+}
+/* The liquid pushes edge pixels around; the badge's own backdrop colour
+   (#27101A, sampled from the artwork) fills any gap so nothing looks cut. */
+.liquid-logo { background: #27101A; }
+.liquid-logo .logo-badge-img { will-change: filter; }
+@media (prefers-reduced-motion: reduce) { .logo-liquid-glow { animation: none; } }
 
 .logo-badge-img {
   width: 100%; height: 100%;
@@ -2041,3 +2063,264 @@ img, video, iframe { max-width: 100%; }
   .player-range::-webkit-slider-thumb { width: 22px; height: 22px; }
   .player-range::-moz-range-thumb { width: 22px; height: 22px; }
 }
+
+
+/* ════════════════════════════════════════════════════════════════════
+   LIQUID GLASS
+   Frosted, translucent surfaces that bend the colour behind them, with a
+   bright rim, an inner glow and a specular highlight that follows the
+   pointer (see glass-init.tsx). Kept last so it layers over the base
+   styles. Blur is the expensive part, so phones get a lighter blur and a
+   still background; reduced-transparency users get solid panels.
+   ════════════════════════════════════════════════════════════════════ */
+:root {
+  --glass-blur: 12px;
+  --glass-rim: rgba(255,255,255,0.72);
+}
+@media (min-width: 769px) { :root { --glass-blur: 20px; } }
+
+/* Ambient colour behind the page — the "liquid" the glass refracts. */
+body::before {
+  content: "";
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(42vmax 42vmax at 10% 14%, rgba(244,114,182,0.34), transparent 62%),
+    radial-gradient(48vmax 48vmax at 90% 28%, rgba(157,23,77,0.20), transparent 64%),
+    radial-gradient(40vmax 40vmax at 26% 88%, rgba(167,139,250,0.22), transparent 62%),
+    radial-gradient(36vmax 36vmax at 80% 92%, rgba(253,186,140,0.22), transparent 62%);
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  body::before { animation: liquid-drift 32s ease-in-out infinite alternate; will-change: transform; }
+}
+@keyframes liquid-drift {
+  0%   { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+  50%  { transform: translate3d(2.5%, -3%, 0) scale(1.08) rotate(6deg); }
+  100% { transform: translate3d(-3%, 2.5%, 0) scale(1.04) rotate(-5deg); }
+}
+
+/* Light sections turn translucent so that colour shows through them. */
+.section-light  { background: rgba(255,251,252,0.58); }
+.section-cream  { background: rgba(253,242,246,0.60); }
+.section-mid    { background: rgba(248,227,236,0.58); }
+.section-pearl  { background: linear-gradient(180deg, rgba(255,245,248,0.58) 0%, rgba(250,238,243,0.62) 100%); }
+.section-blush  { background: linear-gradient(180deg, rgba(255,251,252,0.56) 0%, rgba(253,228,239,0.62) 100%); }
+
+/* Dark rose sections get their own soft light pools so glass on them has depth. */
+.section-dark, .section-deep, .section-kente, .section-warm-dark { position: relative; isolation: isolate; }
+.section-dark::before, .section-deep::before, .section-kente::before, .section-warm-dark::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(38rem 24rem at 12% 8%, rgba(244,114,182,0.16), transparent 70%),
+    radial-gradient(34rem 26rem at 92% 88%, rgba(167,139,250,0.12), transparent 70%);
+}
+
+/* ── Light glass panels ── */
+.card, .track-card, .ministry-card, .testimonial-card, .fh-card, .fh-song, .card-glass {
+  background:
+    radial-gradient(260px circle at var(--gx, 14%) var(--gy, 0%), rgba(255,255,255,0.78), transparent 62%),
+    linear-gradient(145deg, rgba(255,255,255,0.86) 0%, rgba(255,255,255,0.62) 100%);
+  border: 1px solid var(--glass-rim);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.7);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.7);
+  box-shadow:
+    0 12px 36px rgba(157,23,77,0.13),
+    0 1px 2px rgba(157,23,77,0.08),
+    inset 0 1.5px 0 rgba(255,255,255,0.95),
+    inset 1px 0 0 rgba(255,255,255,0.55),
+    inset 0 -1px 0 rgba(157,23,77,0.07),
+    inset 0 0 22px rgba(255,255,255,0.28);
+}
+.card:hover, .track-card:hover, .ministry-card:hover, .testimonial-card:hover, .fh-card:hover {
+  border-color: rgba(255,255,255,0.95);
+  box-shadow:
+    0 18px 48px rgba(157,23,77,0.20),
+    0 1px 2px rgba(157,23,77,0.08),
+    inset 0 1.5px 0 #fff,
+    inset 1px 0 0 rgba(255,255,255,0.7),
+    inset 0 -1px 0 rgba(157,23,77,0.08),
+    inset 0 0 26px rgba(255,255,255,0.4);
+}
+.fh-song { box-shadow: inset 0 1.5px 0 rgba(255,255,255,0.9), 0 6px 18px rgba(157,23,77,0.10); }
+
+/* ── Dark glass panels (on rose backgrounds) ── */
+.card-dark, .card-green, .hero-streaming-card {
+  background:
+    radial-gradient(260px circle at var(--gx, 14%) var(--gy, 0%), rgba(255,255,255,0.26), transparent 62%),
+    linear-gradient(145deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 100%);
+  border: 1px solid rgba(255,255,255,0.26);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.6);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.6);
+  box-shadow:
+    0 16px 44px rgba(60,5,30,0.30),
+    inset 0 1.5px 0 rgba(255,255,255,0.45),
+    inset 0 -1px 0 rgba(0,0,0,0.12),
+    inset 0 0 24px rgba(255,255,255,0.08);
+}
+.hero-streaming-card { background-color: rgba(131,24,67,0.38); }
+
+/* ── Navigation, menus, player ── */
+.premium-nav.nav-scrolled {
+  background: linear-gradient(180deg, rgba(255,255,255,0.86), rgba(255,251,252,0.70));
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  backdrop-filter: blur(24px) saturate(1.8);
+  border-bottom: 1px solid rgba(255,255,255,0.8);
+  box-shadow: 0 8px 32px rgba(157,23,77,0.12), inset 0 -1px 0 rgba(157,23,77,0.08), inset 0 1px 0 #fff;
+}
+.mobile-overlay {
+  background: linear-gradient(160deg, rgba(255,255,255,0.92) 0%, rgba(253,228,239,0.86) 100%);
+  -webkit-backdrop-filter: blur(30px) saturate(1.8);
+  backdrop-filter: blur(30px) saturate(1.8);
+}
+.floating-player {
+  background: linear-gradient(180deg, rgba(160,40,95,0.78), rgba(110,18,62,0.86));
+  -webkit-backdrop-filter: blur(26px) saturate(1.7);
+  backdrop-filter: blur(26px) saturate(1.7);
+  border-top: 1px solid rgba(255,255,255,0.3);
+  box-shadow: 0 -10px 40px rgba(60,5,30,0.35), inset 0 1px 0 rgba(255,255,255,0.3);
+}
+.fh-tabs, .fh-switch {
+  background:
+    radial-gradient(220px circle at var(--gx, 20%) var(--gy, 0%), rgba(255,255,255,0.8), transparent 65%),
+    linear-gradient(145deg, rgba(255,255,255,0.70), rgba(255,255,255,0.42));
+  border: 1px solid var(--glass-rim);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.7);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.7);
+  box-shadow: 0 8px 26px rgba(157,23,77,0.12), inset 0 1.5px 0 rgba(255,255,255,0.95), inset 0 -1px 0 rgba(157,23,77,0.07);
+}
+.fh-tabs a.is-on, .fh-switch button.is-on {
+  color: #FFFBFC;
+  background: linear-gradient(160deg, rgba(190,40,105,0.95), rgba(130,20,70,0.95));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), 0 4px 12px rgba(157,23,77,0.35);
+}
+
+/* ── Buttons & chips ── */
+.btn-primary, .btn-secondary, .btn-hero-solid {
+  box-shadow:
+    0 10px 26px rgba(157,23,77,0.38),
+    inset 0 1.5px 0 rgba(255,255,255,0.5),
+    inset 0 -10px 18px rgba(60,5,30,0.18);
+}
+.btn-gold, .platform-badge, .fh-chip, .fh-action, .fh-file {
+  background:
+    radial-gradient(160px circle at var(--gx, 20%) var(--gy, 0%), rgba(255,255,255,0.85), transparent 70%),
+    linear-gradient(145deg, rgba(255,255,255,0.66), rgba(255,255,255,0.38));
+  border: 1px solid var(--glass-rim);
+  -webkit-backdrop-filter: blur(10px) saturate(1.6);
+  backdrop-filter: blur(10px) saturate(1.6);
+  box-shadow: 0 6px 18px rgba(157,23,77,0.12), inset 0 1.5px 0 rgba(255,255,255,0.95), inset 0 -1px 0 rgba(157,23,77,0.08);
+}
+.btn-gold:hover, .platform-badge:hover { background-color: rgba(255,255,255,0.7); }
+.fh-action.is-on { background: linear-gradient(160deg, rgba(190,40,105,0.95), rgba(130,20,70,0.95)); color: #FFFBFC; }
+.btn-ghost, .footer-social-pill, .hero-platform-pill {
+  background:
+    radial-gradient(160px circle at var(--gx, 20%) var(--gy, 0%), rgba(255,255,255,0.28), transparent 70%),
+    linear-gradient(145deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06));
+  border: 1px solid rgba(255,255,255,0.30);
+  -webkit-backdrop-filter: blur(10px) saturate(1.5);
+  backdrop-filter: blur(10px) saturate(1.5);
+  box-shadow: 0 6px 18px rgba(60,5,30,0.22), inset 0 1.5px 0 rgba(255,255,255,0.4);
+}
+
+/* ── Fields: sunken glass ── */
+.input, .fh-form input, .fh-form textarea, .fh-composer textarea, .fh-composer select,
+.fh-comment-form input, .fh-row select, .fh-search {
+  background: linear-gradient(145deg, rgba(255,255,255,0.62), rgba(255,255,255,0.40));
+  border: 1px solid rgba(255,255,255,0.85);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  box-shadow: inset 0 2px 6px rgba(157,23,77,0.10), 0 0 0 1px rgba(157,23,77,0.16);
+}
+.input:focus, .fh-form input:focus, .fh-form textarea:focus, .fh-composer textarea:focus, .fh-comment-form input:focus, .fh-search:focus {
+  box-shadow: inset 0 2px 6px rgba(157,23,77,0.08), 0 0 0 3px rgba(157,23,77,0.28);
+}
+
+/* ── Fallbacks ── */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .card, .track-card, .ministry-card, .testimonial-card, .fh-card, .fh-song, .fh-tabs, .fh-switch { background: rgba(255,255,255,0.92); }
+  .card-dark, .card-green, .hero-streaming-card { background: rgba(131,24,67,0.78); }
+  .premium-nav.nav-scrolled { background: rgba(255,251,252,0.97); }
+  .mobile-overlay { background: #FFFBFC; }
+  .floating-player { background: rgba(131,24,67,0.98); }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .card, .track-card, .ministry-card, .testimonial-card, .fh-card, .fh-song, .fh-tabs, .fh-switch,
+  .btn-gold, .platform-badge, .fh-chip, .fh-action, .fh-file { background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .card-dark, .card-green, .hero-streaming-card { background: rgb(131,24,67); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .premium-nav.nav-scrolled { background: rgb(255,251,252); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .mobile-overlay { background: #FFFBFC; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .floating-player { background: rgb(131,24,67); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  body::before { display: none; }
+}
+
+/* Small gold labels were rose-on-rose (invisible) on dark sections. */
+.section-dark .gold-label, .section-deep .gold-label, .section-kente .gold-label, .section-warm-dark .gold-label { color: #FCE7F3; }
+
+/* Sideways reveals (translateX 36px) widened the page on phones before they
+   faded in, so mobile browsers shrank the whole layout to fit (header and menu
+   button pushed off the right edge). Clip horizontal overflow at the root and
+   slide in vertically on small screens. */
+html, body { overflow-x: hidden; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+@media (max-width: 768px) {
+  .reveal-left, .reveal-right { transform: translateY(24px); }
+}
+
+
+/* ════════════════════════════════════
+   READABILITY FIXES (after the glass pass)
+   Glass over a bright photo or a pale panel washed out small text. Dark glass
+   now carries a deep-rose tint so light text stays ≥4.5:1, light glass is
+   whiter, and small labels got brighter.
+   ════════════════════════════════════ */
+
+/* The "15+ Nations Reached" badge was hidden under the slideshow photos. */
+.hero-slideshow { isolation: isolate; }
+.hero-portrait-badge { z-index: 3; }
+
+/* Dark glass: tinted, with solid light text */
+.btn-ghost, .footer-social-pill, .hero-platform-pill {
+  background:
+    radial-gradient(160px circle at var(--gx, 20%) var(--gy, 0%), rgba(255,255,255,0.20), transparent 70%),
+    linear-gradient(145deg, rgba(70,6,38,0.58), rgba(70,6,38,0.38));
+  color: #FFFBFC;
+  border-color: rgba(255,255,255,0.34);
+}
+.footer-social-pill, .hero-platform-pill { color: rgba(255,251,252,0.95); }
+.hero-streaming-card, .card-dark, .card-green {
+  background:
+    radial-gradient(260px circle at var(--gx, 14%) var(--gy, 0%), rgba(255,255,255,0.16), transparent 62%),
+    linear-gradient(145deg, rgba(70,8,38,0.62) 0%, rgba(70,8,38,0.44) 100%);
+}
+:is(.section-dark, .section-deep, .section-kente, .section-warm-dark) .btn-gold {
+  color: #FFFBFC;
+  background:
+    radial-gradient(160px circle at var(--gx, 20%) var(--gy, 0%), rgba(255,255,255,0.20), transparent 70%),
+    linear-gradient(145deg, rgba(70,6,38,0.58), rgba(70,6,38,0.38));
+  border-color: rgba(255,255,255,0.4);
+}
+/* Light panels sitting inside dark sections keep dark, rose-coloured labels */
+:is(.section-dark, .section-deep, .section-kente, .section-warm-dark) :is(.card, .track-card, .ministry-card, .testimonial-card, .fh-card) .gold-label {
+  color: var(--kente-green);
+}
+
+/* Small text on rose: brighter and a touch larger */
+.stat-label { color: rgba(255,251,252,0.85); }
+.hero-scroll, .hero-scroll span { color: rgba(255,251,252,0.78); }
+.hero-release-label { font-size: 0.68rem; }
+.hero-badge-label { color: #FFFBFC; }
+.booking-contact-link { color: rgba(255,251,252,0.88); }
+.footer-nav-link { color: rgba(255,251,252,0.80); }
+.footer-nav-link:hover { color: var(--champagne-gold); }
+.footer-contact-link { color: rgba(255,251,252,0.78); }
+
+/* Auth pages and others with inline padding sat underneath the fixed header */
+.auth-wrap { padding-top: 7rem !important; }
+@media (max-width: 640px) { .auth-wrap { padding-top: 5.5rem !important; } }
+/* Outline buttons on rose backgrounds, however the section is built */
+.on-dark .btn-gold, .btn-gold.on-dark { color: #FFFBFC; background: linear-gradient(145deg, rgba(70,6,38,0.58), rgba(70,6,38,0.38)); border-color: rgba(255,255,255,0.4); }
+.section-subtitle { color: rgba(255,251,252,0.88); }
+
+/* Placeholders were ~3:1 on glass; deepen them to pass 4.5:1. */
+input::placeholder, textarea::placeholder, .input::placeholder { color: #7A5E6D; opacity: 1; }
+
+.btn-primary, .btn-secondary, .btn-hero-solid { text-shadow: 0 1px 2px rgba(60,5,30,0.35); }

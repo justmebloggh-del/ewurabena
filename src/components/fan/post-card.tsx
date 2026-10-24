@@ -134,7 +134,7 @@ export function PostCard({ post, viewer, onDeleted }: Props) {
 
       {post.media_url && post.media_kind === "image" && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={post.media_url} alt={post.caption || `Photo by ${post.author.display_name}`} className="fh-media" loading="lazy" />
+        <img src={post.media_url} decoding="async" alt={post.caption || `Photo by ${post.author.display_name}`} className="fh-media" loading="lazy" />
       )}
       {post.media_url && post.media_kind === "video" && (
         <video src={post.media_url} className="fh-media" controls playsInline preload="metadata" />

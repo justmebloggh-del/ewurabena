@@ -105,7 +105,7 @@ export async function SiteFooter() {
             style={{
               fontFamily: "var(--font-body), sans-serif",
               fontSize: "0.97rem",
-              color: "rgba(255,251,252,0.55)",
+              color: "rgba(255,251,252,0.85)",
               maxWidth: "480px",
               margin: "0 auto 2rem",
               lineHeight: 1.75,
@@ -158,7 +158,7 @@ export async function SiteFooter() {
             style={{
               fontFamily: "var(--font-body), sans-serif",
               fontSize: "0.9rem",
-              color: "rgba(255,251,252,0.52)",
+              color: "rgba(255,251,252,0.82)",
               lineHeight: 1.8,
               maxWidth: "300px",
               marginBottom: "2rem",
@@ -187,7 +187,7 @@ export async function SiteFooter() {
               <a
                 key={c.href}
                 href={c.href}
-                style={{ color: "rgba(255,251,252,0.50)", textDecoration: "none", transition: "color 0.2s" }}
+                style={{ color: "rgba(255,251,252,0.85)", textDecoration: "none", transition: "color 0.2s" }}
                 className="footer-contact-link"
               >
                 {c.label}
@@ -262,7 +262,7 @@ export async function SiteFooter() {
               style={{
                 fontFamily: "var(--font-body), sans-serif",
                 fontSize: "0.78rem",
-                color: "rgba(255,251,252,0.35)",
+                color: "rgba(255,251,252,0.78)",
                 margin: 0,
               }}
             >
@@ -275,7 +275,7 @@ export async function SiteFooter() {
                 fontSize: "0.7rem",
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
-                color: "rgba(255,251,252,0.3)",
+                color: "rgba(255,251,252,0.75)",
                 textDecoration: "none",
                 borderLeft: "1px solid rgba(255,251,252,0.2)",
                 paddingLeft: "1.25rem",
@@ -290,7 +290,7 @@ export async function SiteFooter() {
               fontFamily: "var(--font-heading), serif",
               fontSize: "0.8rem",
               fontStyle: "italic",
-              color: "rgba(157,23,77,0.50)",
+              color: "#FBCFE8",
               margin: 0,
               letterSpacing: "0.04em",
             }}

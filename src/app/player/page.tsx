@@ -4,6 +4,7 @@ import Link from "next/link";
 import { MusicPlayer } from "@/components/music-player";
 import { getPublicContent } from "@/lib/data/public";
 import type { Track } from "@/lib/types";
+import { AppImage } from "@/components/app-image";
 
 export const metadata: Metadata = {
   title: "Music Player | Ewura Abena",
@@ -56,9 +57,12 @@ export default async function PlayerPage() {
                 className="card"
                 style={{ overflow: "hidden", padding: 0, transition: "all 0.3s ease" }}
               >
-                <img
+                <AppImage
                   src={album.cover_image_url || "/ep.jpg"}
                   alt={album.title}
+                  width={800}
+                  height={480}
+                  sizes="(max-width: 640px) 100vw, 400px"
                   style={{ width: "100%", height: "240px", objectFit: "cover", display: "block" }}
                 />
                 <div style={{ padding: "1.25rem" }}>

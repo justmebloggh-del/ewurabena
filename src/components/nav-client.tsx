@@ -3,6 +3,9 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+import { LiquidLogo } from '@/components/liquid-logo';
 
 const NAV_ITEMS = [
   { href: '/', label: 'Home' },
@@ -14,6 +17,11 @@ const NAV_ITEMS = [
   { href: '/contact', label: 'Booking' },
 ];
 
+// Pages whose top is light (no dark hero behind the header). The transparent
+// header uses white links, which vanish there, so these always use the solid
+// glass header.
+const LIGHT_TOP_PAGES = ['/player', '/fan', '/auth', '/portfolio'];
+
 interface NavClientProps {
   isAuthenticated: boolean;
   isAdmin?: boolean;
@@ -23,6 +31,8 @@ export function NavClient({ isAuthenticated, isAdmin = false }: NavClientProps) 
   const [scrolled, setScrolled] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const solid = scrolled || LIGHT_TOP_PAGES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -63,7 +73,7 @@ export function NavClient({ isAuthenticated, isAdmin = false }: NavClientProps) 
 
   return (
     <>
-      <header className={`premium-nav ${scrolled ? 'nav-scrolled' : ''} ${isScrolling ? 'is-scroll-active' : ''}`} role="banner">
+      <header className={`premium-nav ${solid ? 'nav-scrolled' : ''} ${isScrolling ? 'is-scroll-active' : ''}`} role="banner">
         <div className="nav-inner container">
 
           {/* ── Logo v2: user-supplied full-color badge artwork (treble
@@ -73,11 +83,7 @@ export function NavClient({ isAuthenticated, isAdmin = false }: NavClientProps) 
                  background. Shine sweep + gold-pulse glow on scroll are
                  layered on top as overlays, not recolors. */}
           <Link href="/" className="nav-logo-link" aria-label="Ewura Abena — Home" onClick={() => setMenuOpen(false)}>
-            <div className="logo-wrap">
-              <Image src="/ewuraabenalogo.png" alt="Ewura Abena" width={124} height={68} className="logo-badge-img" priority />
-              <span className="logo-shine" aria-hidden="true" />
-              <span className="logo-glow-halo" aria-hidden="true" />
-            </div>
+            <LiquidLogo />
           </Link>
 
           {/* ── Desktop Nav ── */}

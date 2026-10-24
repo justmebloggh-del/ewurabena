@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { Track } from '@/lib/types';
 import { recordTrackPlay } from '@/lib/record-play';
 import { FavoriteButton } from './favorite-button';
+import { AppImage } from "@/components/app-image";
 
 interface MusicPlayerProps {
   tracks: Track[];
@@ -139,13 +140,16 @@ export function MusicPlayer({ tracks, initialIndex = 0, className = '' }: MusicP
   return (
     <div className={`music-player bg-gradient-to-b from-[var(--bg-card)] to-pink-100 border border-[color:var(--border-soft)] rounded-2xl p-6 space-y-6 shadow-2xl ${className}`}>
       {/* Now Playing */}
-      <div className="flex items-center gap-4">
-        <img
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
+        <AppImage
           src="/ea.jpg" // Ewura Abena cover fallback
-          alt={currentTrack?.title}
+          alt={currentTrack?.title ?? "Now playing"}
+          width={192}
+          height={192}
+          sizes="96px"
           className="w-24 h-24 rounded-xl object-cover flex-shrink-0"
         />
-        <div className="min-w-0 flex-1">
+        <div className="min-w-[9rem] flex-1">
           <h3 className="font-semibold text-lg truncate">{currentTrack?.title}</h3>
           <p className="text-sm text-[color:var(--text-dark-muted)] truncate">Ewura Abena</p>
         </div>

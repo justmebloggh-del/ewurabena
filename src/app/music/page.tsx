@@ -8,6 +8,7 @@ import { WatchOnTvBadge } from "@/components/watch-on-tv-badge";
 import { firstEmbeddableCatalog } from "@/lib/catalog-embeds";
 import { getPublicContent } from "@/lib/data/public";
 import { trackHasTvVideo } from "@/lib/tv-channel";
+import { AppImage } from "@/components/app-image";
 
 export const metadata: Metadata = {
   title: "Music | Ewura Abena",
@@ -42,7 +43,7 @@ export default async function MusicPage() {
           }}
         />
         <div className="container" style={{ position: "relative" }}>
-          <p className="gold-label" style={{ marginBottom: "0.75rem" }}>
+          <p className="gold-label" style={{ marginBottom: "0.75rem", color: "#F9A8D4" }}>
             Streaming &amp; Discography
           </p>
           <h1
@@ -151,7 +152,7 @@ export default async function MusicPage() {
         }}
       >
         <div className="container">
-          <p className="gold-label" style={{ marginBottom: "1rem" }}>Apple Music</p>
+          <p className="gold-label" style={{ marginBottom: "1rem", color: "#F9A8D4" }}>Apple Music</p>
           <h2
             style={{
               fontFamily: "var(--font-heading)",
@@ -192,7 +193,7 @@ export default async function MusicPage() {
               href="https://music.apple.com/gb/artist/ewura-abena/994868905"
               target="_blank"
               rel="noreferrer"
-              className="btn-gold"
+              className="btn-gold on-dark"
               style={{ fontSize: "0.8rem" }}
             >
               ♪ Open in Apple Music ↗
@@ -285,7 +286,7 @@ export default async function MusicPage() {
         }}
       >
         <div className="container">
-          <p className="gold-label" style={{ marginBottom: "1rem" }}>Boomplay</p>
+          <p className="gold-label" style={{ marginBottom: "1rem", color: "#F9A8D4" }}>Boomplay</p>
           <h2
             style={{
               fontFamily: "var(--font-heading)",
@@ -435,9 +436,12 @@ export default async function MusicPage() {
                     className="album-header"
                   >
                     <div style={{ position: "relative" }}>
-                      <img
+                      <AppImage
                         src={album.cover_image_url || "https://images.unsplash.com/photo-1485579149621-3123dd979885?auto=format&fit=crop&w=900&q=80"}
                         alt={`${album.title} cover art`}
+                        width={900}
+                        height={440}
+                        sizes="(max-width: 900px) 100vw, 40vw"
                         style={{
                           width: "100%",
                           height: "220px",
