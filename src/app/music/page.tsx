@@ -82,12 +82,8 @@ export default async function MusicPage() {
               <a
                 key={href}
                 href={href}
-                className="platform-badge"
-                style={{
-                  background: "rgba(157,23,77,0.12)",
-                  border: "1px solid rgba(157,23,77,0.45)",
-                  fontSize: "0.75rem",
-                }}
+                className="platform-badge on-dark"
+                style={{ fontSize: "0.75rem" }}
               >
                 {label}
               </a>
