@@ -160,7 +160,7 @@ export default async function HomePage() {
               <Link href="/music" className="btn-primary btn-hero">
                 ▶&nbsp; Listen Now
               </Link>
-              <Link href="/gallery" className="btn-ghost btn-hero">
+              <Link href="/#ewura-abena-tv" className="btn-ghost btn-hero">
                 ◈&nbsp; Watch Ministry
               </Link>
               <Link href="/contact" className="btn-hero btn-hero-solid">
